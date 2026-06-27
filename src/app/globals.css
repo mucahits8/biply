@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f3ed;
+  --foreground: #18181b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+}
+
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.section-pad {
+  margin-inline: auto;
+  max-width: 80rem;
+  padding: 4rem 1rem;
+}
+
+.field-input {
+  min-height: 3rem;
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgb(228 228 231);
+  background: rgb(250 250 250);
+  padding: 0 1rem;
+  color: rgb(24 24 27);
+  font-size: 0.875rem;
+  font-weight: 700;
+  outline: none;
+}
+
+.field-input:focus {
+  border-color: rgb(24 24 27);
+  box-shadow: 0 0 0 4px rgb(212 212 216 / 0.55);
+}
+
+@media (min-width: 768px) {
+  .section-pad {
+    padding-inline: 1.5rem;
+  }
+}
