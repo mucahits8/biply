@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckIcon, PlusIcon } from "@/components/icons";
-import { ProductMockup } from "@/components/product/ProductMockup";
+import Image from "next/image";
 import { upsells } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
 import { useCart } from "@/components/commerce/CartProvider";
@@ -27,7 +27,7 @@ export function CartDrawer() {
 
         {items.length === 0 ? (
           <div className="rounded-[1.5rem] border border-dashed border-zinc-300 p-6 text-sm text-zinc-600">
-            Henüz ürün seçilmedi. Bir paket seçtiğinde upsell önerileri burada da netleşir.
+            Henüz ürün seçilmedi. Bir paket seçtiğinde ek ürün önerileri burada netleşir.
           </div>
         ) : (
           <div className="space-y-3">
@@ -36,7 +36,7 @@ export function CartDrawer() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-sm font-black text-zinc-950">{item.name}</p>
-                    <p className="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-zinc-400">{item.kind}</p>
+                    <p className="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-zinc-400">{item.kind === "upsell" ? "ek ürün" : item.kind === "package" ? "paket" : "ürün"}</p>
                   </div>
                   <strong className="text-sm text-zinc-950">{formatPrice(item.price * item.quantity)}</strong>
                 </div>
@@ -60,20 +60,22 @@ export function CartDrawer() {
         )}
 
         {selectedPackage ? (
-          <section className="mt-5 rounded-[1.5rem] border border-zinc-200 bg-white p-4" aria-label="Sepet upsell önerileri">
+          <section className="mt-5 rounded-[1.5rem] border border-zinc-200 bg-white p-4" aria-label="Sepet ek ürün önerileri">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600">Sepete özel eklemeler</p>
             <h3 className="mt-1 text-lg font-black tracking-[-0.04em] text-zinc-950">Paketi temas sistemine çevir.</h3>
             <div className="mt-4 space-y-2">
               {upsells.slice(0, 4).map((upsell) => (
                 <div key={upsell.id} className="grid grid-cols-[44px_1fr_auto] items-center gap-3 rounded-2xl bg-[#f7f3ed] p-2.5">
-                  <ProductMockup shape={upsell.shape} tone={upsell.shape === "social" ? "social" : "light"} size="sm" className="scale-[0.62]" />
+                  <div className="relative h-11 w-11 overflow-hidden rounded-xl bg-zinc-100">
+                    <Image src={upsell.image} alt={upsell.imageAlt} fill sizes="44px" className="object-cover" />
+                  </div>
                   <div>
                     <p className="text-xs font-black text-zinc-950">{upsell.name}</p>
                     <p className="text-[11px] font-bold text-zinc-500">{formatPrice(upsell.price)}</p>
                   </div>
                   <button
                     type="button"
-                    data-testid={`drawer-upsell-${upsell.slug}`}
+                    data-testid={`drawer-extra-${upsell.slug}`}
                     onClick={() => addItem({ id: upsell.id, kind: "upsell", name: upsell.name, price: upsell.price })}
                     className="grid h-9 w-9 place-items-center rounded-xl bg-zinc-950 text-white"
                     aria-label={`${upsell.name} sepete ekle`}
@@ -96,7 +98,7 @@ export function CartDrawer() {
             <CheckIcon className="h-7 w-7 text-emerald-300" />
           </div>
           <a href="#checkout" onClick={closeCart} className="mt-4 flex min-h-12 items-center justify-center rounded-full bg-white text-sm font-black text-zinc-950">
-            Checkout’a geç
+            Siparişe geç
           </a>
         </div>
       </aside>

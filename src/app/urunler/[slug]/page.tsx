@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/commerce/AddToCartButton";
 import { Logo } from "@/components/brand/Logo";
 import { ArrowIcon, CheckIcon, NfcIcon, QrIcon } from "@/components/icons";
-import { ProductMockup } from "@/components/product/ProductMockup";
 import { products } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
 
@@ -42,15 +42,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <main className="min-h-screen bg-[#f7f3ed] px-4 py-5 text-zinc-950 md:px-6">
       <div className="mx-auto max-w-6xl">
         <header className="mb-8 flex items-center justify-between">
-          <Link href="/" aria-label="Biply ana sayfa"><Logo compact /></Link>
+          <Link href="/" aria-label="Biply ana sayfa"><Logo compact image /></Link>
           <Link href="/#urunler" className="inline-flex items-center gap-2 rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-black">
             Ürünlere dön <ArrowIcon className="h-4 w-4 rotate-180" />
           </Link>
         </header>
 
         <section className="grid gap-8 rounded-[2.5rem] border border-white/80 bg-white/65 p-5 shadow-xl shadow-zinc-950/8 backdrop-blur md:grid-cols-[0.95fr_1.05fr] md:p-10">
-          <div className="grid place-items-center rounded-[2rem] bg-gradient-to-br from-white via-[#f3eee7] to-zinc-200 p-8">
-            <ProductMockup shape={product.shape} tone={product.shape === "glass" ? "glass" : "light"} size="lg" />
+          <div className="relative min-h-[360px] overflow-hidden rounded-[2rem] bg-zinc-950 md:min-h-[520px]">
+            <Image
+              src={product.image}
+              alt={product.imageAlt}
+              fill
+              priority
+              sizes="(min-width: 768px) 48vw, 100vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/45 via-transparent to-transparent" />
           </div>
           <div className="flex flex-col justify-center">
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-zinc-500">{product.eyebrow}</p>

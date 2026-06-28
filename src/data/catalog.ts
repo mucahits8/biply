@@ -18,6 +18,8 @@ export type CatalogItem = {
   shape: "desk" | "glass" | "card" | "pad" | "social";
   features: string[];
   details: string[];
+  image: string;
+  imageAlt: string;
 };
 
 export const products: CatalogItem[] = [
@@ -36,6 +38,8 @@ export const products: CatalogItem[] = [
       "Google yorum bağlantısına hızlı yönlendirme",
       "İşletmenize özel kurulum ve tasarım",
     ],
+    image: "/images/product-biply-desk-wood.png",
+    imageAlt: "Ahşap tabanlı Biply Desk masa üstü yorum standı",
   },
   {
     id: "product-glass",
@@ -52,6 +56,8 @@ export const products: CatalogItem[] = [
       "NFC dokundurma ikonu büyük ve yönlendirici",
       "QR kod yalnızca alternatif erişim olarak konumlanır",
     ],
+    image: "/images/product-biply-glass-window.png",
+    imageAlt: "Cam yüzeyde kullanılan şeffaf Biply Glass NFC etiketi",
   },
   {
     id: "product-card",
@@ -68,6 +74,8 @@ export const products: CatalogItem[] = [
       "İnce kart formu sayesinde kolay taşınır",
       "Google yorum veya sosyal medya yönlendirmesi yapılabilir",
     ],
+    image: "/images/product-biply-card-hand.png",
+    imageAlt: "Elde tutulan siyah Biply Card NFC ve QR kartı",
   },
   {
     id: "product-pad",
@@ -82,8 +90,10 @@ export const products: CatalogItem[] = [
     details: [
       "Az yer kaplayan yuvarlatılmış kare form",
       "Telefonunu dokundur aksiyonunu net gösterir",
-      "Paketlere ek temas noktası olarak güçlü upsell ürünüdür",
+      "Paketlere ek temas noktası olarak güçlü tamamlayıcı üründür",
     ],
+    image: "/images/product-biply-pad-round.png",
+    imageAlt: "Tezgah üzerinde yuvarlak siyah Biply Pad NFC yorum ürünü",
   },
 ];
 
@@ -133,6 +143,8 @@ export const upsells = [
     oldPrice: 990,
     price: 690,
     shape: "glass" as const,
+    image: "/images/product-biply-glass-window.png",
+    imageAlt: "Ek Biply Glass cam etiketi",
   },
   {
     id: "upsell-desk",
@@ -142,6 +154,8 @@ export const upsells = [
     oldPrice: 1190,
     price: 890,
     shape: "desk" as const,
+    image: "/images/product-biply-desk-black.png",
+    imageAlt: "Ek Biply Desk masa üstü stand",
   },
   {
     id: "upsell-instagram",
@@ -151,6 +165,8 @@ export const upsells = [
     oldPrice: 790,
     price: 590,
     shape: "social" as const,
+    image: "/images/product-biply-card-hand.png",
+    imageAlt: "Sosyal medya yönlendirmesi için Biply kart",
   },
   {
     id: "upsell-card",
@@ -160,6 +176,8 @@ export const upsells = [
     oldPrice: 590,
     price: 390,
     shape: "card" as const,
+    image: "/images/product-biply-card-hand.png",
+    imageAlt: "Ek Biply Card",
   },
   {
     id: "upsell-branch",
@@ -169,6 +187,39 @@ export const upsells = [
     oldPrice: 990,
     price: 690,
     shape: "pad" as const,
+    image: "/images/product-biply-pad-round.png",
+    imageAlt: "İkinci şube kurulumu için Biply temas ürünü",
+  },
+];
+
+export const testimonials = [
+  {
+    name: "Ece Y.",
+    role: "Kafe işletmecisi",
+    sector: "Kafe",
+    quote:
+      "Masaya koyduğumuz ilk hafta müşterilerimiz yoruma nasıl ulaşacağını sormadan aksiyona geçti. Görüntüsü de mekânın diline yakıştı.",
+  },
+  {
+    name: "Burak A.",
+    role: "Gym kurucusu",
+    sector: "Gym",
+    quote:
+      "Girişteki cam etiketi üyeler için çok doğal bir temas noktası oldu. Ekip link anlatmak yerine sadece dokundurma alanını gösteriyor.",
+  },
+  {
+    name: "Mert K.",
+    role: "Boks salonu yöneticisi",
+    sector: "Boks",
+    quote:
+      "Antrenman sonrası memnun kalan üyeye kart göstermek yeterli oluyor. Hızlı, sade ve salonun premium hissini bozmuyor.",
+  },
+  {
+    name: "Selin D.",
+    role: "Emlak danışmanı",
+    sector: "Emlak",
+    quote:
+      "Portföy görüşmelerinden sonra müşteriyi doğru sayfaya yönlendirmek kolaylaştı. Kart ve masa standı birlikte daha güvenli hissettiriyor.",
   },
 ];
 

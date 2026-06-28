@@ -1,12 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CommerceExperience } from "@/components/commerce/CommerceExperience";
 import { MobileStickyCta } from "@/components/commerce/MobileStickyCta";
 import { Logo } from "@/components/brand/Logo";
-import { ArrowIcon, CheckIcon, NfcIcon, QrIcon, ShieldIcon } from "@/components/icons";
+import { CheckIcon, NfcIcon, QrIcon, ShieldIcon } from "@/components/icons";
 import { ProductFamily } from "@/components/landing/ProductFamily";
 import { SectionHeader } from "@/components/landing/SectionHeader";
 import { ProductMockup } from "@/components/product/ProductMockup";
-import { faqs, sectors } from "@/data/catalog";
+import { faqs, sectors, testimonials } from "@/data/catalog";
 
 export function HomePage() {
   return (
@@ -36,12 +37,31 @@ export function HomePage() {
       </section>
 
       <section id="google-review" className="section-pad pt-0">
-        <div className="grid gap-6 rounded-[2.5rem] border border-white/80 bg-white/70 p-5 shadow-sm backdrop-blur md:grid-cols-[1fr_0.85fr] md:p-8">
-          <div className="grid place-items-center rounded-[2rem] bg-gradient-to-br from-white via-[#f4f1eb] to-zinc-100 p-6">
-            <div className="relative w-full max-w-sm rounded-[2rem] border border-white/80 bg-white/55 p-6 text-center shadow-2xl shadow-zinc-950/10 backdrop-blur-xl">
+        <div className="grid gap-5 lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="relative min-h-[430px] overflow-hidden rounded-[2.5rem] bg-zinc-950 shadow-2xl shadow-zinc-950/15">
+            <Image
+              src="/images/usecase-biply-review-flow-phone.png"
+              alt="Biply ile Google yorum akışının telefonda açılması"
+              fill
+              sizes="(min-width: 1024px) 56vw, 100vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/70 via-zinc-950/10 to-transparent" />
+            <div className="absolute bottom-5 left-5 right-5 rounded-[1.6rem] border border-white/15 bg-white/10 p-5 text-white backdrop-blur-xl">
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-white/60">Gerçek akış</p>
+              <h2 className="mt-2 text-2xl font-black tracking-[-0.05em]">Dokunma sonrası yorum ekranı saniyeler içinde açılır.</h2>
+            </div>
+          </div>
+          <div className="rounded-[2.5rem] border border-white/80 bg-white/75 p-5 shadow-sm backdrop-blur md:p-8">
+            <SectionHeader
+              eyebrow="Google Review odak alanı"
+              title="Google yorumlarını tek dokunuşla kolaylaştırın."
+              description="Google G küçük ve açıklayıcı kalır; asıl deneyim Biply’nin sade, premium temas diliyle taşınır."
+            />
+            <div className="rounded-[2rem] border border-zinc-200 bg-[#f7f3ed] p-5 text-center">
               <div className="text-4xl font-black text-blue-600">G</div>
               <div className="mt-1 text-xl text-amber-400" aria-label="Beş yıldız görseli">★★★★★</div>
-              <h2 className="mt-4 text-2xl font-black tracking-[-0.05em]">Google Yorumlarınızı Bekliyoruz</h2>
+              <h3 className="mt-4 text-2xl font-black tracking-[-0.05em]">Google Yorumlarınızı Bekliyoruz</h3>
               <p className="mt-2 text-zinc-600">Deneyiminizi paylaşın</p>
               <div className="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
                 <div className="grid place-items-center rounded-full border border-zinc-200 bg-white p-5">
@@ -56,27 +76,41 @@ export function HomePage() {
                 <span>Telefonunu dokundur</span>
                 <span>veya QR kodu tara</span>
               </div>
-              <Logo compact className="mt-6 items-center" />
             </div>
-          </div>
-          <div className="flex flex-col justify-center">
-            <SectionHeader
-              eyebrow="Google Review odak alanı"
-              title="Google yorumlarını tek dokunuşla kolaylaştırın."
-              description="Google G küçük ve açıklayıcı kalır; asıl deneyim Biply’nin sade, premium temas diliyle taşınır."
-            />
-            <div className="grid gap-3">
-              {[
-                "NFC alanı QR’dan daha baskın görünür.",
-                "Nötr ve güvenli metinler kullanılır.",
-                "Cam, masa ve kart temasları birlikte çalışır.",
-              ].map((item) => (
+            <div className="mt-4 grid gap-3">
+              {["NFC alanı QR’dan daha baskın görünür.", "Nötr ve güvenli metinler kullanılır.", "Cam, masa ve kart temasları birlikte çalışır."].map((item) => (
                 <p key={item} className="flex items-center gap-3 rounded-2xl bg-white p-4 text-sm font-bold text-zinc-700">
                   <CheckIcon className="h-5 w-5" /> {item}
                 </p>
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="yorumlar" className="section-pad pt-0">
+        <SectionHeader
+          eyebrow="İşletmelerden notlar"
+          title="Farklı sektörlerde aynı güvenli temas."
+          description="Biply; müşteriye baskı kurmadan, doğru anda doğru bağlantıyı açan sade bir yorum deneyimi sunar."
+          centered
+        />
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {testimonials.map((testimonial) => (
+            <article key={testimonial.name} className="rounded-[2rem] border border-zinc-200 bg-white p-5 shadow-sm">
+              <div className="flex items-center justify-between gap-3">
+                <span className="rounded-full bg-[#f7f3ed] px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-zinc-600">
+                  {testimonial.sector}
+                </span>
+                <span className="text-amber-400" aria-label="Yorum puanı görseli">★★★★★</span>
+              </div>
+              <p className="mt-5 text-base font-bold leading-7 text-zinc-800">“{testimonial.quote}”</p>
+              <div className="mt-5 border-t border-zinc-100 pt-4">
+                <p className="text-sm font-black text-zinc-950">{testimonial.name}</p>
+                <p className="mt-1 text-xs font-bold text-zinc-500">{testimonial.role}</p>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -102,8 +136,8 @@ export function HomePage() {
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-zinc-400">Instagram / sosyal medya ürünü</p>
             <h2 className="mt-3 text-4xl font-black tracking-[-0.06em] md:text-6xl">Yorumdan sonra takip akışını da büyüt.</h2>
             <p className="mt-5 max-w-xl text-base leading-7 text-zinc-300">Biply sosyal medya kartı; Instagram, TikTok veya WhatsApp aksiyonlarını aynı premium temas diliyle açar.</p>
-            <a href="#upsell" className="mt-6 inline-flex min-h-12 w-fit items-center justify-center rounded-full bg-white px-6 text-sm font-black text-zinc-950">
-              Upsell’e ekle
+            <a href="#ek-urunler" className="mt-6 inline-flex min-h-12 w-fit items-center justify-center rounded-full bg-white px-6 text-sm font-black text-zinc-950">
+              Pakete ekle
             </a>
           </div>
         </div>
@@ -111,12 +145,27 @@ export function HomePage() {
 
       <section id="sektorler" className="section-pad pt-0">
         <SectionHeader eyebrow="Sektörler" title="Memnuniyet anı olan her yerde çalışır." centered />
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-          {sectors.map((sector) => (
-            <div key={sector} className="rounded-[1.5rem] border border-zinc-200 bg-white p-5 text-sm font-black text-zinc-950 shadow-sm">
-              {sector}
-            </div>
-          ))}
+        <div className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-2">
+            {sectors.map((sector) => (
+              <div key={sector} className="rounded-[1.5rem] border border-zinc-200 bg-white p-5 text-sm font-black text-zinc-950 shadow-sm">
+                {sector}
+              </div>
+            ))}
+          </div>
+          <div className="relative min-h-[360px] overflow-hidden rounded-[2.2rem] bg-zinc-950 shadow-xl shadow-zinc-950/10">
+            <Image
+              src="/images/usecase-biply-glass-gym-touch.png"
+              alt="Biply Glass spor salonu camında NFC yorum teması"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/70 via-transparent to-transparent" />
+            <p className="absolute bottom-5 left-5 right-5 rounded-2xl bg-white/12 p-4 text-sm font-bold leading-6 text-white backdrop-blur-xl">
+              Cam yüzey, resepsiyon ve giriş noktalarında müşteriyi doğal aksiyona çağırır.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -172,7 +221,7 @@ function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-zinc-200/70 bg-[#f7f3ed]/85 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6">
-        <Link href="/" aria-label="Biply ana sayfa"><Logo compact /></Link>
+        <Link href="/" aria-label="Biply ana sayfa"><Logo compact image /></Link>
         <nav className="hidden items-center gap-6 text-sm font-bold text-zinc-600 md:flex">
           <a href="#urunler">Ürünler</a>
           <a href="#paketler">Paketler</a>
@@ -192,7 +241,7 @@ function Header() {
 function Hero() {
   return (
     <section className="section-pad pt-8 md:pt-14">
-      <div className="grid items-center gap-8 lg:grid-cols-[0.88fr_1.12fr]">
+      <div className="grid items-center gap-8 lg:grid-cols-[0.82fr_1.18fr]">
         <div>
           <div className="inline-flex rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-zinc-600">
             NFC + QR ile akıllı etkileşim
@@ -217,19 +266,19 @@ function Hero() {
             <span className="rounded-2xl bg-white p-3">Türkiye geneli</span>
           </div>
         </div>
-        <div className="relative min-h-[430px] overflow-hidden sm:min-h-[520px] rounded-[2.5rem] border border-white/80 bg-gradient-to-br from-white via-[#f6f2ec] to-zinc-200 p-5 shadow-2xl shadow-zinc-950/10">
-          <div className="absolute right-5 top-5 z-10"><Logo compact /></div>
-          <div className="absolute left-8 top-16 rotate-[-7deg]"><ProductMockup shape="desk" tone="light" size="lg" /></div>
-          <div className="absolute bottom-16 left-1/2 z-10 -translate-x-1/2 rotate-[3deg]"><ProductMockup shape="desk" tone="dark" size="lg" /></div>
-          <div className="absolute right-4 top-32 rotate-[8deg]"><ProductMockup shape="glass" tone="glass" size="lg" /></div>
-          <div className="absolute bottom-7 left-6 right-6 z-20 rounded-[1.5rem] border border-white/70 bg-white/75 p-4 backdrop-blur-xl">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-zinc-500">Dokundur</p>
-                <p className="text-lg font-black tracking-[-0.04em]">Telefonunu dokundur veya QR kodu tara</p>
-              </div>
-              <ArrowIcon className="h-8 w-8 shrink-0" />
-            </div>
+        <div className="relative min-h-[430px] overflow-hidden rounded-[2.5rem] bg-zinc-950 shadow-2xl shadow-zinc-950/15 sm:min-h-[560px]">
+          <Image
+            src="/images/hero-biply-desk-white-touch.png"
+            alt="Beyaz Biply Desk standına telefon dokundurma hareketi"
+            fill
+            priority
+            sizes="(min-width: 1024px) 58vw, 100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/65 via-transparent to-transparent" />
+          <div className="absolute bottom-5 left-5 right-5 rounded-[1.5rem] border border-white/15 bg-white/12 p-4 text-white backdrop-blur-xl">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-white/65">NFC önce</p>
+            <p className="mt-1 text-lg font-black tracking-[-0.04em]">Telefonunu dokundur veya QR kodu tara</p>
           </div>
         </div>
       </div>
@@ -241,7 +290,7 @@ function Footer() {
   return (
     <footer className="border-t border-zinc-200 bg-white px-4 py-10 md:px-6">
       <div className="mx-auto flex max-w-7xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
-        <Logo />
+        <Logo image />
         <div className="flex flex-wrap gap-4 text-sm font-bold text-zinc-500">
           <a href="#sss">Sıkça Sorulan Sorular</a>
           <a href="#checkout">İletişim</a>

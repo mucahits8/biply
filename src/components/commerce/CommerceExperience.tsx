@@ -1,9 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useCart } from "@/components/commerce/CartProvider";
 import { CheckIcon, PlusIcon } from "@/components/icons";
-import { ProductMockup } from "@/components/product/ProductMockup";
 import { packages, upsells } from "@/data/catalog";
 import { formatPrice, whatsappUrl } from "@/lib/format";
 
@@ -119,10 +119,10 @@ export function CommerceExperience() {
       </section>
 
       <div className="space-y-6">
-        <section id="upsell" className="scroll-mt-24 rounded-[2.3rem] border border-zinc-200 bg-white p-4 shadow-sm sm:p-6">
+        <section id="ek-urunler" className="scroll-mt-24 rounded-[2.3rem] border border-zinc-200 bg-white p-4 shadow-sm sm:p-6">
           <div className="mb-5 text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-zinc-500">Upsell builder</p>
-            <h2 className="mt-2 text-3xl font-black tracking-[-0.055em] text-zinc-950">Tek ürün değil, müşteri temas sistemi.</h2>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-zinc-500">Ek temas noktaları</p>
+            <h2 className="mt-2 text-3xl font-black tracking-[-0.055em] text-zinc-950">Paketini işletmenin temas sistemine çevir.</h2>
           </div>
 
           <div className="rounded-[1.5rem] border border-zinc-200 bg-[#fbfaf7] p-4">
@@ -136,13 +136,15 @@ export function CommerceExperience() {
             </div>
           </div>
 
-          <p className="mt-5 text-sm font-bold text-zinc-950">Deneyimi büyüt, değeri artır.</p>
-          <p className="mt-1 inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">Pakette alınca daha avantajlı</p>
+          <p className="mt-5 text-sm font-bold text-zinc-950">İhtiyacına göre ek ürün seç.</p>
+          <p className="mt-1 inline-flex rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">Paketle birlikte daha avantajlı</p>
 
           <div className="mt-4 space-y-3">
             {upsells.map((upsell) => (
               <article key={upsell.id} className="grid grid-cols-[56px_1fr_auto] items-center gap-3 rounded-[1.3rem] border border-zinc-200 bg-[#fbfaf7] p-3">
-                <ProductMockup shape={upsell.shape} tone={upsell.shape === "social" ? "social" : "light"} size="sm" className="scale-75" />
+                <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-zinc-100">
+                  <Image src={upsell.image} alt={upsell.imageAlt} fill sizes="56px" className="object-cover" />
+                </div>
                 <div>
                   <h3 className="text-sm font-black text-zinc-950">+ {upsell.name}</h3>
                   <p className="text-xs text-zinc-500">{upsell.description}</p>
@@ -153,7 +155,7 @@ export function CommerceExperience() {
                 </div>
                 <button
                   type="button"
-                  data-testid={`add-upsell-${upsell.slug}`}
+                  data-testid={`add-extra-${upsell.slug}`}
                   onClick={() => addItem({ id: upsell.id, kind: "upsell", name: upsell.name, price: upsell.price })}
                   className="grid h-11 w-11 place-items-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/25"
                   aria-label={`${upsell.name} sepete ekle`}
@@ -167,9 +169,9 @@ export function CommerceExperience() {
 
         <section id="checkout" className="scroll-mt-24 rounded-[2.3rem] border border-zinc-200 bg-white p-4 shadow-sm sm:p-6">
           <div className="mb-5 text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-zinc-500">Checkout</p>
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-zinc-500">Sipariş bilgileri</p>
             <h2 className="mt-2 text-3xl font-black tracking-[-0.055em] text-zinc-950">İşletmenizin müşterileri bir dokunuş uzağında.</h2>
-            <p className="mt-2 text-sm leading-6 text-zinc-600">Mock ödeme veya WhatsApp sipariş özetiyle ilerleyin.</p>
+            <p className="mt-2 text-sm leading-6 text-zinc-600">Güvenli sipariş özetiyle ilerleyin; istersen WhatsApp’tan hızlı teklif alın.</p>
           </div>
 
           <div className="space-y-3">
@@ -194,7 +196,7 @@ export function CommerceExperience() {
           </div>
 
           <button type="button" data-testid="mock-checkout" onClick={handleMockSubmit} className="mt-4 min-h-12 w-full rounded-full bg-zinc-950 text-sm font-black text-white">
-            Mock checkout’u tamamla
+            Sipariş özetini oluştur
           </button>
           <div className="my-4 flex items-center gap-3 text-xs font-bold text-zinc-400">
             <span className="h-px flex-1 bg-zinc-200" /> veya <span className="h-px flex-1 bg-zinc-200" />
