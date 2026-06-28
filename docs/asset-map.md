@@ -32,3 +32,23 @@ Bu dosya, kullanıcının kesin kullanılacak dediği görselleri ve sitedeki ro
 - `public/images/product-biply-card-hand.png` — Biply Card ürün kartı, detay ve kart ek ürün görseli.
 - `public/images/product-biply-pad-round.png` — Biply Pad ürün kartı, detay ve şube ek ürün görseli.
 - `public/images/reference-product-catalog-mobile.png` — Ürün listeleme UI referansı; doğrudan sayfaya basılmıyor.
+
+## 2026-06-28 Ürün Kartı Görsel Değişimleri
+
+Kullanıcının son isteğiyle ürün kartları, ürün detayları ve ek ürün satırlarındaki küçük görseller aynı anda güncellendi:
+
+- `public/images/product-biply-desk-wood-clean.png`
+  - Kullanım: Biply Desk ürün kartı, detay sayfası, Ek Biply Desk.
+  - Not: temiz beyaz akrilik + ahşap stand görünümü; eski koyu/şeffaf stand yerine öncelikli kaynak.
+
+- `public/images/product-biply-glass-white-window.png`
+  - Kullanım: Biply Glass ürün kartı, detay sayfası, Ek Biply Glass.
+  - Not: beyaz cam sticker görünümü; eski şeffaf cam sticker görselinin yerine kullanılır.
+
+- `public/images/product-biply-pad-white-round.png`
+  - Kullanım: Biply Pad ürün kartı, detay sayfası, ikinci şube ek ürün görseli.
+  - Not: eski siyah yuvarlak pad yerine beyaz yuvarlak pad kullanılır.
+
+- `public/images/product-biply-card-white-hand.png`
+  - Kullanım: Biply Card ürün kartı, detay sayfası, Ek Biply Card ve sosyal kart küçük görseli.
+  - Not: eski siyah el kartı yerine beyaz kart kullanılır.
