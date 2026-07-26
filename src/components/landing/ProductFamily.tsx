@@ -9,9 +9,9 @@ import { formatPrice } from "@/lib/format";
 
 export function ProductFamily() {
   return (
-    <div className="grid auto-cols-[84%] grid-flow-col gap-4 overflow-x-auto pb-2 sm:auto-cols-[48%] lg:grid-flow-row lg:grid-cols-3 lg:overflow-visible lg:pb-0">
+    <div className="no-scrollbar grid auto-cols-[86%] grid-flow-col snap-x snap-mandatory gap-4 overflow-x-auto pb-2 sm:auto-cols-[48%] lg:grid-flow-row lg:grid-cols-3 lg:overflow-visible lg:pb-0">
       {products.map((product) => (
-        <article key={product.id} className="group overflow-hidden rounded-[1.8rem] border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-zinc-950/12">
+        <article key={product.id} className="group snap-start overflow-hidden rounded-[1.8rem] border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-zinc-950/12">
           <div className="relative aspect-[4/3] overflow-hidden bg-[#f4f1eb]">
             <Image
               src={product.image}

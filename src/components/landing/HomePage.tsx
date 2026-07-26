@@ -19,7 +19,7 @@ export function HomePage() {
       <ProofStrip />
       <DealMarquee />
 
-      <section id="urunler" className="section-pad">
+      <section id="urunler" className="section-pad hidden lg:block">
         <SectionHeader
           eyebrow="Hızlı seçim"
           title="İlk Biply&apos;ni seç, sepete ekle."
@@ -193,14 +193,15 @@ function Header() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 md:px-6">
         <Link href="/" aria-label="Biply ana sayfa"><Logo compact image /></Link>
         <nav className="hidden items-center gap-6 text-sm font-bold text-zinc-600 md:flex">
-          <a href="#urunler">Ürünler</a>
+          <a href="#mobil-urunler" className="lg:hidden">Ürünler</a>
+          <a href="#urunler" className="hidden lg:inline">Ürünler</a>
           <a href="#paketler">Paket Oluştur</a>
           <a href="#sss">SSS</a>
         </nav>
         <a href="#paketler" className="hidden min-h-11 items-center justify-center rounded-full bg-zinc-950 px-5 text-sm font-black text-white md:inline-flex">
           Hızlı Fiyat Al
         </a>
-        <a href="#hizli-secim" className="inline-flex min-h-10 items-center justify-center rounded-full bg-zinc-950 px-4 text-xs font-black text-white md:hidden">
+        <a href="#mobil-urunler" className="inline-flex min-h-10 items-center justify-center rounded-full bg-zinc-950 px-4 text-xs font-black text-white md:hidden">
           Fiyat
         </a>
       </div>
@@ -208,9 +209,26 @@ function Header() {
   );
 }
 
+function MobileProductShelf() {
+  return (
+    <div id="mobil-urunler" className="mt-5 scroll-mt-24 lg:hidden">
+      <div className="mb-3">
+        <p className="text-[11px] font-black uppercase tracking-[0.18em] text-blue-700">Hızlı seçim</p>
+        <h2 className="mt-1 text-3xl font-black leading-[0.98] tracking-[-0.055em] text-zinc-950">
+          Biply&apos;ni seç, sepete ekle.
+        </h2>
+        <p className="mt-2 text-sm font-semibold leading-6 text-zinc-600">
+          Stand kritik nokta, Square çoklu yüzey, Round masa yoğun işletmeler için.
+        </p>
+      </div>
+      <ProductFamily />
+    </div>
+  );
+}
+
 function QuickBuyStrip() {
   return (
-    <section id="hizli-secim" className="mx-auto max-w-7xl scroll-mt-24 px-4 pb-4 md:px-6">
+    <section id="hizli-secim" className="mx-auto hidden max-w-7xl scroll-mt-24 px-4 pb-4 md:px-6 lg:block">
       <div className="smooth-card overflow-hidden border border-zinc-200 bg-white shadow-xl shadow-zinc-950/8">
         <div className="grid gap-0 lg:grid-cols-[0.6fr_1.4fr]">
           <div className="bg-zinc-950 p-5 text-white sm:p-6">
@@ -323,7 +341,7 @@ function Hero() {
           <p className="mt-3 max-w-[520px] text-base font-semibold leading-7 text-zinc-600 sm:text-lg sm:leading-8">
             Müşteriniz telefonunu Biply&apos;ye yaklaştırır, Google yorum ekranınız anında açılır.
           </p>
-          <div className="mt-4 grid max-w-[540px] grid-cols-3 gap-2 text-xs font-bold text-zinc-600 sm:gap-2.5">
+          <div className="mt-4 hidden max-w-[540px] grid-cols-3 gap-2 text-xs font-bold text-zinc-600 lg:grid lg:gap-2.5">
             {products.map((product) => (
               <div key={product.id} className="smooth-card border border-zinc-200 bg-white p-2 shadow-md shadow-zinc-950/5 sm:p-3">
                 <span className="block truncate text-sm font-black text-zinc-950">{product.name.replace("Biply ", "")}</span>
@@ -342,14 +360,18 @@ function Hero() {
             <span className="text-amber-400" aria-label="Beş yıldız">★★★★★</span>
             <span>Kafe, otel ve kliniklerde yorum istemeyi doğal hale getirir.</span>
           </div>
-          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-          <a href="#hizli-secim" className="inline-flex min-h-12 items-center justify-center rounded-full bg-zinc-950 px-7 text-sm font-black text-white shadow-xl shadow-zinc-950/20 transition hover:-translate-y-0.5">
+          <div className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:gap-3">
+            <a href="#mobil-urunler" className="inline-flex min-h-12 items-center justify-center rounded-full bg-zinc-950 px-4 text-sm font-black text-white shadow-xl shadow-zinc-950/20 transition hover:-translate-y-0.5 sm:px-7 lg:hidden">
               Biply&apos;ni Seç
             </a>
-            <a href="#nasil-calisir" className="inline-flex min-h-12 items-center justify-center rounded-full border border-zinc-300 bg-white px-7 text-sm font-black text-zinc-950 transition hover:-translate-y-0.5">
+            <a href="#hizli-secim" className="hidden min-h-12 items-center justify-center rounded-full bg-zinc-950 px-7 text-sm font-black text-white shadow-xl shadow-zinc-950/20 transition hover:-translate-y-0.5 lg:inline-flex">
+              Biply&apos;ni Seç
+            </a>
+            <a href="#nasil-calisir" className="inline-flex min-h-12 items-center justify-center rounded-full border border-zinc-300 bg-white px-4 text-sm font-black text-zinc-950 transition hover:-translate-y-0.5 sm:px-7">
               Nasıl Çalışır?
             </a>
           </div>
+          <MobileProductShelf />
         </div>
         <div className="smooth-card reveal-soft overflow-hidden bg-zinc-950 p-2.5 shadow-2xl shadow-zinc-950/15 sm:p-3 lg:mt-3">
           <div className="relative aspect-[1.78/1] min-h-[220px] overflow-hidden rounded-[1.15rem] bg-zinc-900 sm:min-h-[320px]">
@@ -372,7 +394,10 @@ function Hero() {
               <p className="mt-1 text-base font-black tracking-[-0.04em] sm:text-lg">Stand 2.000 TL | Square 1.250 TL | Round 750 TL</p>
               <p className="mt-1 text-xs font-bold text-emerald-700">Çoklu alımda %20&apos;ye varan avantaj</p>
             </div>
-            <a href="#hizli-secim" className="inline-flex min-h-11 items-center justify-center rounded-full bg-amber-300 px-5 text-sm font-black text-zinc-950">
+            <a href="#mobil-urunler" className="inline-flex min-h-11 items-center justify-center rounded-full bg-amber-300 px-5 text-sm font-black text-zinc-950 lg:hidden">
+              Fiyatları Gör
+            </a>
+            <a href="#hizli-secim" className="hidden min-h-11 items-center justify-center rounded-full bg-amber-300 px-5 text-sm font-black text-zinc-950 lg:inline-flex">
               Fiyatları Gör
             </a>
           </div>
