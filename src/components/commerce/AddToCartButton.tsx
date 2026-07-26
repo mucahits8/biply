@@ -5,7 +5,7 @@ import { useCart } from "@/components/commerce/CartProvider";
 type AddToCartButtonProps = {
   item: {
     id: string;
-    kind: "package" | "product" | "upsell";
+    kind: "package" | "product";
     name: string;
     price: number;
   };

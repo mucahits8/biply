@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local content studio fallback storage
+.content-studio
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

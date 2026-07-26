@@ -21,10 +21,10 @@ export const metadata: Metadata = {
     template: "%s | Biply",
   },
   description:
-    "Biply, NFC ve QR destekli premium ürünlerle Google yorum, sosyal medya ve WhatsApp aksiyonlarını tek dokunuşla kolaylaştırır.",
+    "Biply, NFC odaklı Stand, Square ve Round ürünleriyle Google yorum ekranınızı müşterinin tek dokunuşuyla açar.",
   openGraph: {
     title: "Biply | Tek dokunuşla Google yorum akışı",
-    description: "Müşteriniz memnun. Yorumu bir dokunuş uzağında.",
+    description: "QR yok. Uygulama yok. Sadece dokundur.",
     type: "website",
     locale: "tr_TR",
   },

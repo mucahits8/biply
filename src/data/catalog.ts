@@ -1,195 +1,507 @@
-export type ProductSlug = "biply-desk" | "biply-glass" | "biply-card" | "biply-pad";
-export type PackageSlug = "start" | "business" | "growth" | "pro";
-export type UpsellSlug =
-  | "extra-glass"
-  | "extra-desk"
-  | "instagram-card"
-  | "extra-card"
-  | "second-branch";
+export type ProductSlug = "biply-stand" | "biply-square" | "biply-round";
+export type ProductShape = "stand" | "square" | "round";
 
 export type CatalogItem = {
   id: string;
-  slug: string;
+  slug: ProductSlug;
+  name: string;
+  eyebrow: string;
+  subtitle: string;
+  description: string;
+  price: number;
+  oldPrice: number;
+  badge: string;
+  saleBadge: string;
+  shape: ProductShape;
+  size: string;
+  form: string;
+  mounting: string;
+  idealQuantity: string;
+  hierarchy: string;
+  cta: string;
+  features: string[];
+  details: string[];
+  useCases: string[];
+  detailStory: {
+    headline: string;
+    body: string;
+    proof: string;
+    bestFor: string;
+  };
+  salesMoments: {
+    title: string;
+    body: string;
+  }[];
+  customerReactions: {
+    persona: string;
+    moment: string;
+    quote: string;
+    signal: string;
+  }[];
+  reviewExamples: {
+    name: string;
+    sector: string;
+    quote: string;
+  }[];
+  closingPitch: {
+    title: string;
+    body: string;
+  };
+  image: string;
+  imageAlt: string;
+  gallery: string[];
+};
+
+export type BundlePreset = {
+  id: string;
   name: string;
   eyebrow: string;
   description: string;
-  price: number;
   badge?: string;
-  shape: "desk" | "glass" | "card" | "pad" | "social";
-  features: string[];
-  details: string[];
+  quantities: Record<ProductSlug, number>;
+};
+
+export type Promotion = {
+  id: string;
+  name: string;
+  description: string;
+  badge: string;
+  productSlug: ProductSlug;
+  quantity: number;
   image: string;
   imageAlt: string;
 };
 
 export const products: CatalogItem[] = [
   {
-    id: "product-desk",
-    slug: "biply-desk",
-    name: "Biply Desk",
-    eyebrow: "Masa üstü NFC stand",
+    id: "product-stand",
+    slug: "biply-stand",
+    name: "Biply Stand",
+    eyebrow: "Premium NFC Yorum Standı",
+    subtitle: "Tek kritik nokta",
     description:
-      "Kasa, resepsiyon ve masa üstlerinde yorumu tek dokunuşa indiren premium stand.",
-    price: 1190,
-    shape: "desk",
-    features: ["NFC alanı önde", "QR yedek erişim", "Beyaz veya siyah gövde"],
+      "İşletmenizin en önemli temas noktasında müşterilerinizi tek dokunuşla Google yorumlarına yönlendirin.",
+    price: 2000,
+    oldPrice: 2600,
+    badge: "PREMIUM",
+    saleBadge: "Lansmana özel 600 TL avantaj",
+    shape: "stand",
+    size: "110 x 160 mm",
+    form: "Masaüstü, ayaklı",
+    mounting: "Tezgah veya resepsiyona konumlanır",
+    idealQuantity: "1-3",
+    hierarchy: "Resepsiyonunuz veya kasanız için.",
+    cta: "Sepete Ekle",
+    features: ["NFC", "Beyaz premium gövde", "QR yok", "Tek dokunuşla Google yorum ekranı"],
     details: [
-      "Kareye yakın premium ön panel",
-      "Google yorum bağlantısına hızlı yönlendirme",
-      "İşletmenize özel kurulum ve tasarım",
+      "Otel, klinik, restoran, mağaza ve servis resepsiyonlarında premium görünürlük sağlar.",
+      "Müşterinin karar anında gördüğü net ve fiziksel bir yorum çağrısıdır.",
+      "Önemli tek temas noktasını temiz, kurumsal ve kalıcı bir yorum alanına çevirir.",
     ],
-    image: "/images/product-biply-desk-wood-clean.png",
-    imageAlt: "Ahşap tabanlı beyaz Biply Desk masa üstü yorum standı",
+    useCases: [
+      "Otel resepsiyonu",
+      "Klinik resepsiyonu",
+      "Restoran/kafe kasası",
+      "Güzellik merkezi",
+      "Spor salonu danışması",
+      "Mağaza kasası",
+      "Veteriner kliniği",
+      "Oto servis",
+      "Ofis resepsiyonu",
+    ],
+    detailStory: {
+      headline: "İşletmenin en görünür noktasını yorum toplama alanına çevirir.",
+      body:
+        "Biply Stand, müşterinin ödeme, kayıt, çıkış veya teslim alma anında karşısına çıkan premium temas noktasıdır. Ekip yorum istemek için uzun açıklama yapmak zorunda kalmaz; stand zaten ne yapılacağını sessizce anlatır.",
+      proof: "Tek noktada güçlü görünürlük",
+      bestFor: "Resepsiyon, kasa, danışma ve karşılama alanları",
+    },
+    salesMoments: [
+      {
+        title: "Çıkış anında görünür",
+        body: "Memnun müşteri ayrılmadan önce standı görür. Yorum istemek doğal bir kapanış hareketine dönüşür.",
+      },
+      {
+        title: "Premium algıyı bozmadan çalışır",
+        body: "Beyaz gövde ve masaüstü form, otel, klinik ve mağaza gibi şık alanlarda promosyon gibi değil kurumsal bir araç gibi durur.",
+      },
+      {
+        title: "Ekibin yükünü azaltır",
+        body: "Personel 'Google'a yorum bırakır mısınız?' demek yerine sadece standı işaret eder. Süreç daha kısa ve daha konforlu olur.",
+      },
+    ],
+    customerReactions: [
+      {
+        persona: "Otel misafiri",
+        moment: "Check-out sırasında",
+        quote: "Bu kadar kolay mıydı? Telefonu yaklaştırınca direkt yorum ekranı açıldı.",
+        signal: "Resepsiyonda doğal kapanış",
+      },
+      {
+        persona: "Klinik danışanı",
+        moment: "Randevu sonrası çıkarken",
+        quote: "Beklemeden açıldı, iki dakikada yorumumu yazdım.",
+        signal: "Hız hissi",
+      },
+      {
+        persona: "Mağaza müşterisi",
+        moment: "Ödeme bittikten sonra",
+        quote: "Kasada görünce unutmadan değerlendirme yaptım.",
+        signal: "Hatırlatma etkisi",
+      },
+    ],
+    reviewExamples: [
+      {
+        name: "Ayşe K.",
+        sector: "Klinik",
+        quote: "Randevu süreci çok düzenliydi, çıkışta kolayca yorum bırakabildim. Teşekkürler.",
+      },
+      {
+        name: "Burak S.",
+        sector: "Otel",
+        quote: "Resepsiyon ekibi çok ilgiliydi. Konaklama sonrası yorum ekranı hemen açıldı, deneyimimi paylaşmak kolay oldu.",
+      },
+      {
+        name: "Deniz A.",
+        sector: "Mağaza",
+        quote: "Ürün seçimi ve ödeme süreci hızlıydı. Mağazadan ayrılmadan değerlendirme yapabildim.",
+      },
+    ],
+    closingPitch: {
+      title: "Tek kritik noktaya koy, yorum akışını başlat.",
+      body:
+        "Bir işletmede bazen en değerli yer sadece bir noktadır: resepsiyon, kasa ya da danışma. Stand o noktayı daha görünür, daha profesyonel ve daha ölçülebilir hale getirir.",
+    },
+    image: "/media/biply-stand-product.jpeg",
+    imageAlt: "Beyaz Biply Stand premium NFC Google yorum standı",
+    gallery: [
+      "/media/biply-stand-product.jpeg",
+      "/media/biply-stand-clean-product.jpeg",
+      "/media/biply-stand-hero.png",
+      "/media/biply-stand-hotel-lobby.png",
+      "/media/biply-stand-hotel.png",
+      "/media/biply-stand-beauty-reception.png",
+      "/media/biply-stand-dental-clinic.png",
+      "/media/biply-stand-veterinary.png",
+      "/media/biply-stand-office-reception.png",
+      "/media/biply-stand-auto-service.png",
+      "/media/biply-stand-retail-counter.png",
+      "/media/biply-stand-retail-pos.png",
+    ],
   },
   {
-    id: "product-glass",
-    slug: "biply-glass",
-    name: "Biply Glass",
-    eyebrow: "Şeffaf cam sticker",
-    description:
-      "Vitrin, cam kapı ve masa yüzeylerinde şeffaf, minimal ve kalıcı temas noktası.",
-    price: 890,
-    shape: "glass",
-    features: ["Şeffaf akrilik his", "Güçlü yapışkan", "İz bırakmadan sökülebilir"],
+    id: "product-square",
+    slug: "biply-square",
+    name: "Biply Square",
+    eyebrow: "NFC Yorum Etiketi",
+    subtitle: "Birden fazla temas noktası",
+    description: "Yapıştır. Dokundur. Yorumunu al.",
+    price: 1250,
+    oldPrice: 1650,
+    badge: "EN COK TERCIH EDILEN",
+    saleBadge: "Lansmana özel 400 TL avantaj",
+    shape: "square",
+    size: "100 x 100 mm",
+    form: "Yuvarlatılmış kare",
+    mounting: "Yapışkanlı",
+    idealQuantity: "2-10",
+    hierarchy: "Masa, cam ve bankolar için.",
+    cta: "Sepete Ekle",
+    features: ["NFC", "Yapışkanlı kullanım", "QR yok", "Çok yönlü temas noktası"],
     details: [
-      "Cam yüzeyle bütünleşen kırık beyaz baskı",
-      "NFC dokundurma ikonu büyük ve yönlendirici",
-      "QR kod yalnızca alternatif erişim olarak konumlanır",
+      "İşletme içinde birden fazla noktaya yerleştirilerek yorum alma olasılığını artırır.",
+      "Masa, cam, ayna, banko ve bekleme alanlarında sade ve görünür kalır.",
+      "Ana satış ürünü olarak hem tekil hem adetli kullanım için dengeli seçimdir.",
     ],
-    image: "/images/product-biply-glass-white-window.png",
-    imageAlt: "Beyaz cam yüzeyde kullanılan Biply Glass NFC etiketi",
+    useCases: [
+      "Restoran masaları",
+      "Kafe masaları",
+      "Resepsiyon",
+      "Kasa",
+      "Kuaför aynası",
+      "Cam yüzey",
+      "Klinik",
+      "Mağaza",
+      "Paket teslim noktası",
+      "Bekleme alanları",
+    ],
+    detailStory: {
+      headline: "Müşterinin doğal temas ettiği yüzeylerde yorum çağrısı oluşturur.",
+      body:
+        "Biply Square, tek bir noktaya bağlı kalmak istemeyen işletmeler için tasarlandı. Masaya, aynaya, cama veya bankoya yerleşir; müşteri hizmeti deneyimlediği yerde telefonunu yaklaştırır ve yorum ekranına geçer.",
+      proof: "Birden fazla temas noktasında daha fazla fırsat",
+      bestFor: "Masa, cam, ayna, banko, bekleme alanı",
+    },
+    salesMoments: [
+      {
+        title: "Müşteri beklerken çalışır",
+        body: "Sipariş, işlem veya randevu beklerken yorum bırakma çağrısı göz hizasında kalır. Boş bekleme süresi değerlendirmeye dönüşür.",
+      },
+      {
+        title: "Bir alanla sınırlı kalmaz",
+        body: "Square'i kasaya, masaya ve cama dağıtarak müşteriye birden fazla doğal dokunma noktası sunarsın.",
+      },
+      {
+        title: "Görünür ama rahatsız etmez",
+        body: "100 x 100 mm form, mesajı net verir; alanı domine etmeden masaya veya yüzeye yerleşir.",
+      },
+    ],
+    customerReactions: [
+      {
+        persona: "Kafe müşterisi",
+        moment: "Kahvesini beklerken",
+        quote: "Masadaki etikete dokundum, yorum ekranı hemen açıldı. QR aramak yok.",
+        signal: "Bekleme anını değerlendirir",
+      },
+      {
+        persona: "Güzellik merkezi müşterisi",
+        moment: "Ayna karşısında işlem sonrası",
+        quote: "Aynanın yanında görünce hizmetten memnunken yorumumu yazdım.",
+        signal: "Hizmet sonrası hatırlatma",
+      },
+      {
+        persona: "Showroom ziyaretçisi",
+        moment: "Danışmanlık sonrası",
+        quote: "Çıkmadan değerlendirme bırakmak çok pratikti.",
+        signal: "Çok yönlü temas",
+      },
+    ],
+    reviewExamples: [
+      {
+        name: "Melis T.",
+        sector: "Kafe",
+        quote: "Kahve ve servis çok iyiydi. Masadaki Biply sayesinde yorum bırakmak da çok kolay oldu.",
+      },
+      {
+        name: "Seda B.",
+        sector: "Güzellik",
+        quote: "İşlemden çok memnun kaldım. Aynanın yanındaki etiketle direkt değerlendirme ekranı açıldı.",
+      },
+      {
+        name: "Emre Y.",
+        sector: "Showroom",
+        quote: "Danışmanlık süreci açıklayıcıydı. Çıkışta hızlıca yorumumu paylaşabildim.",
+      },
+    ],
+    closingPitch: {
+      title: "Tek yer değil, tüm temas noktaları yorum toplasın.",
+      body:
+        "Square, müşterinin işletme içinde dolaştığı akışa uyum sağlar. Birkaç noktaya yerleştirildiğinde yorum isteme işi personele bağlı kalmaz.",
+    },
+    image: "/media/biply-square-product-front.png",
+    imageAlt: "Biply Square kare NFC Google yorum etiketi ürün görseli",
+    gallery: [
+      "/media/biply-square-product-front.png",
+      "/media/biply-square-cafe.png",
+      "/media/biply-square-office-door.png",
+      "/media/biply-square-salon-mirror.png",
+      "/media/biply-square-salon.png",
+      "/media/biply-square-restaurant-table.png",
+      "/media/biply-square-cafe-moment.png",
+      "/media/biply-square-hotel-room.png",
+      "/media/biply-square-fine-dining.png",
+      "/media/biply-square-office.png",
+      "/media/biply-square-table.png",
+    ],
   },
   {
-    id: "product-card",
-    slug: "biply-card",
-    name: "Biply Card",
-    eyebrow: "El kartı NFC + QR",
-    description:
-      "Garson, ekip ve saha kullanımı için cepte taşınan hızlı yorum ve takip kartı.",
-    price: 590,
-    shape: "card",
-    features: ["NFC dokundur", "QR ile paylaş", "Ekip kullanımına uygun"],
+    id: "product-round",
+    slug: "biply-round",
+    name: "Biply Round",
+    eyebrow: "Kompakt NFC Yorum Etiketi",
+    subtitle: "Cok sayida masa / kompakt kullanım",
+    description: "Küçük alanlarda maksimum görünürlük.",
+    price: 750,
+    oldPrice: 950,
+    badge: "KOMPAKT",
+    saleBadge: "Lansmana özel 200 TL avantaj",
+    shape: "round",
+    size: "Cap 70 mm",
+    form: "Yuvarlak",
+    mounting: "Yapışkanlı",
+    idealQuantity: "5+",
+    hierarchy: "Her masaya bir Biply.",
+    cta: "Sepete Ekle",
+    features: ["NFC", "Kompakt yuvarlak form", "QR yok", "Adetli satışa uygun"],
     details: [
-      "Müşteriyle yüz yüze temas anında kullanılır",
-      "İnce kart formu sayesinde kolay taşınır",
-      "Google yorum veya sosyal medya yönlendirmesi yapılabilir",
+      "Küçük yüzeylerde ve çok sayıda müşteri temas noktasında görünür kalır.",
+      "Restoran, kafe, bar ve pastane gibi masa yoğun işletmeler için güçlü giriş ürünüdür.",
+      "10+ alımda birim fiyatı aşağı çeken çoklu alım avantajı ile ölçeklenir.",
     ],
-    image: "/images/product-biply-card-white-hand.png",
-    imageAlt: "Elde tutulan beyaz Biply Card NFC ve QR kartı",
-  },
-  {
-    id: "product-pad",
-    slug: "biply-pad",
-    name: "Biply Pad",
-    eyebrow: "Kompakt NFC temas pedi",
-    description:
-      "Tezgah, paket teslimi ve bekleme alanları için küçük ama dikkat çeken temas pedi.",
-    price: 790,
-    shape: "pad",
-    features: ["Kompakt form", "NFC odaklı", "Yoğun alanlara uygun"],
-    details: [
-      "Az yer kaplayan yuvarlatılmış kare form",
-      "Telefonunu dokundur aksiyonunu net gösterir",
-      "Paketlere ek temas noktası olarak güçlü tamamlayıcı üründür",
+    useCases: [
+      "Restoran masası",
+      "Kafe masası",
+      "Bar",
+      "Pastane",
+      "Kasa",
+      "Tezgah",
+      "Paket teslim alanı",
+      "Bekleme alanları",
     ],
-    image: "/images/product-biply-pad-white-round.png",
-    imageAlt: "Tezgah üzerinde yuvarlak beyaz Biply Pad NFC yorum ürünü",
+    detailStory: {
+      headline: "Her masayı sessiz bir yorum davetine dönüştürür.",
+      body:
+        "Biply Round, adetli kullanım için en hızlı başlangıç ürünüdür. Küçük yüzeylerde net görünür, masa düzenini bozmaz ve müşterinin telefonu zaten elindeyken yorum ekranını açmasını sağlar.",
+      proof: "Çoklu kullanımda birim fiyat avantajı",
+      bestFor: "Kafe, restoran, bar, pastane ve paket teslim noktaları",
+    },
+    salesMoments: [
+      {
+        title: "Her masada aynı çağrı",
+        body: "Personel tek tek hatırlatmak zorunda kalmaz. Her masa kendi yorum çağrısını taşır.",
+      },
+      {
+        title: "Kompakt alanlarda güçlü görünürlük",
+        body: "70 mm yuvarlak form, küçük masalarda, bar tezgahında veya paket teslim alanında rahatça yer bulur.",
+      },
+      {
+        title: "Adet arttıkça karar kolaylaşır",
+        body: "10+ adetle masaları kaplamak daha mantıklı hale gelir; çoklu alım avantajı toplam maliyeti görünür biçimde düşürür.",
+      },
+    ],
+    customerReactions: [
+      {
+        persona: "Restoran müşterisi",
+        moment: "Yemek sonrası masada",
+        quote: "Hesabı beklerken dokundum, yorumu hemen yazdım.",
+        signal: "Masa başı dönüşüm",
+      },
+      {
+        persona: "Pastane müşterisi",
+        moment: "Tezgahta sipariş tesliminde",
+        quote: "Küçük ama net görünüyor. Telefonu yaklaştırınca ekran açıldı.",
+        signal: "Kompakt görünürlük",
+      },
+      {
+        persona: "Bar misafiri",
+        moment: "Servis sonrası",
+        quote: "QR okutmaya çalışmadım, dokundurmak daha hızlı geldi.",
+        signal: "Sürtünmesiz kullanım",
+      },
+    ],
+    reviewExamples: [
+      {
+        name: "Can P.",
+        sector: "Restoran",
+        quote: "Yemekler ve servis çok başarılıydı. Masadaki etiketle yorumu hemen bırakabildim.",
+      },
+      {
+        name: "İrem L.",
+        sector: "Pastane",
+        quote: "Ürünler tazeydi, ekip çok güler yüzlüydü. Telefonu yaklaştırınca değerlendirme ekranı açıldı.",
+      },
+      {
+        name: "Murat E.",
+        sector: "Bar",
+        quote: "Servis hızlıydı, ortam keyifliydi. Çıkmadan puanımı ve yorumumu paylaşmak kolay oldu.",
+      },
+    ],
+    closingPitch: {
+      title: "Masa sayın arttıkça Round daha çok çalışır.",
+      body:
+        "Round, müşteri yoğunluğunu avantaja çevirir. Her masa ayrı bir yorum fırsatı olur; adetli alımda kampanya etkisi daha net hissedilir.",
+    },
+    image: "/media/biply-round-product-front.jpeg",
+    imageAlt: "Biply Round yuvarlak NFC Google yorum etiketi ürün görseli",
+    gallery: [
+      "/media/biply-round-product-front.jpeg",
+      "/media/biply-round-cafe.png",
+      "/media/biply-round-cafe-touch.png",
+      "/media/biply-round-bakery-counter.png",
+      "/media/biply-round-bakery.png",
+      "/media/biply-round-window-large.png",
+      "/media/biply-round-window.png",
+    ],
   },
 ];
 
-export const packages = [
+export const bundlePresets: BundlePreset[] = [
   {
-    id: "package-start",
-    slug: "start" as const,
-    name: "Start",
-    price: 1490,
-    description: "İlk temas noktasını hızlı kurmak isteyen küçük işletmeler için.",
-    includes: ["1 Biply Desk veya Card", "Google yorum NFC kurulumu", "Kolay kurulum desteği"],
+    id: "preset-critical",
+    name: "Kritik Nokta",
+    eyebrow: "Resepsiyon / kasa",
+    description: "Tek güçlü temas noktasını premium stand ile kapat.",
+    quantities: {
+      "biply-stand": 1,
+      "biply-square": 0,
+      "biply-round": 0,
+    },
   },
   {
-    id: "package-business",
-    slug: "business" as const,
-    name: "Business",
-    price: 3490,
-    badge: "En Çok Tercih Edilen",
-    description: "Masa, cam ve sosyal temasları aynı sistemde toplar.",
-    includes: ["Biply Desk + Biply Glass", "Google yorum + Instagram", "Öncelikli destek"],
+    id: "preset-most-loved",
+    name: "Hazır Başlangıç",
+    eyebrow: "Lansman önerisi",
+    description: "Bir stand, birkaç square ve masa üstü round ile hızlı başlangıç.",
+    badge: "EN AVANTAJLI",
+    quantities: {
+      "biply-stand": 1,
+      "biply-square": 4,
+      "biply-round": 8,
+    },
   },
   {
-    id: "package-growth",
-    slug: "growth" as const,
-    name: "Growth",
-    price: 4990,
-    description: "Birden çok temas noktasıyla yorum akışını büyütmek için.",
-    includes: ["Desk + Glass + Card", "Google + Instagram + WhatsApp", "Çok şubeli yönetime hazır"],
-  },
-  {
-    id: "package-pro",
-    slug: "pro" as const,
-    name: "Pro",
-    price: 0,
-    description: "Zincir, otel, klinik ve çok lokasyonlu yapılar için özel teklif.",
-    includes: ["Özel ürün kombinasyonu", "Şube bazlı kurulum", "Teklif ve operasyon planı"],
-    quoteOnly: true,
+    id: "preset-table",
+    name: "Masa Paketi",
+    eyebrow: "Kafe / restoran",
+    description: "Her masaya bir Biply koymak isteyen işletmeler için.",
+    quantities: {
+      "biply-stand": 0,
+      "biply-square": 2,
+      "biply-round": 10,
+    },
   },
 ];
 
-export const upsells = [
+export const promotions: Promotion[] = [
   {
-    id: "upsell-glass",
-    slug: "extra-glass" as const,
-    name: "Ek Biply Glass",
-    description: "Cam sticker",
-    oldPrice: 990,
-    price: 690,
-    shape: "glass" as const,
-    image: "/images/product-biply-glass-white-window.png",
-    imageAlt: "Ek beyaz Biply Glass cam etiketi",
+    id: "promo-round-10",
+    name: "10'lu Biply Round",
+    description: "Masa yoğun kafe ve restoranlar için adetli başlangıç.",
+    badge: "LANSMAN SETI",
+    productSlug: "biply-round",
+    quantity: 10,
+    image: "/media/biply-round-bakery.png",
+    imageAlt: "Pastane tezgahında Biply Round NFC yorum etiketi",
   },
   {
-    id: "upsell-desk",
-    slug: "extra-desk" as const,
-    name: "Ek Biply Desk",
-    description: "Masa üstü stand",
-    oldPrice: 1190,
-    price: 890,
-    shape: "desk" as const,
-    image: "/images/product-biply-desk-wood-clean.png",
-    imageAlt: "Ek ahşap tabanlı Biply Desk masa üstü stand",
+    id: "promo-square-4",
+    name: "4'lu Biply Square",
+    description: "Masa, cam, kasa ve bekleme alanını birlikte kapat.",
+    badge: "MASA AVANTAJI",
+    productSlug: "biply-square",
+    quantity: 4,
+    image: "/media/biply-square-salon.png",
+    imageAlt: "Güzellik salonunda Biply Square NFC yorum etiketi",
   },
   {
-    id: "upsell-instagram",
-    slug: "instagram-card" as const,
-    name: "Instagram takip kartı",
-    description: "Sosyal medya odaklı",
-    oldPrice: 790,
-    price: 590,
-    shape: "social" as const,
-    image: "/images/product-biply-card-white-hand.png",
-    imageAlt: "Sosyal medya yönlendirmesi için beyaz Biply kart",
+    id: "promo-stand-extra",
+    name: "İkinci Nokta Stand",
+    description: "İkinci şube, ikinci kasa veya VIP resepsiyon noktası.",
+    badge: "PREMIUM EKLEME",
+    productSlug: "biply-stand",
+    quantity: 1,
+    image: "/media/biply-stand-hotel.png",
+    imageAlt: "Otel resepsiyonunda Biply Stand NFC yorum standı",
   },
-  {
-    id: "upsell-card",
-    slug: "extra-card" as const,
-    name: "Ek beyaz Biply Card",
-    description: "NFC + QR kart",
-    oldPrice: 590,
-    price: 390,
-    shape: "card" as const,
-    image: "/images/product-biply-card-white-hand.png",
-    imageAlt: "Ek beyaz Biply Card",
-  },
-  {
-    id: "upsell-branch",
-    slug: "second-branch" as const,
-    name: "İkinci şube kurulumu",
-    description: "Aynı yönetim paneli",
-    oldPrice: 990,
-    price: 690,
-    shape: "pad" as const,
-    image: "/images/product-biply-pad-white-round.png",
-    imageAlt: "İkinci şube kurulumu için beyaz Biply temas ürünü",
-  },
+];
+
+export const comparisonRows = [
+  ["Fiyat", "2.000 TL", "1.250 TL", "750 TL"],
+  ["Boyut", "11 x 16 cm", "10 x 10 cm", "Ø7 cm"],
+  ["Kullanım", "Masaüstü", "Yapışkanlı", "Yapışkanlı"],
+  ["Segment", "Premium", "Çok yönlü", "Kompakt"],
+  ["İdeal adet", "1-3", "2-10", "5+"],
+  ["NFC", "Var", "Var", "Var"],
+  ["QR", "Yok", "Yok", "Yok"],
+];
+
+export const sectors = [
+  "Kafe & restoran",
+  "Klinik & güzellik",
+  "Otel & konaklama",
+  "Mağaza & showroom",
+  "Oto servis",
+  "Veteriner kliniği",
 ];
 
 export const testimonials = [
@@ -198,59 +510,67 @@ export const testimonials = [
     role: "Kafe işletmecisi",
     sector: "Kafe",
     quote:
-      "Masaya koyduğumuz ilk hafta müşterilerimiz yoruma nasıl ulaşacağını sormadan aksiyona geçti. Görüntüsü de mekânın diline yakıştı.",
-  },
-  {
-    name: "Burak A.",
-    role: "Gym kurucusu",
-    sector: "Gym",
-    quote:
-      "Girişteki cam etiketi üyeler için çok doğal bir temas noktası oldu. Ekip link anlatmak yerine sadece dokundurma alanını gösteriyor.",
-  },
-  {
-    name: "Mert K.",
-    role: "Boks salonu yöneticisi",
-    sector: "Boks",
-    quote:
-      "Antrenman sonrası memnun kalan üyeye kart göstermek yeterli oluyor. Hızlı, sade ve salonun premium hissini bozmuyor.",
+      "Masalara Round koyunca yoruma yönlendirme kasadaki anlatımdan çıktı. Müşteri sadece telefonunu yaklaştırıyor.",
   },
   {
     name: "Selin D.",
-    role: "Emlak danışmanı",
-    sector: "Emlak",
+    role: "Güzellik merkezi kurucusu",
+    sector: "Güzellik",
     quote:
-      "Portföy görüşmelerinden sonra müşteriyi doğru sayfaya yönlendirmek kolaylaştı. Kart ve masa standı birlikte daha güvenli hissettiriyor.",
+      "Square etiketi aynanın yanında çok doğal durdu. Hizmet sonrası yorum istemek daha zarif hale geldi.",
   },
-];
-
-export const sectors = [
-  "Kafe & restoran",
-  "Klinik & güzellik",
-  "Otel & konaklama",
-  "Mağaza & showroom",
-  "Servis & teknik ekip",
-  "Eğitim & stüdyo",
+  {
+    name: "Mert K.",
+    role: "Otel operasyon yöneticisi",
+    sector: "Otel",
+    quote:
+      "Resepsiyondaki Stand premium görünüyor ve ekibin açıklama yapmasına gerek bırakmıyor.",
+  },
 ];
 
 export const faqs = [
   {
-    question: "Biply ne yapar?",
+    question: "Biply nasıl çalışır?",
     answer:
-      "Müşterinizin Google yorum, sosyal medya veya WhatsApp gibi aksiyonlara NFC dokundurma ya da QR tarama ile ulaşmasını sağlar.",
+      "Müşteri telefonunu Biply NFC alanına yaklaştırır ve Google yorum ekranınız anında açılır. Uygulama indirme veya QR tarama gerekmez.",
+  },
+  {
+    question: "Ürünlerde QR var mı?",
+    answer: "Hayır. Bu yeni ürün ailesi NFC odaklıdır; QR yok, sadece dokundur deneyimi vardır.",
+  },
+  {
+    question: "Çoklu alım indirimi nasıl hesaplanır?",
+    answer:
+      "Adet arttıkça avantaj otomatik uygulanır. 2 adette %5, 3-4 adette %10, 5-9 adette %15, 10+ adette %20 avantaj gösterilir.",
+  },
+  {
+    question: "Şu an nasıl satın alıyoruz?",
+    answer:
+      "Sipariş özetinizi oluşturup WhatsApp'tan gönderirsiniz. Temsilcimiz ödeme, teslimat ve kurulum bilgilerini aynı görüşmede netleştirir.",
+  },
+  {
+    question: "Telefonlar NFC'yi destekliyor mu?",
+    answer:
+      "Güncel iPhone ve Android telefonların büyük çoğunluğu NFC destekler. Müşteri telefonunu ürün üzerindeki NFC alanına yaklaştırdığında yorum ekranı açılır.",
+  },
+  {
+    question: "Google yorum linkim ürüne nasıl tanımlanıyor?",
+    answer:
+      "Sipariş sırasında işletmenizin Google yorum bağlantısı alınır ve ürünler bu bağlantıya göre hazırlanır. Kurulum için gerekli bilgiler WhatsApp üzerinden netleştirilir.",
+  },
+  {
+    question: "Havale sonrası süreç nasıl ilerler?",
+    answer:
+      "Sipariş WhatsApp'ta teyit edildikten sonra ödeme bilgisi paylaşılır. Ödeme onayıyla birlikte üretim, bağlantı tanımı ve teslimat süreci başlar.",
+  },
+  {
+    question: "Fatura veya belge süreci nasıl olacak?",
+    answer:
+      "Sipariş öncesinde ihtiyaç duyduğunuz belge ve teslimat bilgilerini temsilcimizle netleştirebilirsiniz. Satın alma akışı WhatsApp üzerinden kayıtlı ilerler.",
   },
   {
     question: "Google yorumlarında teşvik var mı?",
     answer:
-      "Hayır. Biply nötr yönlendirme dili kullanır: deneyimi paylaşmaya davet eder, belirli puan veya olumlu yorum istemez.",
-  },
-  {
-    question: "Ödeme altyapısı hazır mı?",
-    answer:
-      "Bu V1 sürümünde checkout mock çalışır; sipariş özeti WhatsApp üzerinden hızlı teklif ve kurulum akışına gönderilir.",
-  },
-  {
-    question: "Tasarım işletmeye özel mi?",
-    answer:
-      "Evet. Ürün üzerindeki bağlantılar, QR ve temel metinler işletmenize göre hazırlanır.",
+      "Hayır. Biply müşteriyi yorum ekranına kolayca ulaştırır; belirli puan, olumlu yorum veya ödül vaadi kullanmaz.",
   },
 ];

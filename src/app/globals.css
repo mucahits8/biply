@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f3ed;
+  --background: #fbf7ef;
   --foreground: #18181b;
 }
 
@@ -22,7 +22,9 @@ html {
 
 body {
   margin: 0;
-  background: var(--background);
+  background:
+    radial-gradient(circle at 16% 0%, rgb(255 255 255 / 0.95), transparent 34rem),
+    linear-gradient(180deg, #fffaf0 0%, var(--background) 38%, #f6eddf 100%);
   color: var(--foreground);
   font-family: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
 }
@@ -38,6 +40,83 @@ select {
   margin-inline: auto;
   max-width: 80rem;
   padding: 4rem 1rem;
+}
+
+.smooth-card {
+  border-radius: 1.5rem;
+  transition:
+    transform 260ms ease,
+    box-shadow 260ms ease,
+    border-color 260ms ease,
+    background-color 260ms ease;
+}
+
+.smooth-card:hover {
+  border-color: rgb(212 212 216);
+}
+
+.reveal-soft {
+  animation: reveal-soft 620ms ease both;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.marquee-track {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-content {
+  display: inline-flex;
+  min-width: max-content;
+  gap: 1.25rem;
+  padding-inline: 1rem;
+  animation: marquee-slide 28s linear infinite;
+}
+
+.marquee-pill {
+  display: inline-flex;
+  min-height: 1.8rem;
+  align-items: center;
+  border-width: 1px;
+  border-radius: 999px;
+  padding: 0 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.marquee-pill::after {
+  content: "•";
+  margin-left: 1.25rem;
+  color: rgb(24 24 27 / 0.42);
+}
+
+@keyframes marquee-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes reveal-soft {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .field-input {
@@ -61,5 +140,20 @@ select {
 @media (min-width: 768px) {
   .section-pad {
     padding-inline: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

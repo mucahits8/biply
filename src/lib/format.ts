@@ -9,6 +9,7 @@ export function formatPrice(price: number) {
 }
 
 export function whatsappUrl(message: string) {
-  const phone = "905551112233";
+  const phone = (process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? "905551112233").replace(/\D/g, "");
+
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }

@@ -1,8 +1,9 @@
 "use client";
 
 import { createContext, useContext, useMemo, useReducer } from "react";
+import { calculateBulkPricing } from "@/lib/pricing";
 
-type CartItemKind = "package" | "product" | "upsell";
+type CartItemKind = "package" | "product";
 
 export type CartItem = {
   id: string;
@@ -21,6 +22,9 @@ type AddItemInput = Omit<CartItem, "quantity"> & { quantity?: number };
 
 type CartContextValue = {
   items: CartItem[];
+  subtotal: number;
+  discountAmount: number;
+  discountRate: number;
   total: number;
   count: number;
   selectedPackage?: CartItem;
@@ -80,13 +84,16 @@ function reducer(state: CartState, action: CartAction): CartState {
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, { items: [], isCartOpen: false });
-  const total = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const { subtotal, discountAmount, discountRate, total } = calculateBulkPricing(state.items);
   const count = state.items.reduce((sum, item) => sum + item.quantity, 0);
   const selectedPackage = state.items.find((item) => item.kind === "package");
 
   const value = useMemo<CartContextValue>(
     () => ({
       items: state.items,
+      subtotal,
+      discountAmount,
+      discountRate,
       total,
       count,
       selectedPackage,
@@ -98,7 +105,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       openCart: () => dispatch({ type: "open" }),
       closeCart: () => dispatch({ type: "close" }),
     }),
-    [count, selectedPackage, state.isCartOpen, state.items, total],
+    [count, discountAmount, discountRate, selectedPackage, state.isCartOpen, state.items, subtotal, total],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
