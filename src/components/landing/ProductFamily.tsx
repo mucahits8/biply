@@ -9,7 +9,7 @@ import { formatPrice } from "@/lib/format";
 
 export function ProductFamily() {
   return (
-    <div className="no-scrollbar grid auto-cols-[78%] grid-flow-col snap-x snap-mandatory gap-3 overflow-x-auto pb-2 sm:auto-cols-[48%] lg:grid-flow-row lg:grid-cols-5 lg:gap-4 lg:overflow-visible lg:pb-0">
+    <div className="no-scrollbar grid auto-cols-[100%] grid-flow-col snap-x snap-mandatory gap-3 overflow-x-auto pb-2 sm:auto-cols-[48%] lg:grid-flow-row lg:grid-cols-5 lg:gap-4 lg:overflow-visible lg:pb-0">
       {products.map((product) => (
         <article key={product.id} className="group swipe-card overflow-hidden rounded-[1.45rem] border border-zinc-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-zinc-950/12 lg:rounded-[1.8rem]">
           <div className="relative aspect-[1.16/1] overflow-hidden bg-[#f4f1eb] lg:aspect-[4/3]">

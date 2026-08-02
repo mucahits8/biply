@@ -146,8 +146,8 @@ export function CommerceExperience() {
   }
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1.08fr_0.92fr] lg:gap-6">
-      <section id="paketler" className="smooth-card scroll-mt-24 border border-zinc-200 bg-white p-3 shadow-sm sm:p-6">
+    <div className="grid min-w-0 max-w-full gap-4 overflow-hidden lg:grid-cols-[1.08fr_0.92fr] lg:gap-6 lg:overflow-visible">
+      <section id="paketler" className="smooth-card min-w-0 max-w-full scroll-mt-24 overflow-hidden border border-zinc-200 bg-white p-3 shadow-sm sm:p-6">
         <div className="mb-4 sm:mb-6">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-blue-700">Hızlı paket oluşturucu</p>
           <h2 className="mt-2 text-2xl font-black tracking-[-0.04em] text-zinc-950 sm:text-5xl">
@@ -158,7 +158,7 @@ export function CommerceExperience() {
           </p>
         </div>
 
-        <div className="no-scrollbar grid auto-cols-[78%] grid-flow-col gap-3 overflow-x-auto pb-1 md:grid-flow-row md:grid-cols-4 md:overflow-visible md:pb-0">
+        <div className="no-scrollbar grid min-w-0 max-w-full auto-cols-[100%] grid-flow-col snap-x snap-mandatory gap-3 overflow-x-auto pb-1 md:grid-flow-row md:grid-cols-4 md:overflow-visible md:pb-0">
           {bundlePresets.map((preset) => (
             <button
               key={preset.id}
@@ -179,29 +179,29 @@ export function CommerceExperience() {
           ))}
         </div>
 
-        <div className="mt-4 grid gap-2.5 sm:mt-5 sm:gap-3">
+        <div className="mt-4 grid min-w-0 gap-2.5 sm:mt-5 sm:gap-3">
           {products.map((product) => (
-            <article key={product.id} className="smooth-card grid grid-cols-[68px_1fr] gap-3 border border-zinc-200 bg-[#fbfaf7] p-3 sm:grid-cols-[92px_1fr_auto] sm:items-center sm:gap-4">
+            <article key={product.id} className="smooth-card grid min-w-0 grid-cols-[68px_minmax(0,1fr)] gap-3 border border-zinc-200 bg-[#fbfaf7] p-3 sm:grid-cols-[92px_minmax(0,1fr)_auto] sm:items-center sm:gap-4">
               <div className="relative h-20 overflow-hidden rounded-[1rem] bg-zinc-100 sm:h-20">
                 <Image src={product.image} alt={product.imageAlt} fill sizes="92px" className="object-contain p-1" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-full bg-white px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.14em] text-blue-700">
                     {product.badge}
                   </span>
                   <span className="text-xs font-bold text-zinc-500">{product.subtitle}</span>
                 </div>
-                <h3 className="mt-2 text-xl font-black tracking-[-0.04em] text-zinc-950">{product.name}</h3>
+                <h3 className="mt-2 break-words text-xl font-black tracking-[-0.04em] text-zinc-950">{product.name}</h3>
                 <p className="mt-1 hidden text-sm leading-5 text-zinc-600 sm:block">{product.hierarchy}</p>
-                <div className="mt-2 flex items-center gap-2">
+                <div className="mt-2 flex min-w-0 flex-wrap items-center gap-2">
                   <span className="text-xs font-bold text-zinc-400 line-through">{formatPrice(product.oldPrice)}</span>
                   <strong className="text-sm text-zinc-950">{formatPrice(product.price)}</strong>
                   <span className="hidden text-[11px] font-black text-emerald-700 sm:inline">{product.saleBadge}</span>
                 </div>
               </div>
-              <div className="col-span-2 flex items-center justify-between gap-3 sm:col-auto sm:justify-end">
-                <span className="text-xs font-black text-emerald-700 sm:hidden">{product.saleBadge}</span>
+              <div className="col-span-2 flex min-w-0 items-center justify-between gap-3 sm:col-auto sm:justify-end">
+                <span className="min-w-0 text-xs font-black leading-5 text-emerald-700 sm:hidden">{product.saleBadge}</span>
                 <div className="inline-grid h-12 grid-cols-[40px_48px_40px] items-center overflow-hidden rounded-full border border-zinc-200 bg-white">
                   <button type="button" className="h-full text-xl font-black" onClick={() => updateQuantity(product.slug, quantities[product.slug] - 1)} aria-label={`${product.name} azalt`}>
                     -
@@ -220,7 +220,7 @@ export function CommerceExperience() {
           <div className="sm:col-span-3">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Sık seçilen tamamlayıcılar</p>
           </div>
-          <div className="no-scrollbar mt-3 grid auto-cols-[72%] grid-flow-col gap-3 overflow-x-auto pb-1 sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0 xl:grid-cols-4">
+          <div className="no-scrollbar mt-3 grid min-w-0 max-w-full auto-cols-[100%] grid-flow-col snap-x snap-mandatory gap-3 overflow-x-auto pb-1 sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0 xl:grid-cols-4">
             {promotions.map((promotion) => (
               <article key={promotion.id} className="swipe-card overflow-hidden border border-zinc-200 bg-white shadow-sm">
                 <div className="relative aspect-[4/3] bg-zinc-100">
@@ -247,7 +247,7 @@ export function CommerceExperience() {
         </div>
       </section>
 
-      <div className="space-y-4 lg:sticky lg:top-24 lg:self-start lg:space-y-6">
+      <div className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start lg:space-y-6">
         <section className="smooth-card border border-zinc-200 bg-zinc-950 p-4 text-white shadow-xl shadow-zinc-950/15 sm:p-5">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-amber-300">Paketin</p>
           <div className="mt-4 space-y-3">

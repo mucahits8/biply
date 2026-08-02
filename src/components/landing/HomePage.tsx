@@ -239,7 +239,7 @@ function MobileSignalFlow() {
 
   return (
     <section className="mx-auto max-w-7xl px-4 pb-5 lg:hidden">
-      <div className="no-scrollbar grid auto-cols-[82%] grid-flow-col gap-3 overflow-x-auto pb-1">
+      <div className="no-scrollbar grid auto-cols-[100%] grid-flow-col snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
         {signals.map(([step, title, copy]) => (
           <article key={step} className="swipe-card rounded-[1.25rem] border border-zinc-200 bg-white p-4 shadow-sm">
             <div className="flex items-center gap-3">
