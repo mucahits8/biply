@@ -14,16 +14,17 @@ export function HomePage() {
   return (
     <main className="min-h-screen bg-[#f7f3ed] text-zinc-950">
       <Header />
+      <DealMarquee />
       <Hero />
+      <MobileSignalFlow />
       <QuickBuyStrip />
       <ProofStrip />
-      <DealMarquee />
 
       <section id="urunler" className="section-pad hidden lg:block">
         <SectionHeader
           eyebrow="Hızlı seçim"
           title="İlk Biply&apos;ni seç, sepete ekle."
-          description="Kasa veya resepsiyon için Stand, masa ve cam yüzeyler için Square, çoklu masa kullanımı için Round."
+          description="Kasa için Stand, masa ve cam yüzeyler için Kare, özel yazılı kare için Kişiselleştirilmiş Kare, çoklu masa için Mini."
         />
         <ProductFamily />
       </section>
@@ -32,12 +33,12 @@ export function HomePage() {
         <CommerceExperience />
       </section>
 
-      <section id="nasil-calisir" className="section-pad pt-0">
+      <section id="nasil-calisir" className="section-pad hidden pt-0 lg:block">
         <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="smooth-card reveal-soft relative min-h-[420px] overflow-hidden bg-zinc-950 shadow-xl shadow-zinc-950/10">
             <Image
               src="/media/biply-stand-hotel.png"
-              alt="Biply Stand ile Google yorum ekranını açan otel müşterisi"
+              alt="Stand ile Google yorum ekranını açan otel müşterisi"
               fill
               sizes="(min-width: 1024px) 45vw, 100vw"
               className="object-contain p-3"
@@ -73,13 +74,13 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="section-pad pt-0">
+      <section className="section-pad hidden pt-0 lg:block">
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
           <div>
             <SectionHeader
               eyebrow="Karşılaştırma"
               title="Hangisini almalıyım sorusunu hızlı cevapla."
-              description="Tek kritik nokta için Stand, birden fazla yüzey için Square, çok sayıda masa için Round."
+              description="Tek kritik nokta için Stand, çok yönlü kullanım için Kare, özel yazılı yüzey için Kişiselleştirilmiş Kare, çok sayıda masa için Mini."
             />
             <div className="smooth-card overflow-hidden border border-zinc-200 bg-white shadow-sm">
               <table className="w-full border-collapse text-left text-sm">
@@ -87,8 +88,10 @@ export function HomePage() {
                   <tr>
                     <th className="p-3 font-black">Özellik</th>
                     <th className="p-3 font-black">Stand</th>
-                    <th className="p-3 font-black">Square</th>
-                    <th className="p-3 font-black">Round</th>
+                    <th className="p-3 font-black">Kare</th>
+                    <th className="p-3 font-black">Kişisel Kare</th>
+                    <th className="p-3 font-black">Mini</th>
+                    <th className="p-3 font-black">Kişisel Mini</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -106,13 +109,13 @@ export function HomePage() {
             </div>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1">
-            <ImageCard image="/media/biply-square-salon.png" title="Square" copy="Ayna, cam ve bankolarda görünür temas noktası." />
-            <ImageCard image="/media/biply-round-bakery.png" title="Round" copy="Her masaya, her tezgaha kompakt yorum çağrısı." />
+            <ImageCard image="/media/biply-square-salon-mirror.png" title="Kare" copy="Ayna, cam ve bankolarda görünür temas noktası." />
+            <ImageCard image="/media/biply-round-bakery-counter.png" title="Mini" copy="Her masaya, her tezgaha kompakt yorum çağrısı." />
           </div>
         </div>
       </section>
 
-      <section id="sektorler" className="section-pad pt-0">
+      <section id="sektorler" className="section-pad hidden pt-0 lg:block">
         <SectionHeader eyebrow="Sektörler" title="Memnuniyet anı olan her yerde çalışır." centered />
         <div className="grid gap-5 lg:grid-cols-[0.78fr_1.22fr]">
           <div className="grid grid-cols-2 gap-3">
@@ -124,8 +127,8 @@ export function HomePage() {
           </div>
           <div className="smooth-card relative min-h-[360px] overflow-hidden bg-zinc-950 shadow-xl shadow-zinc-950/10">
             <Image
-              src="/media/biply-round-window.png"
-              alt="Came yapıştırılmış Biply Round NFC Google yorum etiketi"
+              src="/media/biply-round-window-large.png"
+              alt="Came yapıştırılmış Mini NFC Google yorum etiketi"
               fill
               sizes="(min-width: 1024px) 58vw, 100vw"
               className="object-contain p-3"
@@ -134,12 +137,12 @@ export function HomePage() {
         </div>
       </section>
 
-      <section id="guven" className="section-pad pt-0">
+      <section id="guven" className="section-pad hidden pt-0 lg:block">
         <div className="grid gap-4 md:grid-cols-3">
           {[
             [<NfcIcon key="nfc" className="h-8 w-8" />, "NFC odaklı deneyim", "QR yok, uygulama yok, sadece dokundur."],
-            [<ShieldIcon key="shield" className="h-8 w-8" />, "Kurumsal görünüm", "Beyaz, sade ve premium fiziksel temas noktası."],
-            [<CheckIcon key="check" className="h-8 w-8" />, "WhatsApp sipariş akışı", "Özet oluştur, temsilciyle netleştir, ödeme ve teslimat bilgisini al."],
+          [<ShieldIcon key="shield" className="h-8 w-8" />, "Kurumsal görünüm", "Beyaz, sade ve premium fiziksel temas noktası."],
+            [<CheckIcon key="check" className="h-8 w-8" />, "Shopier satın alma", "Sepete ekle, ürününü seç, ödeme adımına Shopier üzerinden geç."],
           ].map(([icon, title, copy]) => (
             <article key={String(title)} className="smooth-card border border-zinc-200 bg-white p-5 shadow-sm">
               <div className="grid h-14 w-14 place-items-center rounded-full border border-zinc-200">{icon}</div>
@@ -169,7 +172,7 @@ export function HomePage() {
             Daha fazla temas noktası seç, toplam fiyat otomatik düşsün.
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-zinc-300">
-            Paketini oluştur, tasarrufunu gör, siparişini WhatsApp&apos;tan netleştir.
+            Paketini oluştur, tasarrufunu gör, Shopier üzerinden satın alma adımına geç.
           </p>
           <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
             <a href="#paketler" className="inline-flex min-h-12 items-center justify-center bg-amber-300 px-6 text-sm font-black text-zinc-950">
@@ -211,18 +214,43 @@ function Header() {
 
 function MobileProductShelf() {
   return (
-    <div id="mobil-urunler" className="mt-5 scroll-mt-24 lg:hidden">
+    <div id="mobil-urunler" className="mt-4 scroll-mt-24 lg:hidden">
       <div className="mb-3">
         <p className="text-[11px] font-black uppercase tracking-[0.18em] text-blue-700">Hızlı seçim</p>
-        <h2 className="mt-1 text-3xl font-black leading-[0.98] tracking-[-0.055em] text-zinc-950">
+        <h2 className="mt-1 text-2xl font-black leading-[0.98] tracking-[-0.055em] text-zinc-950">
           Biply&apos;ni seç, sepete ekle.
         </h2>
-        <p className="mt-2 text-sm font-semibold leading-6 text-zinc-600">
-          Stand kritik nokta, Square çoklu yüzey, Round masa yoğun işletmeler için.
+        <p className="mt-1.5 text-sm font-semibold leading-6 text-zinc-600">
+          Stand kritik nokta, Kare çoklu yüzey, Kişiselleştirilmiş Kare özel yazı, Mini masa yoğun işletmeler için.
         </p>
       </div>
       <ProductFamily />
     </div>
+  );
+}
+
+function MobileSignalFlow() {
+  const signals = [
+    ["1", "Dokundur", "Müşteri telefonunu yaklaştırır, Google yorum ekranı açılır."],
+    ["2", "Seç", "Stand, Kare, Kişiselleştirilmiş Kare, Mini veya Kişiselleştirilmiş Mini."],
+    ["3", "Kişiselleştir", "Kişiselleştirilmiş ürünlerde sabit Biply şablonuna ürün üstü metnini yaz."],
+    ["4", "Tamamla", "Sepete ekle, Shopier ödeme adımına geç."],
+  ];
+
+  return (
+    <section className="mx-auto max-w-7xl px-4 pb-5 lg:hidden">
+      <div className="no-scrollbar grid auto-cols-[82%] grid-flow-col gap-3 overflow-x-auto pb-1">
+        {signals.map(([step, title, copy]) => (
+          <article key={step} className="swipe-card rounded-[1.25rem] border border-zinc-200 bg-white p-4 shadow-sm">
+            <div className="flex items-center gap-3">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-zinc-950 text-sm font-black text-white">{step}</span>
+              <h3 className="text-xl font-black tracking-[-0.045em] text-zinc-950">{title}</h3>
+            </div>
+            <p className="mt-3 text-sm font-semibold leading-6 text-zinc-600">{copy}</p>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -235,14 +263,14 @@ function QuickBuyStrip() {
             <p className="text-xs font-black uppercase tracking-[0.18em] text-amber-300">Hızlı seçim</p>
             <h2 className="mt-2 text-3xl font-black tracking-[-0.05em]">İlk Biply&apos;ni hemen sepete ekle.</h2>
             <p className="mt-3 text-sm leading-6 text-zinc-300">
-              Stand kritik nokta, Square çoklu yüzey, Round masa yoğun işletmeler için.
+              Stand kritik nokta, Kare çoklu yüzey, Kişisel Kare özel yazı, Mini yoğun masa için.
             </p>
             <div className="mt-4 rounded-[1.2rem] bg-white/10 p-3 text-sm font-bold text-white">
               <span className="text-amber-300" aria-label="Beş yıldız">★★★★★</span>
               <span className="ml-2">Yorum istemek yerine dokundur.</span>
             </div>
           </div>
-          <div className="grid gap-3 p-3 sm:grid-cols-3 sm:p-4">
+          <div className="grid gap-3 p-3 sm:grid-cols-2 xl:grid-cols-5 sm:p-4">
             {products.map((product) => (
               <article key={product.id} className="smooth-card border border-zinc-200 bg-[#fbfaf7] p-3">
                 <div className="flex items-center gap-3 sm:block">
@@ -276,7 +304,7 @@ function QuickBuyStrip() {
 
 function ProofStrip() {
   return (
-    <section id="yorumlar" className="mx-auto max-w-7xl px-4 pb-4 md:px-6">
+    <section id="yorumlar" className="mx-auto hidden max-w-7xl px-4 pb-4 md:block md:px-6">
       <div className="grid gap-3 md:grid-cols-[0.7fr_1.3fr] md:items-stretch">
         <div className="smooth-card bg-zinc-950 p-5 text-white shadow-xl shadow-zinc-950/10">
           <p className="text-xs font-black uppercase tracking-[0.2em] text-amber-300">Güven veren temas</p>
@@ -303,10 +331,12 @@ function DealMarquee() {
   const items = [
     "Lansmana özel fiyatlar",
     "Stand 2.000 TL",
-    "Square 1.250 TL",
-    "Round 750 TL",
+    "Kare 1.250 TL",
+    "Kişisel Kare 1.350 TL",
+    "Mini 750 TL",
     "10+ adette %20 avantaj",
-    "WhatsApp ile hızlı sipariş",
+    "Shopier ile hızlı satın alma",
+    "Kişisel Mini 850 TL",
     "QR yok",
     "Uygulama yok",
   ];
@@ -329,19 +359,19 @@ function DealMarquee() {
 
 function Hero() {
   return (
-    <section className="mx-auto max-w-7xl px-4 pb-4 pt-5 md:px-6 md:pt-7">
-      <div className="grid items-start gap-5 lg:grid-cols-[0.62fr_1.38fr] lg:gap-5 xl:gap-7">
+    <section className="mx-auto max-w-7xl px-4 pb-5 pt-4 md:px-6 md:pt-7">
+      <div className="grid items-start gap-4 lg:grid-cols-[0.62fr_1.38fr] lg:gap-5 xl:gap-7">
         <div className="reveal-soft lg:pt-1">
-          <div className="inline-flex max-w-full rounded-full border border-zinc-200 bg-white px-4 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-zinc-600 shadow-sm sm:text-xs">
+          <div className="inline-flex max-w-full rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-zinc-600 shadow-sm sm:px-4 sm:py-2 sm:text-xs">
             Lansmana özel NFC yorum ürünleri
           </div>
-          <h1 className="mt-4 max-w-[560px] text-[2.95rem] font-black leading-[0.9] tracking-[-0.055em] text-zinc-950 sm:text-6xl lg:text-[4.25rem] xl:text-[4.85rem]">
+          <h1 className="mt-3 max-w-[560px] text-[2.55rem] font-black leading-[0.9] tracking-[-0.055em] text-zinc-950 sm:text-6xl lg:mt-4 lg:text-[4.25rem] xl:text-[4.85rem]">
             Google yorumlarını tek dokunuşa indir.
           </h1>
-          <p className="mt-3 max-w-[520px] text-base font-semibold leading-7 text-zinc-600 sm:text-lg sm:leading-8">
+          <p className="mt-3 max-w-[520px] text-[15px] font-semibold leading-7 text-zinc-600 sm:text-lg sm:leading-8">
             Müşteriniz telefonunu Biply&apos;ye yaklaştırır, Google yorum ekranınız anında açılır.
           </p>
-          <div className="mt-4 hidden max-w-[540px] grid-cols-3 gap-2 text-xs font-bold text-zinc-600 lg:grid lg:gap-2.5">
+          <div className="mt-4 hidden max-w-[760px] grid-cols-5 gap-2 text-xs font-bold text-zinc-600 lg:grid lg:gap-2.5">
             {products.map((product) => (
               <div key={product.id} className="smooth-card border border-zinc-200 bg-white p-2 shadow-md shadow-zinc-950/5 sm:p-3">
                 <span className="block truncate text-sm font-black text-zinc-950">{product.name.replace("Biply ", "")}</span>
@@ -356,11 +386,11 @@ function Hero() {
               </div>
             ))}
           </div>
-          <div className="mt-4 flex flex-wrap items-center gap-2 text-sm font-bold text-zinc-700">
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm font-bold text-zinc-700 lg:mt-4">
             <span className="text-amber-400" aria-label="Beş yıldız">★★★★★</span>
             <span>Kafe, otel ve kliniklerde yorum istemeyi doğal hale getirir.</span>
           </div>
-          <div className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:gap-3">
+          <div className="mt-4 grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:gap-3 lg:mt-5">
             <a href="#mobil-urunler" className="inline-flex min-h-12 items-center justify-center rounded-full bg-zinc-950 px-4 text-sm font-black text-white shadow-xl shadow-zinc-950/20 transition hover:-translate-y-0.5 sm:px-7 lg:hidden">
               Biply&apos;ni Seç
             </a>
@@ -373,8 +403,8 @@ function Hero() {
           </div>
           <MobileProductShelf />
         </div>
-        <div className="smooth-card reveal-soft overflow-hidden bg-zinc-950 p-2.5 shadow-2xl shadow-zinc-950/15 sm:p-3 lg:mt-3">
-          <div className="relative aspect-[1.78/1] min-h-[220px] overflow-hidden rounded-[1.15rem] bg-zinc-900 sm:min-h-[320px]">
+        <div className="smooth-card reveal-soft overflow-hidden bg-zinc-950 p-2 shadow-2xl shadow-zinc-950/15 sm:p-3 lg:mt-3">
+          <div className="relative aspect-[1.55/1] min-h-[190px] overflow-hidden rounded-[1.15rem] bg-zinc-900 sm:aspect-[1.78/1] sm:min-h-[320px]">
             <Image
               src="/media/biply-review-phone-hero.png"
               alt="Biply ile açılan Google yorum ekranında beş yıldız seçen müşteri"
@@ -388,10 +418,10 @@ function Hero() {
               QR yok. Uygulama yok.
             </div>
           </div>
-          <div className="mt-2.5 grid gap-3 rounded-[1.25rem] bg-white p-3.5 text-zinc-950 shadow-xl sm:grid-cols-[1fr_auto] sm:items-center">
+          <div className="mt-2 grid gap-2 rounded-[1.15rem] bg-white p-3 text-zinc-950 shadow-xl sm:grid-cols-[1fr_auto] sm:items-center sm:p-3.5">
             <div>
               <p className="text-[11px] font-black uppercase tracking-[0.16em] text-blue-700 sm:text-xs">Lansman fiyatları aktif</p>
-              <p className="mt-1 text-base font-black tracking-[-0.04em] sm:text-lg">Stand 2.000 TL | Square 1.250 TL | Round 750 TL</p>
+              <p className="mt-1 text-base font-black tracking-[-0.04em] sm:text-lg">Stand 2.000 TL | Kare 1.250 TL | Kişisel Kare 1.350 TL | Mini 750 TL | Kişisel Mini 850 TL</p>
               <p className="mt-1 text-xs font-bold text-emerald-700">Çoklu alımda %20&apos;ye varan avantaj</p>
             </div>
             <a href="#mobil-urunler" className="inline-flex min-h-11 items-center justify-center rounded-full bg-amber-300 px-5 text-sm font-black text-zinc-950 lg:hidden">

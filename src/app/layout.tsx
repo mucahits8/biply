@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s | Biply",
   },
   description:
-    "Biply, NFC odaklı Stand, Square ve Round ürünleriyle Google yorum ekranınızı müşterinin tek dokunuşuyla açar.",
+    "Biply, NFC odaklı Stand, Kare ve Mini ürünleriyle Google yorum ekranınızı müşterinin tek dokunuşuyla açar.",
   openGraph: {
     title: "Biply | Tek dokunuşla Google yorum akışı",
     description: "QR yok. Uygulama yok. Sadece dokundur.",

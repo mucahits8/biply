@@ -1,3 +1,9 @@
+export const SHOPIER_URL = process.env.NEXT_PUBLIC_SHOPIER_URL ?? "https://www.shopier.com/biply";
+
+export function shopierUrlForProduct(product?: { shopierUrl?: string }) {
+  return product?.shopierUrl ?? SHOPIER_URL;
+}
+
 export function formatPrice(price: number) {
   if (price === 0) return "Teklif al";
 

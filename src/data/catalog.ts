@@ -1,5 +1,10 @@
-export type ProductSlug = "biply-stand" | "biply-square" | "biply-round";
-export type ProductShape = "stand" | "square" | "round";
+export type ProductSlug =
+  | "biply-stand"
+  | "biply-square"
+  | "biply-personal-square"
+  | "biply-round"
+  | "biply-personal-mini";
+export type ProductShape = "stand" | "square" | "personal-square" | "round" | "personal-mini";
 
 export type CatalogItem = {
   id: string;
@@ -10,6 +15,7 @@ export type CatalogItem = {
   description: string;
   price: number;
   oldPrice: number;
+  shopierUrl?: string;
   badge: string;
   saleBadge: string;
   shape: ProductShape;
@@ -72,17 +78,26 @@ export type Promotion = {
   imageAlt: string;
 };
 
+export type CustomCampaignExample = {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+};
+
 export const products: CatalogItem[] = [
   {
     id: "product-stand",
     slug: "biply-stand",
-    name: "Biply Stand",
+    name: "Stand",
     eyebrow: "Premium NFC Yorum Standı",
     subtitle: "Tek kritik nokta",
     description:
       "İşletmenizin en önemli temas noktasında müşterilerinizi tek dokunuşla Google yorumlarına yönlendirin.",
     price: 2000,
     oldPrice: 2600,
+    shopierUrl: "https://www.shopier.com/biply/49453066",
     badge: "PREMIUM",
     saleBadge: "Lansmana özel 600 TL avantaj",
     shape: "stand",
@@ -112,7 +127,7 @@ export const products: CatalogItem[] = [
     detailStory: {
       headline: "İşletmenin en görünür noktasını yorum toplama alanına çevirir.",
       body:
-        "Biply Stand, müşterinin ödeme, kayıt, çıkış veya teslim alma anında karşısına çıkan premium temas noktasıdır. Ekip yorum istemek için uzun açıklama yapmak zorunda kalmaz; stand zaten ne yapılacağını sessizce anlatır.",
+        "Stand, müşterinin ödeme, kayıt, çıkış veya teslim alma anında karşısına çıkan premium temas noktasıdır. Ekip yorum istemek için uzun açıklama yapmak zorunda kalmaz; ürün zaten ne yapılacağını sessizce anlatır.",
       proof: "Tek noktada güçlü görünürlük",
       bestFor: "Resepsiyon, kasa, danışma ve karşılama alanları",
     },
@@ -173,17 +188,14 @@ export const products: CatalogItem[] = [
         "Bir işletmede bazen en değerli yer sadece bir noktadır: resepsiyon, kasa ya da danışma. Stand o noktayı daha görünür, daha profesyonel ve daha ölçülebilir hale getirir.",
     },
     image: "/media/biply-stand-product.jpeg",
-    imageAlt: "Beyaz Biply Stand premium NFC Google yorum standı",
+    imageAlt: "Beyaz Stand premium NFC Google yorum standı",
     gallery: [
       "/media/biply-stand-product.jpeg",
-      "/media/biply-stand-clean-product.jpeg",
       "/media/biply-stand-hero.png",
       "/media/biply-stand-hotel-lobby.png",
       "/media/biply-stand-hotel.png",
-      "/media/biply-stand-beauty-reception.png",
       "/media/biply-stand-dental-clinic.png",
       "/media/biply-stand-veterinary.png",
-      "/media/biply-stand-office-reception.png",
       "/media/biply-stand-auto-service.png",
       "/media/biply-stand-retail-counter.png",
       "/media/biply-stand-retail-pos.png",
@@ -192,12 +204,13 @@ export const products: CatalogItem[] = [
   {
     id: "product-square",
     slug: "biply-square",
-    name: "Biply Square",
+    name: "Kare",
     eyebrow: "NFC Yorum Etiketi",
     subtitle: "Birden fazla temas noktası",
     description: "Yapıştır. Dokundur. Yorumunu al.",
     price: 1250,
     oldPrice: 1650,
+    shopierUrl: "https://www.shopier.com/biply/49453089",
     badge: "EN COK TERCIH EDILEN",
     saleBadge: "Lansmana özel 400 TL avantaj",
     shape: "square",
@@ -228,7 +241,7 @@ export const products: CatalogItem[] = [
     detailStory: {
       headline: "Müşterinin doğal temas ettiği yüzeylerde yorum çağrısı oluşturur.",
       body:
-        "Biply Square, tek bir noktaya bağlı kalmak istemeyen işletmeler için tasarlandı. Masaya, aynaya, cama veya bankoya yerleşir; müşteri hizmeti deneyimlediği yerde telefonunu yaklaştırır ve yorum ekranına geçer.",
+        "Kare, tek bir noktaya bağlı kalmak istemeyen işletmeler için tasarlandı. Masaya, aynaya, cama veya bankoya yerleşir; müşteri hizmeti deneyimlediği yerde telefonunu yaklaştırır ve yorum ekranına geçer.",
       proof: "Birden fazla temas noktasında daha fazla fırsat",
       bestFor: "Masa, cam, ayna, banko, bekleme alanı",
     },
@@ -239,7 +252,7 @@ export const products: CatalogItem[] = [
       },
       {
         title: "Bir alanla sınırlı kalmaz",
-        body: "Square'i kasaya, masaya ve cama dağıtarak müşteriye birden fazla doğal dokunma noktası sunarsın.",
+        body: "Kare'yi kasaya, masaya ve cama dağıtarak müşteriye birden fazla doğal dokunma noktası sunarsın.",
       },
       {
         title: "Görünür ama rahatsız etmez",
@@ -286,37 +299,141 @@ export const products: CatalogItem[] = [
     closingPitch: {
       title: "Tek yer değil, tüm temas noktaları yorum toplasın.",
       body:
-        "Square, müşterinin işletme içinde dolaştığı akışa uyum sağlar. Birkaç noktaya yerleştirildiğinde yorum isteme işi personele bağlı kalmaz.",
+        "Kare, müşterinin işletme içinde dolaştığı akışa uyum sağlar. Birkaç noktaya yerleştirildiğinde yorum isteme işi personele bağlı kalmaz.",
     },
     image: "/media/biply-square-product-front.png",
-    imageAlt: "Biply Square kare NFC Google yorum etiketi ürün görseli",
+    imageAlt: "Kare NFC Google yorum etiketi ürün görseli",
     gallery: [
       "/media/biply-square-product-front.png",
       "/media/biply-square-cafe.png",
       "/media/biply-square-office-door.png",
       "/media/biply-square-salon-mirror.png",
-      "/media/biply-square-salon.png",
-      "/media/biply-square-restaurant-table.png",
       "/media/biply-square-cafe-moment.png",
       "/media/biply-square-hotel-room.png",
       "/media/biply-square-fine-dining.png",
-      "/media/biply-square-office.png",
-      "/media/biply-square-table.png",
+    ],
+  },
+  {
+    id: "product-personal-square",
+    slug: "biply-personal-square",
+    name: "Kişiselleştirilmiş Kare",
+    eyebrow: "Sabit Şablon Kişiselleştirilmiş Kare",
+    subtitle: "Yazısı sana özel / Kare form",
+    description: "Kare formda sabit Biply kampanya şablonu. İşletme mesajını söyler, ürün Biply çizgisinde hazırlanır.",
+    price: 1350,
+    oldPrice: 1750,
+    badge: "KİŞİSELLEŞTİRİLMİŞ",
+    saleBadge: "Lansmana özel 400 TL avantaj",
+    shape: "personal-square",
+    size: "100 x 100 mm",
+    form: "Yuvarlatılmış kare",
+    mounting: "Yapışkanlı",
+    idealQuantity: "2-10",
+    hierarchy: "Kampanya mesajı olan yüzeyler için.",
+    cta: "Sepete Ekle",
+    features: ["NFC", "Sabit Biply şablonu", "Kampanya metni özelleşir", "QR yok"],
+    details: [
+      "Standart Kare'nin görünürlüğünü kampanya mesajıyla birleştirir.",
+      "Ürün tasarımı sabit Biply şablonunda kalır; üstteki teklif metni işletmeye göre hazırlanır.",
+      "Masa, cam, banko ve bar gibi daha geniş yüzeylerde kampanya çağrısını net gösterir.",
+    ],
+    useCases: [
+      "Kafe masaları",
+      "Restoran masaları",
+      "Bar",
+      "Pastane",
+      "Kasa",
+      "Banko",
+      "Cam yüzey",
+      "Bekleme alanları",
+    ],
+    detailStory: {
+      headline: "Kare görünürlüğünü kampanya mesajıyla daha satış odaklı hale getirir.",
+      body:
+        "Kişiselleştirilmiş Kare, 100 x 100 mm alanda daha büyük ve net bir kampanya çağrısı isteyen işletmeler için hazırlandı. Mesaj işletmeye göre değişir; ikon yerleşimi, Biply markası ve NFC akışı sabit kalır.",
+      proof: "Daha geniş alanda sabit şablonlu kampanya mesajı",
+      bestFor: "Kafe, restoran, bar, pastane, cam ve banko yüzeyleri",
+    },
+    salesMoments: [
+      {
+        title: "Mesajı uzaktan daha rahat gösterir",
+        body: "Kare yüzey, 'Kahven bizden' veya 'İçeceğin bizden' gibi kampanya metinlerini Mini'ye göre daha geniş alanda taşır.",
+      },
+      {
+        title: "Kampanya ayrı ürün gibi netleşir",
+        body: "Standart Kare ile karışmaz. Müşteri normal yorum etiketi veya kişiselleştirilmiş kare arasında bilinçli seçim yapar.",
+      },
+      {
+        title: "Sabit şablon üretimi hızlandırır",
+        body: "Ürün Biply tasarım sistemi içinde kalır; sadece metin, ikon ve kısa not alanı siparişe göre düzenlenir.",
+      },
+    ],
+    customerReactions: [
+      {
+        persona: "Kafe müşterisi",
+        moment: "Kahvesini beklerken",
+        quote: "Kahven bizden yazısını görünce yorum bırakmak daha cazip geldi.",
+        signal: "Güçlü kampanya görünürlüğü",
+      },
+      {
+        persona: "Bar misafiri",
+        moment: "Servis sonrası",
+        quote: "Biranız bizden mesajı masada direkt dikkat çekti.",
+        signal: "Net teklif algısı",
+      },
+      {
+        persona: "Pastane müşterisi",
+        moment: "Sipariş sonrası",
+        quote: "Çereziniz bizden yazısını görünce telefonu yaklaştırdım.",
+        signal: "Hızlı aksiyon",
+      },
+    ],
+    reviewExamples: [
+      {
+        name: "Eylül A.",
+        sector: "Kafe",
+        quote: "Kahvem çok iyiydi. Masadaki kişiselleştirilmiş Kare ile yorum bırakmak çok kolay oldu.",
+      },
+      {
+        name: "Kerem D.",
+        sector: "Bar",
+        quote: "Servis hızlıydı, ortam keyifliydi. Yorum ekranı tek dokunuşla açıldı.",
+      },
+      {
+        name: "Mina S.",
+        sector: "Pastane",
+        quote: "Tatlı ve kahve çok güzeldi. Kampanya mesajı sayesinde yorum bırakmayı unutmadım.",
+      },
+    ],
+    closingPitch: {
+      title: "Kampanya metnini büyüt, yorum çağrısını görünür kıl.",
+      body:
+        "Kişiselleştirilmiş Kare, özel tasarım karmaşası yaratmadan kampanya mesajınızı netleştirir. Sabit Biply şablonu sayesinde ürün temiz, hızlı ve tutarlı görünür.",
+    },
+    image: "/media/biply-personal-square-front.png",
+    imageAlt: "Kişiselleştirilmiş Kare NFC yorum ürünü kampanya tasarımı",
+    gallery: [
+      "/media/biply-personal-square-front.png",
+      "/media/biply-personal-square-coffee-nfc.png",
+      "/media/biply-personal-square-coffee-counter.png",
+      "/media/biply-personal-square-cookie-table.png",
+      "/media/biply-personal-square-beer-bar.png",
     ],
   },
   {
     id: "product-round",
     slug: "biply-round",
-    name: "Biply Round",
+    name: "Mini",
     eyebrow: "Kompakt NFC Yorum Etiketi",
-    subtitle: "Cok sayida masa / kompakt kullanım",
+    subtitle: "Çok sayıda masa / kompakt kullanım",
     description: "Küçük alanlarda maksimum görünürlük.",
     price: 750,
     oldPrice: 950,
+    shopierUrl: "https://www.shopier.com/biply/49453111",
     badge: "KOMPAKT",
     saleBadge: "Lansmana özel 200 TL avantaj",
     shape: "round",
-    size: "Cap 70 mm",
+    size: "Çap 70 mm",
     form: "Yuvarlak",
     mounting: "Yapışkanlı",
     idealQuantity: "5+",
@@ -341,7 +458,7 @@ export const products: CatalogItem[] = [
     detailStory: {
       headline: "Her masayı sessiz bir yorum davetine dönüştürür.",
       body:
-        "Biply Round, adetli kullanım için en hızlı başlangıç ürünüdür. Küçük yüzeylerde net görünür, masa düzenini bozmaz ve müşterinin telefonu zaten elindeyken yorum ekranını açmasını sağlar.",
+        "Mini, adetli kullanım için en hızlı başlangıç ürünüdür. Küçük yüzeylerde net görünür, masa düzenini bozmaz ve müşterinin telefonu zaten elindeyken yorum ekranını açmasını sağlar.",
       proof: "Çoklu kullanımda birim fiyat avantajı",
       bestFor: "Kafe, restoran, bar, pastane ve paket teslim noktaları",
     },
@@ -397,20 +514,126 @@ export const products: CatalogItem[] = [
       },
     ],
     closingPitch: {
-      title: "Masa sayın arttıkça Round daha çok çalışır.",
+      title: "Masa sayın arttıkça Mini daha çok çalışır.",
       body:
-        "Round, müşteri yoğunluğunu avantaja çevirir. Her masa ayrı bir yorum fırsatı olur; adetli alımda kampanya etkisi daha net hissedilir.",
+        "Mini, müşteri yoğunluğunu avantaja çevirir. Her masa ayrı bir yorum fırsatı olur; adetli alımda kampanya etkisi daha net hissedilir.",
     },
     image: "/media/biply-round-product-front.jpeg",
-    imageAlt: "Biply Round yuvarlak NFC Google yorum etiketi ürün görseli",
+    imageAlt: "Mini yuvarlak NFC Google yorum etiketi ürün görseli",
     gallery: [
       "/media/biply-round-product-front.jpeg",
       "/media/biply-round-cafe.png",
-      "/media/biply-round-cafe-touch.png",
       "/media/biply-round-bakery-counter.png",
-      "/media/biply-round-bakery.png",
       "/media/biply-round-window-large.png",
-      "/media/biply-round-window.png",
+    ],
+  },
+  {
+    id: "product-personal-mini",
+    slug: "biply-personal-mini",
+    name: "Kişiselleştirilmiş Mini",
+    eyebrow: "Sabit Şablon Kişiselleştirilmiş Mini",
+    subtitle: "Yazısı sana özel / tasarımı Biply",
+    description: "Biply'nin sabit şablonunda, müşteriyi yorum sonrası küçük bir teklife yönlendiren kişiselleştirilmiş Mini.",
+    price: 850,
+    oldPrice: 1050,
+    badge: "KİŞİSELLEŞTİRİLMİŞ",
+    saleBadge: "Lansmana özel 200 TL avantaj",
+    shape: "personal-mini",
+    size: "Çap 70 mm",
+    form: "Yuvarlak",
+    mounting: "Yapışkanlı",
+    idealQuantity: "5+",
+    hierarchy: "Kampanya mesajı olan masalar için.",
+    cta: "Sepete Ekle",
+    features: ["NFC", "Sabit Biply şablonu", "Kampanya metni özelleşir", "QR yok"],
+    details: [
+      "Ürünün tasarım dili sabittir; değişen alan işletmenizin kampanya cümlesidir.",
+      "Kahven bizden, içeceğin bizden veya işletmenize uygun kısa teklif metni ürüne yerleştirilir.",
+      "Masa, bar, pastane ve hızlı servis noktalarında yorum bırakmayı küçük bir ödül hissiyle hızlandırır.",
+    ],
+    useCases: [
+      "Kafe masası",
+      "Restoran masası",
+      "Pastane tezgahı",
+      "Bar",
+      "Paket teslim noktası",
+      "Bekleme alanı",
+      "Etkinlik masası",
+      "Hızlı servis noktası",
+    ],
+    detailStory: {
+      headline: "Yorum çağrısını kampanya mesajıyla daha cazip hale getirir.",
+      body:
+        "Kişiselleştirilmiş Mini, Biply'nin sabit yuvarlak şablonunu kullanır. İşletme sadece ürünün üzerinde hangi teklifin yazmasını istediğini söyler; tasarım dili, NFC yönlendirmesi ve yorum akışı aynı kalır.",
+      proof: "Sabit şablon, özel kampanya metni",
+      bestFor: "Kafe, restoran, bar, pastane ve yoğun masa kullanımı",
+    },
+    salesMoments: [
+      {
+        title: "Teklif net olduğu için aksiyon hızlanır",
+        body: "Müşteri yorum bıraktığında ne kazanacağını ilk bakışta görür. Bu, yorum istemeyi pazarlık gibi değil küçük bir teşekkür gibi hissettirir.",
+      },
+      {
+        title: "Marka dışına çıkmadan özelleşir",
+        body: "Biply'nin sabit düzeni korunur; kampanya metni, ikon ve kısa not alanı işletmeye göre uyarlanır.",
+      },
+      {
+        title: "Masa üstünde satış odaklı çalışır",
+        body: "Mini form masayı kaplamaz, ama 'kahven bizden' gibi net mesajlarla yorum davranışını görünür hale getirir.",
+      },
+    ],
+    customerReactions: [
+      {
+        persona: "Kafe müşterisi",
+        moment: "Kahve sonrası masada",
+        quote: "Kahven bizden mesajını görünce yorumu hemen bıraktım.",
+        signal: "Net teşvik",
+      },
+      {
+        persona: "Restoran misafiri",
+        moment: "Hesabı beklerken",
+        quote: "Telefonu yaklaştırdım, yorum ekranı açıldı. Küçük ikram fikri hoşuma gitti.",
+        signal: "Pozitif kapanış",
+      },
+      {
+        persona: "Pastane müşterisi",
+        moment: "Sipariş tesliminde",
+        quote: "Çereziniz bizden yazısı dikkatimi çekti, yorum bırakmak kolaydı.",
+        signal: "Dikkat çekici mesaj",
+      },
+    ],
+    reviewExamples: [
+      {
+        name: "Derya M.",
+        sector: "Kafe",
+        quote: "Kahve çok lezzetliydi, masadaki Biply ile yorum bırakmak da çok pratik oldu.",
+      },
+      {
+        name: "Onur B.",
+        sector: "Restoran",
+        quote: "Servis hızlıydı. Yorum sonrası küçük ikram mesajı güzel düşünülmüş.",
+      },
+      {
+        name: "Nehir S.",
+        sector: "Pastane",
+        quote: "Tatlılar tazeydi, kasadaki kişiselleştirilmiş Mini sayesinde değerlendirmeyi unutmadan yaptım.",
+      },
+    ],
+    closingPitch: {
+      title: "Mesajı sen söyle, sabit Biply şablonuna yerleştirelim.",
+      body:
+        "Kişiselleştirilmiş Mini, özel tasarım karmaşasına girmeden daha güçlü bir teklif alanı oluşturur. Ürün yine Biply gibi görünür, sadece işletmenin kampanya cümlesi öne çıkar.",
+    },
+    image: "/media/biply-campaign-kahve-table.png",
+    imageAlt: "Kahven bizden yazılı Kişiselleştirilmiş Mini NFC ürününü masada kullanan müşteri",
+    gallery: [
+      "/media/biply-campaign-kahve-table.png",
+      "/media/biply-campaign-cookie-cafe.png",
+      "/media/biply-campaign-beer-bar.png",
+      "/media/biply-custom-coffee.png",
+      "/media/biply-custom-drink-small.png",
+      "/media/biply-custom-cookie.png",
+      "/media/biply-custom-beer.png",
     ],
   },
 ];
@@ -424,19 +647,23 @@ export const bundlePresets: BundlePreset[] = [
     quantities: {
       "biply-stand": 1,
       "biply-square": 0,
+      "biply-personal-square": 0,
       "biply-round": 0,
+      "biply-personal-mini": 0,
     },
   },
   {
     id: "preset-most-loved",
     name: "Hazır Başlangıç",
     eyebrow: "Lansman önerisi",
-    description: "Bir stand, birkaç square ve masa üstü round ile hızlı başlangıç.",
+    description: "Bir Stand, birkaç Kare ve masa üstü Mini ile hızlı başlangıç.",
     badge: "EN AVANTAJLI",
     quantities: {
       "biply-stand": 1,
       "biply-square": 4,
+      "biply-personal-square": 0,
       "biply-round": 8,
+      "biply-personal-mini": 0,
     },
   },
   {
@@ -447,7 +674,22 @@ export const bundlePresets: BundlePreset[] = [
     quantities: {
       "biply-stand": 0,
       "biply-square": 2,
+      "biply-personal-square": 0,
       "biply-round": 10,
+      "biply-personal-mini": 0,
+    },
+  },
+  {
+    id: "preset-personal-mini",
+    name: "Kişisel Mini Masalar",
+    eyebrow: "Yorum + teklif",
+    description: "Sabit şablonda kampanya mesajı isteyen masalar için.",
+    quantities: {
+      "biply-stand": 0,
+      "biply-square": 0,
+      "biply-personal-square": 0,
+      "biply-round": 0,
+      "biply-personal-mini": 10,
     },
   },
 ];
@@ -455,23 +697,33 @@ export const bundlePresets: BundlePreset[] = [
 export const promotions: Promotion[] = [
   {
     id: "promo-round-10",
-    name: "10'lu Biply Round",
+    name: "10'lu Mini",
     description: "Masa yoğun kafe ve restoranlar için adetli başlangıç.",
     badge: "LANSMAN SETI",
     productSlug: "biply-round",
     quantity: 10,
     image: "/media/biply-round-bakery.png",
-    imageAlt: "Pastane tezgahında Biply Round NFC yorum etiketi",
+    imageAlt: "Pastane tezgahında Mini NFC yorum etiketi",
   },
   {
     id: "promo-square-4",
-    name: "4'lu Biply Square",
+    name: "4'lü Kare",
     description: "Masa, cam, kasa ve bekleme alanını birlikte kapat.",
     badge: "MASA AVANTAJI",
     productSlug: "biply-square",
     quantity: 4,
     image: "/media/biply-square-salon.png",
-    imageAlt: "Güzellik salonunda Biply Square NFC yorum etiketi",
+    imageAlt: "Güzellik salonunda Kare NFC yorum etiketi",
+  },
+  {
+    id: "promo-personal-square-4",
+    name: "4'lü Kişiselleştirilmiş Kare",
+    description: "Kampanya mesajını daha geniş kare yüzeyde göster.",
+    badge: "KİŞİSEL",
+    productSlug: "biply-personal-square",
+    quantity: 4,
+    image: "/media/biply-personal-square-coffee-nfc.png",
+    imageAlt: "Kafede kullanılan kişiselleştirilmiş Kare NFC yorum ürünü",
   },
   {
     id: "promo-stand-extra",
@@ -481,18 +733,59 @@ export const promotions: Promotion[] = [
     productSlug: "biply-stand",
     quantity: 1,
     image: "/media/biply-stand-hotel.png",
-    imageAlt: "Otel resepsiyonunda Biply Stand NFC yorum standı",
+    imageAlt: "Otel resepsiyonunda Stand NFC yorum standı",
+  },
+  {
+    id: "promo-personal-mini-10",
+    name: "10'lu Kişiselleştirilmiş Mini",
+    description: "Kahven bizden gibi sabit şablonlu kampanya mesajı.",
+    badge: "KİŞİSEL",
+    productSlug: "biply-personal-mini",
+    quantity: 10,
+    image: "/media/biply-campaign-kahve-table.png",
+    imageAlt: "Kahven bizden yazılı Kişiselleştirilmiş Mini kullanım sahnesi",
   },
 ];
 
 export const comparisonRows = [
-  ["Fiyat", "2.000 TL", "1.250 TL", "750 TL"],
-  ["Boyut", "11 x 16 cm", "10 x 10 cm", "Ø7 cm"],
-  ["Kullanım", "Masaüstü", "Yapışkanlı", "Yapışkanlı"],
-  ["Segment", "Premium", "Çok yönlü", "Kompakt"],
-  ["İdeal adet", "1-3", "2-10", "5+"],
-  ["NFC", "Var", "Var", "Var"],
-  ["QR", "Yok", "Yok", "Yok"],
+  ["Fiyat", "2.000 TL", "1.250 TL", "1.350 TL", "750 TL", "850 TL"],
+  ["Boyut", "11 x 16 cm", "10 x 10 cm", "10 x 10 cm", "Ø7 cm", "Ø7 cm"],
+  ["Kullanım", "Masaüstü", "Yapışkanlı", "Yapışkanlı", "Yapışkanlı", "Yapışkanlı"],
+  ["Segment", "Premium", "Çok yönlü", "Kişisel", "Kompakt", "Kişisel"],
+  ["İdeal adet", "1-3", "2-10", "2-10", "5+", "5+"],
+  ["NFC", "Var", "Var", "Var", "Var", "Var"],
+  ["QR", "Yok", "Yok", "Yok", "Yok", "Yok"],
+];
+
+export const customCampaignExamples: CustomCampaignExample[] = [
+  {
+    id: "custom-drink",
+    title: "İçeceğin bizden",
+    description: "Kafe, restoran ve hızlı servis noktaları için yorum sonrası küçük ikram kurgusu.",
+    image: "/media/biply-custom-drink-small.png",
+    imageAlt: "İçeceğin bizden kişiselleştirilmiş Mini tasarım örneği",
+  },
+  {
+    id: "custom-coffee",
+    title: "Kahven bizden",
+    description: "Kahve dükkanları ve bekleme alanları için sıcak, net ve satışa dönük mesaj.",
+    image: "/media/biply-custom-coffee.png",
+    imageAlt: "Kahven bizden kişiselleştirilmiş Mini tasarım örneği",
+  },
+  {
+    id: "custom-cookie",
+    title: "Çereziniz bizden",
+    description: "Pastane, restoran ve masa üstü kullanım için hızlı teşvik mesajı.",
+    image: "/media/biply-custom-cookie.png",
+    imageAlt: "Çereziniz bizden kişiselleştirilmiş Mini tasarım örneği",
+  },
+  {
+    id: "custom-beer",
+    title: "Biranız bizden",
+    description: "Bar ve etkinlik alanları için markaya göre uyarlanabilir kampanya dili.",
+    image: "/media/biply-custom-beer.png",
+    imageAlt: "Biranız bizden kişiselleştirilmiş Mini tasarım örneği",
+  },
 ];
 
 export const sectors = [
@@ -510,14 +803,14 @@ export const testimonials = [
     role: "Kafe işletmecisi",
     sector: "Kafe",
     quote:
-      "Masalara Round koyunca yoruma yönlendirme kasadaki anlatımdan çıktı. Müşteri sadece telefonunu yaklaştırıyor.",
+      "Masalara Mini koyunca yoruma yönlendirme kasadaki anlatımdan çıktı. Müşteri sadece telefonunu yaklaştırıyor.",
   },
   {
     name: "Selin D.",
     role: "Güzellik merkezi kurucusu",
     sector: "Güzellik",
     quote:
-      "Square etiketi aynanın yanında çok doğal durdu. Hizmet sonrası yorum istemek daha zarif hale geldi.",
+      "Kare etiketi aynanın yanında çok doğal durdu. Hizmet sonrası yorum istemek daha zarif hale geldi.",
   },
   {
     name: "Mert K.",

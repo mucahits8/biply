@@ -18,10 +18,12 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at 16% 0%, rgb(255 255 255 / 0.95), transparent 34rem),
     linear-gradient(180deg, #fffaf0 0%, var(--background) 38%, #f6eddf 100%);
@@ -39,7 +41,7 @@ select {
 .section-pad {
   margin-inline: auto;
   max-width: 80rem;
-  padding: 4rem 1rem;
+  padding: 3rem 1rem;
 }
 
 .smooth-card {
@@ -57,6 +59,11 @@ select {
 
 .reveal-soft {
   animation: reveal-soft 620ms ease both;
+}
+
+.swipe-card {
+  scroll-snap-align: start;
+  animation: reveal-soft 560ms ease both;
 }
 
 .no-scrollbar {

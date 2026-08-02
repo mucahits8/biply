@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { useCart } from "@/components/commerce/CartProvider";
 import { PlusIcon } from "@/components/icons";
 import { bundlePresets, products, promotions, type ProductSlug } from "@/data/catalog";
-import { formatPrice, whatsappUrl } from "@/lib/format";
+import { formatPrice, shopierUrlForProduct, whatsappUrl } from "@/lib/format";
 import { calculateBulkPricing, formatDiscountRate } from "@/lib/pricing";
 
 type CheckoutFields = {
@@ -13,6 +13,9 @@ type CheckoutFields = {
   sector: string;
   phone: string;
   city: string;
+  customHeadline: string;
+  customOffer: string;
+  customNotes: string;
 };
 
 type Quantities = Record<ProductSlug, number>;
@@ -22,19 +25,27 @@ const initialFields: CheckoutFields = {
   sector: "",
   phone: "",
   city: "",
+  customHeadline: "",
+  customOffer: "",
+  customNotes: "",
 };
 
 const initialQuantities: Quantities = {
   "biply-stand": 1,
   "biply-square": 4,
+  "biply-personal-square": 0,
   "biply-round": 8,
+  "biply-personal-mini": 0,
 };
 
-function validate(fields: CheckoutFields) {
+function validate(fields: CheckoutFields, requiresPersonalText: boolean) {
   const errors: Partial<Record<keyof CheckoutFields, string>> = {};
 
   if (fields.business.trim().length < 2) errors.business = "İşletme adını girin.";
   if (!/^\+?[0-9\s()-]{10,}$/.test(fields.phone)) errors.phone = "Geçerli telefon girin.";
+  if (requiresPersonalText && fields.customOffer.trim().length < 2) {
+    errors.customOffer = "Kişiselleştirilmiş ürün için ürün üstü metni yazın.";
+  }
 
   return errors;
 }
@@ -54,7 +65,8 @@ export function CommerceExperience() {
   const [quantities, setQuantities] = useState<Quantities>(initialQuantities);
   const [fields, setFields] = useState(initialFields);
   const [submitted, setSubmitted] = useState(false);
-  const errors = submitted ? validate(fields) : {};
+  const hasPersonalizedProduct = quantities["biply-personal-mini"] > 0 || quantities["biply-personal-square"] > 0;
+  const errors = submitted ? validate(fields, hasPersonalizedProduct) : {};
   const lines = products
     .map((product) => ({
       product,
@@ -64,12 +76,22 @@ export function CommerceExperience() {
     .filter((line) => line.quantity > 0);
   const pricing = calculateBulkPricing(lines);
   const hasSelection = lines.length > 0;
-  const isValid = Object.keys(validate(fields)).length === 0 && hasSelection;
+  const isValid = Object.keys(validate(fields, hasPersonalizedProduct)).length === 0 && hasSelection;
+  const directShopierProduct = lines.length === 1 && lines[0]?.quantity === 1 ? lines[0].product : undefined;
+  const shopierCheckoutUrl = shopierUrlForProduct(directShopierProduct);
 
   const orderMessage = useMemo(() => {
     const orderLines = lines.map(
       ({ product, quantity }) => `- ${quantity} x ${product.name}: ${formatPrice(product.price * quantity)}`,
     );
+    const personalizedLines = hasPersonalizedProduct
+      ? [
+          "Kişiselleştirilmiş ürün sabit şablon metni:",
+          `Üst başlık: ${fields.customHeadline || "Google'da bize yorum yap"}`,
+          `Ana kampanya metni: ${fields.customOffer || "-"}`,
+          `Not: ${fields.customNotes || "-"}`,
+        ]
+      : [];
 
     return [
       "Merhaba Biply, lansman fiyatıyla sipariş oluşturmak istiyorum. Seçimlerim aşağıda.",
@@ -77,15 +99,16 @@ export function CommerceExperience() {
       `Sektör: ${fields.sector || "-"}`,
       `Telefon: ${fields.phone || "-"}`,
       `Şehir: ${fields.city || "-"}`,
+      ...personalizedLines,
       "Seçimler:",
       ...orderLines,
       `Ara toplam: ${formatPrice(pricing.subtotal)}`,
       `Çoklu alım avantajı: ${pricing.discountRate ? formatDiscountRate(pricing.discountRate) : "%0"}`,
       `Tasarruf: ${formatPrice(pricing.discountAmount)}`,
       `Toplam: ${formatPrice(pricing.total)}`,
-      "Ödeme ve teslimat bilgilerini paylaşır mısınız?",
+      "Shopier üzerinden ödeme adımına geçiyorum. Sipariş notu için bu özeti kullanabilirsiniz.",
     ].join("\n");
-  }, [fields, lines, pricing.discountAmount, pricing.discountRate, pricing.subtotal, pricing.total]);
+  }, [fields, hasPersonalizedProduct, lines, pricing.discountAmount, pricing.discountRate, pricing.subtotal, pricing.total]);
 
   function updateField(field: keyof CheckoutFields, value: string) {
     setFields((current) => ({ ...current, [field]: value }));
@@ -123,25 +146,25 @@ export function CommerceExperience() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1.08fr_0.92fr]">
-      <section id="paketler" className="smooth-card scroll-mt-24 border border-zinc-200 bg-white p-4 shadow-sm sm:p-6">
-        <div className="mb-6">
+    <div className="grid gap-4 lg:grid-cols-[1.08fr_0.92fr] lg:gap-6">
+      <section id="paketler" className="smooth-card scroll-mt-24 border border-zinc-200 bg-white p-3 shadow-sm sm:p-6">
+        <div className="mb-4 sm:mb-6">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-blue-700">Hızlı paket oluşturucu</p>
-          <h2 className="mt-2 text-3xl font-black tracking-[-0.04em] text-zinc-950 sm:text-5xl">
+          <h2 className="mt-2 text-2xl font-black tracking-[-0.04em] text-zinc-950 sm:text-5xl">
             İşletmen için doğru seti seç, avantajı anında gör.
           </h2>
-          <p className="mt-3 text-sm leading-6 text-zinc-600">
+          <p className="mt-2 text-sm leading-6 text-zinc-600 sm:mt-3">
             Birkaç temas noktası eklediğinde birim fiyat düşebilir. Hazır setlerden başla, adetleri istediğin gibi düzenle.
           </p>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="no-scrollbar grid auto-cols-[78%] grid-flow-col gap-3 overflow-x-auto pb-1 md:grid-flow-row md:grid-cols-4 md:overflow-visible md:pb-0">
           {bundlePresets.map((preset) => (
             <button
               key={preset.id}
               type="button"
               onClick={() => applyPreset(preset.quantities)}
-              className={`smooth-card border p-4 text-left transition hover:-translate-y-0.5 ${
+              className={`swipe-card border p-3 text-left transition hover:-translate-y-0.5 sm:p-4 ${
                 preset.badge ? "border-zinc-950 bg-zinc-950 text-white shadow-lg shadow-zinc-950/15" : "border-zinc-200 bg-[#f7f3ed] text-zinc-950"
               }`}
             >
@@ -156,10 +179,10 @@ export function CommerceExperience() {
           ))}
         </div>
 
-        <div className="mt-5 grid gap-3">
+        <div className="mt-4 grid gap-2.5 sm:mt-5 sm:gap-3">
           {products.map((product) => (
-            <article key={product.id} className="smooth-card grid gap-4 border border-zinc-200 bg-[#fbfaf7] p-3 sm:grid-cols-[92px_1fr_auto] sm:items-center">
-              <div className="relative h-24 overflow-hidden rounded-[1rem] bg-zinc-100 sm:h-20">
+            <article key={product.id} className="smooth-card grid grid-cols-[68px_1fr] gap-3 border border-zinc-200 bg-[#fbfaf7] p-3 sm:grid-cols-[92px_1fr_auto] sm:items-center sm:gap-4">
+              <div className="relative h-20 overflow-hidden rounded-[1rem] bg-zinc-100 sm:h-20">
                 <Image src={product.image} alt={product.imageAlt} fill sizes="92px" className="object-contain p-1" />
               </div>
               <div>
@@ -170,14 +193,15 @@ export function CommerceExperience() {
                   <span className="text-xs font-bold text-zinc-500">{product.subtitle}</span>
                 </div>
                 <h3 className="mt-2 text-xl font-black tracking-[-0.04em] text-zinc-950">{product.name}</h3>
-                <p className="mt-1 text-sm leading-5 text-zinc-600">{product.hierarchy}</p>
+                <p className="mt-1 hidden text-sm leading-5 text-zinc-600 sm:block">{product.hierarchy}</p>
                 <div className="mt-2 flex items-center gap-2">
                   <span className="text-xs font-bold text-zinc-400 line-through">{formatPrice(product.oldPrice)}</span>
                   <strong className="text-sm text-zinc-950">{formatPrice(product.price)}</strong>
-                  <span className="text-[11px] font-black text-emerald-700">{product.saleBadge}</span>
+                  <span className="hidden text-[11px] font-black text-emerald-700 sm:inline">{product.saleBadge}</span>
                 </div>
               </div>
-              <div className="flex items-center justify-between gap-3 sm:justify-end">
+              <div className="col-span-2 flex items-center justify-between gap-3 sm:col-auto sm:justify-end">
+                <span className="text-xs font-black text-emerald-700 sm:hidden">{product.saleBadge}</span>
                 <div className="inline-grid h-12 grid-cols-[40px_48px_40px] items-center overflow-hidden rounded-full border border-zinc-200 bg-white">
                   <button type="button" className="h-full text-xl font-black" onClick={() => updateQuantity(product.slug, quantities[product.slug] - 1)} aria-label={`${product.name} azalt`}>
                     -
@@ -192,37 +216,39 @@ export function CommerceExperience() {
           ))}
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+        <div className="mt-4 sm:mt-5">
           <div className="sm:col-span-3">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Sık seçilen tamamlayıcılar</p>
           </div>
-          {promotions.map((promotion) => (
-            <article key={promotion.id} className="smooth-card overflow-hidden border border-zinc-200 bg-white shadow-sm">
-              <div className="relative aspect-[4/3] bg-zinc-100">
-                <Image src={promotion.image} alt={promotion.imageAlt} fill sizes="(min-width: 640px) 30vw, 100vw" className="object-contain p-2" />
-                <span className="absolute left-3 top-3 rounded-full bg-amber-300 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-zinc-950">
-                  {promotion.badge}
-                </span>
-              </div>
-              <div className="p-4">
-                <h3 className="text-base font-black text-zinc-950">{promotion.name}</h3>
-                <p className="mt-1 min-h-10 text-xs leading-5 text-zinc-600">{promotion.description}</p>
-                <button
-                  type="button"
-                  onClick={() => addPromotionToCart(promotion.productSlug, promotion.quantity)}
-                  className="mt-3 flex min-h-10 w-full items-center justify-center gap-2 rounded-full bg-blue-700 px-4 text-xs font-black text-white"
-                >
-                  <PlusIcon className="h-4 w-4" />
-                  Pakete ekle
-                </button>
-              </div>
-            </article>
-          ))}
+          <div className="no-scrollbar mt-3 grid auto-cols-[72%] grid-flow-col gap-3 overflow-x-auto pb-1 sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0 xl:grid-cols-4">
+            {promotions.map((promotion) => (
+              <article key={promotion.id} className="swipe-card overflow-hidden border border-zinc-200 bg-white shadow-sm">
+                <div className="relative aspect-[4/3] bg-zinc-100">
+                  <Image src={promotion.image} alt={promotion.imageAlt} fill sizes="(min-width: 640px) 30vw, 100vw" className="object-contain p-2" />
+                  <span className="absolute left-3 top-3 rounded-full bg-amber-300 px-3 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-zinc-950">
+                    {promotion.badge}
+                  </span>
+                </div>
+                <div className="p-3 sm:p-4">
+                  <h3 className="text-base font-black text-zinc-950">{promotion.name}</h3>
+                  <p className="mt-1 min-h-10 text-xs leading-5 text-zinc-600">{promotion.description}</p>
+                  <button
+                    type="button"
+                    onClick={() => addPromotionToCart(promotion.productSlug, promotion.quantity)}
+                    className="mt-3 flex min-h-10 w-full items-center justify-center gap-2 rounded-full bg-blue-700 px-4 text-xs font-black text-white"
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                    Pakete ekle
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
-      <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
-        <section className="smooth-card border border-zinc-200 bg-zinc-950 p-5 text-white shadow-xl shadow-zinc-950/15">
+      <div className="space-y-4 lg:sticky lg:top-24 lg:self-start lg:space-y-6">
+        <section className="smooth-card border border-zinc-200 bg-zinc-950 p-4 text-white shadow-xl shadow-zinc-950/15 sm:p-5">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-amber-300">Paketin</p>
           <div className="mt-4 space-y-3">
             {lines.length ? (
@@ -265,12 +291,20 @@ export function CommerceExperience() {
           <button type="button" onClick={addCurrentPackageToCart} className="mt-4 min-h-12 w-full rounded-full bg-amber-300 text-sm font-black text-zinc-950 transition hover:-translate-y-0.5">
             Paketi Sepete Ekle
           </button>
+          <a
+            href={shopierCheckoutUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-3 flex min-h-12 items-center justify-center rounded-full border border-white/20 text-sm font-black text-white"
+          >
+            {directShopierProduct?.shopierUrl ? "Shopier'de Ürünü Aç" : "Shopier Mağazasına Git"}
+          </a>
         </section>
 
-        <section id="checkout" className="smooth-card scroll-mt-24 border border-zinc-200 bg-white p-5 shadow-sm">
+        <section id="checkout" className="smooth-card scroll-mt-24 border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
           <div className="mb-5">
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-zinc-500">Sipariş talebi</p>
-            <h2 className="mt-2 text-3xl font-black tracking-[-0.05em] text-zinc-950">Sipariş talebini oluştur.</h2>
+            <h2 className="mt-2 text-2xl font-black tracking-[-0.05em] text-zinc-950 sm:text-3xl">Sipariş talebini oluştur.</h2>
             <p className="mt-2 text-sm leading-6 text-zinc-600">
               Siparişinizi WhatsApp&apos;tan netleştiriyoruz. Ödeme, teslimat ve kurulum bilgileri temsilcimiz tarafından paylaşılır.
             </p>
@@ -299,6 +333,46 @@ export function CommerceExperience() {
             </Field>
           </div>
 
+          <div className={`mt-4 rounded-[1.5rem] border p-4 ${hasPersonalizedProduct ? "border-amber-300 bg-amber-50" : "border-zinc-200 bg-[#fbfaf7]"}`}>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-950">Kişiselleştirilmiş ürün yazısı</p>
+              <span className="rounded-full bg-zinc-950 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-white">
+                Sabit şablon
+              </span>
+            </div>
+            <p className="mt-1 text-xs font-bold leading-5 text-zinc-600">
+              Bu alan Kişiselleştirilmiş Kare ve Kişiselleştirilmiş Mini içindir. Biply tasarımı sabit kalır; sadece ürünün üstündeki kısa kampanya metni yerleşir.
+            </p>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <Field label="Üst başlık (opsiyonel)" error={errors.customHeadline}>
+                <input
+                  value={fields.customHeadline}
+                  onChange={(event) => updateField("customHeadline", event.target.value)}
+                  placeholder="Google'da bize yorum yap"
+                  className="field-input"
+                />
+              </Field>
+              <Field label={hasPersonalizedProduct ? "Ürün üstü kampanya metni" : "Ürün üstü kampanya metni (opsiyonel)"} error={errors.customOffer}>
+                <input
+                  value={fields.customOffer}
+                  onChange={(event) => updateField("customOffer", event.target.value)}
+                  placeholder="Kahven bizden"
+                  className="field-input"
+                />
+              </Field>
+              <div className="sm:col-span-2">
+                <Field label="Kısa not (opsiyonel)" error={errors.customNotes}>
+                  <textarea
+                    value={fields.customNotes}
+                    onChange={(event) => updateField("customNotes", event.target.value)}
+                    placeholder="Sabit Biply şablonu içinde kullanılacak ikon veya küçük kampanya şartı..."
+                    className="field-input min-h-28 py-3"
+                  />
+                </Field>
+              </div>
+            </div>
+          </div>
+
           <button type="button" data-testid="mock-checkout" onClick={handleMockSubmit} className="mt-4 min-h-12 w-full rounded-full bg-zinc-950 text-sm font-black text-white">
             Sipariş özetini hazırla
           </button>
@@ -310,12 +384,23 @@ export function CommerceExperience() {
               isValid ? "border-emerald-600 text-emerald-700" : "border-zinc-200 text-zinc-400"
             }`}
           >
-            WhatsApp&apos;tan Sipariş Talebi Gönder
+            Sipariş Notunu WhatsApp&apos;tan Gönder
+          </a>
+          <a
+            href={isValid ? shopierCheckoutUrl : "#checkout"}
+            target={isValid ? "_blank" : undefined}
+            rel={isValid ? "noreferrer" : undefined}
+            onClick={() => setSubmitted(true)}
+            className={`mt-3 flex min-h-12 items-center justify-center rounded-full text-sm font-black ${
+              isValid ? "bg-amber-300 text-zinc-950" : "bg-zinc-100 text-zinc-400"
+            }`}
+          >
+            {directShopierProduct?.shopierUrl ? "Shopier'de Ürünü Aç" : "Shopier Mağazasına Git"}
           </a>
           <div className="mt-5 grid grid-cols-3 gap-2 text-center text-[11px] font-bold text-zinc-500">
             <span>Sipariş teyidi</span>
             <span>Kurulum desteği</span>
-            <span>Ödeme bilgisi temsilciden</span>
+            <span>Shopier ödeme</span>
           </div>
         </section>
       </div>

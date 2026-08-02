@@ -19,8 +19,7 @@ export function Logo({ compact = false, className = "", image = false, light = f
           alt="Biply"
           width={360}
           height={120}
-          loading={compact ? "eager" : "lazy"}
-          fetchPriority={compact ? "high" : "auto"}
+          preload={compact}
           className={`h-auto ${imageWidth} object-contain ${light ? "invert" : ""}`}
         />
       </div>

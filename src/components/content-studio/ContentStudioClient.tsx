@@ -9,7 +9,7 @@ const initialBrief: ContentBrief = {
   sector: "Kafe / restoran",
   goal: "Google yorum artırma",
   tone: "Premium ve eğitici",
-  product: "Biply Stand",
+  product: "Stand",
   slideCount: 8,
   notes: "",
 };
@@ -17,7 +17,7 @@ const initialBrief: ContentBrief = {
 const sectors = ["Kafe / restoran", "Kuaför / güzellik salonu", "Klinik", "Otel", "Spor salonu", "Butik mağaza"];
 const goals = ["Google yorum artırma", "Müşteri güveni", "Google Maps görünürlüğü", "Sosyal medya takip", "WhatsApp aksiyonu"];
 const tones = ["Premium ve eğitici", "Samimi", "Viral", "Sert ve direkt", "Minimal ve güven veren"];
-const products = ["Biply Stand", "Biply Square", "Biply Round"];
+const products = ["Stand", "Kare", "Kişiselleştirilmiş Kare", "Mini", "Kişiselleştirilmiş Mini"];
 const statuses: ContentStatus[] = ["draft", "approved", "posted"];
 
 export function ContentStudioClient() {

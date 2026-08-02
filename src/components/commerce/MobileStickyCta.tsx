@@ -10,7 +10,7 @@ export function MobileStickyCta() {
     <div className="fixed inset-x-3 bottom-3 z-50 rounded-[1.35rem] border border-zinc-200 bg-white/94 p-2 shadow-2xl shadow-zinc-950/20 backdrop-blur-xl md:hidden">
       <div className="grid grid-cols-[1fr_112px] items-center gap-2">
         <a
-          href={count ? "#checkout" : "#hizli-secim"}
+          href={count ? "#checkout" : "#mobil-urunler"}
           className="flex min-h-11 items-center justify-center rounded-full bg-zinc-950 px-4 text-sm font-black text-white"
         >
           {count ? "Siparişi Tamamla" : "Hızlı Fiyat Al"}

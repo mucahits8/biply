@@ -3,12 +3,18 @@
 import { CheckIcon, PlusIcon } from "@/components/icons";
 import Image from "next/image";
 import { products, promotions } from "@/data/catalog";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, shopierUrlForProduct } from "@/lib/format";
 import { formatDiscountRate } from "@/lib/pricing";
 import { useCart } from "@/components/commerce/CartProvider";
 
 export function CartDrawer() {
   const { items, subtotal, discountAmount, discountRate, total, isCartOpen, closeCart, updateQuantity, removeItem, addItem } = useCart();
+  const hasPersonalizedItem = items.some((item) => item.id === "product-personal-mini" || item.id === "product-personal-square");
+  const directShopierProduct =
+    items.length === 1 && items[0]?.kind === "product" && items[0].quantity === 1
+      ? products.find((product) => product.id === items[0].id)
+      : undefined;
+  const shopierCheckoutUrl = shopierUrlForProduct(directShopierProduct);
 
   if (!isCartOpen) return null;
 
@@ -96,6 +102,15 @@ export function CartDrawer() {
           </section>
         ) : null}
 
+        {hasPersonalizedItem ? (
+          <div className="mt-5 rounded-[1.5rem] border border-amber-300 bg-amber-50 p-4">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-950">Kişiselleştirilmiş ürün notu</p>
+            <p className="mt-1 text-sm font-bold leading-6 text-zinc-700">
+              Shopier sipariş notuna ürün üstünde yazmasını istediğiniz kısa metni ekleyin. Örn. “Kahven bizden”.
+            </p>
+          </div>
+        ) : null}
+
         <div className="mt-5 rounded-[1.5rem] bg-zinc-950 p-5 text-white">
           <div className="space-y-2 text-sm text-zinc-300">
             <div className="flex items-center justify-between">
@@ -115,8 +130,14 @@ export function CartDrawer() {
             <strong className="text-3xl font-black tracking-[-0.05em]">{formatPrice(total)}</strong>
             <CheckIcon className="h-7 w-7 text-emerald-300" />
           </div>
-          <a href="#checkout" onClick={closeCart} className="mt-4 flex min-h-12 items-center justify-center rounded-full bg-white text-sm font-black text-zinc-950">
-            Sipariş talebine geç
+          <a
+            href={shopierCheckoutUrl}
+            target="_blank"
+            rel="noreferrer"
+            onClick={closeCart}
+            className="mt-4 flex min-h-12 items-center justify-center rounded-full bg-white text-sm font-black text-zinc-950"
+          >
+            {directShopierProduct?.shopierUrl ? "Shopier'de Ürünü Aç" : "Shopier Mağazasına Git"}
           </a>
         </div>
       </aside>
