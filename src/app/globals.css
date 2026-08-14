@@ -66,6 +66,10 @@ select {
   animation: reveal-soft 560ms ease both;
 }
 
+.swipe-nudge {
+  animation: swipe-nudge 1.35s ease-in-out infinite;
+}
+
 .no-scrollbar {
   scrollbar-width: none;
 }
@@ -123,6 +127,16 @@ select {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes swipe-nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
   }
 }
 

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useCart } from "@/components/commerce/CartProvider";
 import { PlusIcon } from "@/components/icons";
+import { MobileSwipeHint } from "@/components/ui/MobileSwipeHint";
 import { bundlePresets, products, promotions, type ProductSlug } from "@/data/catalog";
 import { formatPrice, shopierUrlForProduct, whatsappUrl } from "@/lib/format";
 import { calculateBulkPricing, formatDiscountRate } from "@/lib/pricing";
@@ -158,8 +159,9 @@ export function CommerceExperience() {
           </p>
         </div>
 
+        <MobileSwipeHint label="Hazır setler" detail="İşletmenize uygun başlangıç paketini seçmek için set kartlarını kaydırın." />
         <div className="no-scrollbar grid min-w-0 max-w-full auto-cols-[100%] grid-flow-col snap-x snap-mandatory gap-3 overflow-x-auto pb-1 md:grid-flow-row md:grid-cols-4 md:overflow-visible md:pb-0">
-          {bundlePresets.map((preset) => (
+          {bundlePresets.map((preset, index) => (
             <button
               key={preset.id}
               type="button"
@@ -174,6 +176,10 @@ export function CommerceExperience() {
               <span className="mt-2 block text-lg font-black tracking-[-0.03em]">{preset.name}</span>
               <span className={preset.badge ? "mt-1 block text-xs leading-5 text-zinc-300" : "mt-1 block text-xs leading-5 text-zinc-600"}>
                 {preset.description}
+              </span>
+              <span className={preset.badge ? "mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-[11px] font-black text-zinc-300 md:hidden" : "mt-3 flex items-center justify-between border-t border-zinc-200 pt-3 text-[11px] font-black text-zinc-500 md:hidden"}>
+                <span>{index + 1} / {bundlePresets.length}</span>
+                <span>Diğer setler sağda</span>
               </span>
             </button>
           ))}
@@ -220,8 +226,9 @@ export function CommerceExperience() {
           <div className="sm:col-span-3">
             <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Sık seçilen tamamlayıcılar</p>
           </div>
+          <MobileSwipeHint label="Ek avantajlar" detail="Siparişi güçlendiren tamamlayıcı seçenekleri görmek için kaydırın." className="mt-3" />
           <div className="no-scrollbar mt-3 grid min-w-0 max-w-full auto-cols-[100%] grid-flow-col snap-x snap-mandatory gap-3 overflow-x-auto pb-1 sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0 xl:grid-cols-4">
-            {promotions.map((promotion) => (
+            {promotions.map((promotion, index) => (
               <article key={promotion.id} className="swipe-card overflow-hidden border border-zinc-200 bg-white shadow-sm">
                 <div className="relative aspect-[4/3] bg-zinc-100">
                   <Image src={promotion.image} alt={promotion.imageAlt} fill sizes="(min-width: 640px) 30vw, 100vw" className="object-contain p-2" />
@@ -240,6 +247,10 @@ export function CommerceExperience() {
                     <PlusIcon className="h-4 w-4" />
                     Pakete ekle
                   </button>
+                  <div className="mt-3 flex items-center justify-between text-[11px] font-black text-zinc-500 sm:hidden">
+                    <span>{index + 1} / {promotions.length}</span>
+                    <span>Devamı sağda</span>
+                  </div>
                 </div>
               </article>
             ))}

@@ -7,6 +7,7 @@ import { Logo } from "@/components/brand/Logo";
 import { CheckIcon, NfcIcon, ShieldIcon } from "@/components/icons";
 import { ProductFamily } from "@/components/landing/ProductFamily";
 import { SectionHeader } from "@/components/landing/SectionHeader";
+import { MobileSwipeHint } from "@/components/ui/MobileSwipeHint";
 import { comparisonRows, faqs, products, sectors, testimonials } from "@/data/catalog";
 import { formatPrice } from "@/lib/format";
 
@@ -224,6 +225,9 @@ function MobileProductShelf() {
           Stand kritik nokta, Kare çoklu yüzey, Kişiselleştirilmiş Kare özel yazı, Mini masa yoğun işletmeler için.
         </p>
       </div>
+      <div className="mb-3 rounded-[1.1rem] border border-zinc-200 bg-white p-3 text-xs font-bold leading-5 text-zinc-600 shadow-sm">
+        Her kart ayrı ürün: fiyatı gör, sepete ekle veya detayına gir. Yana kaydırdıkça diğer ürün seçenekleri gelir.
+      </div>
       <ProductFamily />
     </div>
   );
@@ -239,14 +243,19 @@ function MobileSignalFlow() {
 
   return (
     <section className="mx-auto max-w-7xl px-4 pb-5 lg:hidden">
+      <MobileSwipeHint label="4 adımda yorum akışı" detail="Biply'nin müşteriye nasıl yorum yazdırdığını görmek için adımları kaydırın." />
       <div className="no-scrollbar grid auto-cols-[100%] grid-flow-col snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
-        {signals.map(([step, title, copy]) => (
+        {signals.map(([step, title, copy], index) => (
           <article key={step} className="swipe-card rounded-[1.25rem] border border-zinc-200 bg-white p-4 shadow-sm">
             <div className="flex items-center gap-3">
               <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-zinc-950 text-sm font-black text-white">{step}</span>
               <h3 className="text-xl font-black tracking-[-0.045em] text-zinc-950">{title}</h3>
             </div>
             <p className="mt-3 text-sm font-semibold leading-6 text-zinc-600">{copy}</p>
+            <div className="mt-3 flex items-center justify-between border-t border-zinc-100 pt-3 text-[11px] font-black text-zinc-500">
+              <span>{index + 1} / {signals.length}</span>
+              <span>Devamı sağda</span>
+            </div>
           </article>
         ))}
       </div>

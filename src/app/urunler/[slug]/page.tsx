@@ -7,6 +7,7 @@ import { Logo } from "@/components/brand/Logo";
 import { ArrowIcon, CheckIcon, NfcIcon } from "@/components/icons";
 import { ProductDetailGallery } from "@/components/product/ProductDetailGallery";
 import { ProductStickyCta } from "@/components/product/ProductStickyCta";
+import { MobileSwipeHint } from "@/components/ui/MobileSwipeHint";
 import { products, type CatalogItem } from "@/data/catalog";
 import { formatPrice, shopierUrlForProduct } from "@/lib/format";
 
@@ -362,8 +363,9 @@ function MobileProductExtras({
             <h2 className="mt-1 text-2xl font-black tracking-[-0.05em]">Bir temas noktası daha kapat.</h2>
           </div>
         </div>
+        <MobileSwipeHint label={`${relatedProducts.length} öneri`} detail="Bu ürünün yanına eklenebilecek diğer Biply seçeneklerini görmek için kaydırın." className="mt-3" />
         <div className="no-scrollbar mt-3 grid auto-cols-[100%] grid-flow-col snap-x snap-mandatory gap-3 overflow-x-auto pb-1">
-          {relatedProducts.map((related) => (
+          {relatedProducts.map((related, index) => (
             <article key={related.id} className="swipe-card rounded-[1.15rem] border border-zinc-200 bg-[#fbfaf7] p-3">
               <div className="relative h-28 overflow-hidden rounded-[1rem] bg-zinc-100">
                 <Image src={related.image} alt={related.imageAlt} fill sizes="72vw" className="object-contain p-1" />
@@ -377,6 +379,10 @@ function MobileProductExtras({
               <AddToCartButton item={{ id: related.id, kind: "product", name: related.name, price: related.price }} className="mt-3 min-h-10 w-full text-xs">
                 Sepete Ekle
               </AddToCartButton>
+              <div className="mt-3 flex items-center justify-between text-[11px] font-black text-zinc-500">
+                <span>{index + 1} / {relatedProducts.length}</span>
+                <span>Diğer öneriler sağda</span>
+              </div>
             </article>
           ))}
         </div>
