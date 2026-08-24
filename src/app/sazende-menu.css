@@ -90,7 +90,7 @@
   color: var(--menu-ink);
   margin: 0 auto;
   min-height: 100svh;
-  padding: max(18px, env(safe-area-inset-top)) 14px max(34px, env(safe-area-inset-bottom));
+  padding: max(10px, env(safe-area-inset-top)) 14px max(34px, env(safe-area-inset-bottom));
   position: relative;
   width: 100%;
 }
@@ -115,7 +115,7 @@
   margin-left: auto;
   margin-right: auto;
   max-width: 640px;
-  padding: 4px 0 12px;
+  padding: 0 0 8px;
   text-align: center;
 }
 
@@ -123,8 +123,9 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  margin: 0 auto;
-  max-width: min(100%, 560px);
+  margin: -18px auto 0;
+  max-width: 515px;
+  width: 92%;
 }
 
 .brand-emblem img {
@@ -211,7 +212,7 @@
   font-size: 0.82rem;
   font-weight: 750;
   gap: 7px;
-  margin-top: -6px;
+  margin-top: -14px;
   min-height: 34px;
   padding: 0 12px;
   text-decoration: none;
@@ -283,7 +284,7 @@
   backdrop-filter: blur(16px);
   display: flex;
   gap: 10px;
-  margin: 2px -14px 18px;
+  margin: 0 -14px 16px;
   overflow-x: auto;
   padding: 9px 14px 10px;
   position: sticky;
