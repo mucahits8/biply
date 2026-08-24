@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://biply.com"),
+  metadataBase: new URL("https://www.biply.com.tr"),
   title: {
     default: "Biply | Google yorumlarını tek dokunuşla kolaylaştırın",
     template: "%s | Biply",

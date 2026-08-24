@@ -48,6 +48,8 @@ export type BusinessMenu = {
     name: string;
     slug: string;
     subtitle: string;
+    shareImageUrl?: string | null;
+    faviconUrl?: string | null;
   };
   categories: MenuCategory[];
 };
