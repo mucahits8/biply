@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { getAllergenLabel } from "@/lib/sazende/allergens";
 import { publicAssetUrl } from "@/lib/sazende/assets";
@@ -291,14 +292,16 @@ export function MenuClient({ menu }: Props) {
   return (
     <main className="menu-shell">
       <header className="brand-header">
-        <p className="eyebrow">Dijital Menü</p>
-        <div className="brand-lockup">
-          <h1>{businessInfo.displayName}</h1>
+        <div className="brand-emblem">
+          <Image
+            src="/images/sazende-header.png"
+            alt={`${businessInfo.displayName} Dijital Menü`}
+            width={1448}
+            height={1086}
+            priority
+            sizes="(max-width: 520px) 92vw, 560px"
+          />
         </div>
-        <div className="ornament" />
-        <p className="brand-subtitle">
-          <span>{businessInfo.subtitle}</span>
-        </p>
         <a className="header-social-link" href={businessInfo.instagramUrl} target="_blank" rel="noreferrer">
           <InstagramMark />
           @{businessInfo.instagramHandle}
