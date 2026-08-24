@@ -14,7 +14,7 @@ type Props = {
 
 const CAMPAIGN_STORAGE_KEY = "sazende_campaign_seen";
 const GOOGLE_REVIEW_URL =
-  "https://www.google.com/search?q=%C5%9Eazende+Pa%C3%A7a+%C4%B0%C5%9Fkembe+Kebap+Google+yorum";
+  "https://search.google.com/local/writereview?placeid=ChIJk0HAOki3yhQR0cXgHJDKO-I";
 
 function allergenText(item: MenuItem) {
   return item.allergens.map(getAllergenLabel).join(" · ");
