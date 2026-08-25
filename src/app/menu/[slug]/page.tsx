@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MenuClient } from "@/components/sazende/MenuClient";
+import { getBusinessProfile } from "@/lib/sazende/business-info";
 import { getMenuBySlug, getSeedMenu } from "@/lib/sazende/menu";
 import { getMenuShareMetadata } from "@/lib/sazende/share-metadata";
 import "@/app/sazende-menu.css";
@@ -12,7 +13,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const menu = await getMenuBySlug(slug).catch(() => getSeedMenu(slug));
+  const menu = (await getMenuBySlug(slug).catch(() => null)) ?? getSeedMenu(slug);
 
   if (!menu) {
     return {
@@ -67,7 +68,7 @@ export default async function MenuPage({ params }: Props) {
   let menu;
 
   try {
-    menu = await getMenuBySlug(slug);
+    menu = (await getMenuBySlug(slug)) ?? getSeedMenu(slug);
   } catch {
     menu = getSeedMenu(slug);
   }
@@ -76,5 +77,5 @@ export default async function MenuPage({ params }: Props) {
     return <main className="status-shell">Menü bulunamadı.</main>;
   }
 
-  return <MenuClient menu={menu} />;
+  return <MenuClient menu={menu} profile={getBusinessProfile(menu.business)} />;
 }

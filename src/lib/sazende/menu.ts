@@ -1,4 +1,5 @@
 import type { BusinessMenu, MenuCategory, MenuItem } from "@/types/menu";
+import { hamaratBusiness, hamaratCategories } from "./hamarat-seed";
 import { getCategoryImage } from "./category-images";
 import { seedBusiness, seedCategories, seedItemId } from "./seed";
 import { getNutritionInfo } from "./nutrition";
@@ -106,11 +107,24 @@ export async function getMenuBySlug(slug: string): Promise<BusinessMenu | null> 
 }
 
 export function getSeedMenu(slug: string): BusinessMenu | null {
-  if (slug !== seedBusiness.slug) {
+  const seedMenu = {
+    [seedBusiness.slug]: {
+      business: seedBusiness,
+      categories: seedCategories,
+    },
+    [hamaratBusiness.slug]: {
+      business: hamaratBusiness,
+      categories: hamaratCategories,
+    },
+  }[slug];
+
+  if (!seedMenu) {
     return null;
   }
 
-  const categories: MenuCategory[] = seedCategories.map((category, categoryIndex) => {
+  const categories: MenuCategory[] = seedMenu.categories.map((category, categoryIndex) => {
+    const categoryImageUrl =
+      category.imageUrl === undefined ? getCategoryImage(category.name) : category.imageUrl;
     const items: MenuItem[] = category.items.map((item, itemIndex) => ({
       ...(() => {
         const nutrition = getNutritionInfo(category.name, item.name);
@@ -120,13 +134,13 @@ export function getSeedMenu(slug: string): BusinessMenu | null {
         };
       })(),
       id: seedItemId(category.id, itemIndex),
-      businessId: seedBusiness.id,
+      businessId: seedMenu.business.id,
       categoryId: category.id,
       name: item.name,
       description: null,
       price: item.price,
       weight: item.weight ?? null,
-      imageUrl: getCategoryImage(category.name),
+      imageUrl: item.imageUrl ?? categoryImageUrl,
       sortOrder: (itemIndex + 1) * 10,
       isActive: item.active !== false,
       isAvailable: true,
@@ -137,7 +151,7 @@ export function getSeedMenu(slug: string): BusinessMenu | null {
 
     return {
       id: category.id,
-      businessId: seedBusiness.id,
+      businessId: seedMenu.business.id,
       name: category.name,
       sortOrder: (categoryIndex + 1) * 10,
       isActive: true,
@@ -146,7 +160,7 @@ export function getSeedMenu(slug: string): BusinessMenu | null {
   });
 
   return {
-    business: seedBusiness,
+    business: seedMenu.business,
     categories,
   };
 }

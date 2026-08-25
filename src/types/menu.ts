@@ -53,3 +53,5 @@ export type BusinessMenu = {
   };
   categories: MenuCategory[];
 };
+
+export type BusinessSummary = BusinessMenu["business"];

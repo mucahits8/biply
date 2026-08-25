@@ -1,0 +1,113 @@
+import type { SeedCategory } from "./seed";
+
+export const hamaratBusiness = {
+  id: "biz_hamarat",
+  name: "Hamarat Pastane & Kafe",
+  slug: "hamarat",
+  subtitle: "Pastane • Kafe • Fast Food",
+};
+
+export const hamaratCategories: SeedCategory[] = [
+  {
+    id: "hamarat_cat_fast_food",
+    name: "Fast Food",
+    imageUrl: null,
+    items: [
+      { name: "Hamburger", price: 135 },
+      { name: "Hamarat Burger", price: 165 },
+      { name: "Patso", price: 105 },
+      { name: "Karışık Tost", price: 115 },
+      { name: "Peynirli Tost", price: 90 },
+      { name: "Sandviç", price: 95 },
+    ],
+  },
+  {
+    id: "hamarat_cat_unlu_mamuller",
+    name: "Unlu Mamüller",
+    imageUrl: null,
+    items: [
+      { name: "Simit", price: 25 },
+      { name: "Poğaça", price: 35 },
+      { name: "Açma", price: 35 },
+      { name: "Gül Böreği", price: 70 },
+      { name: "Kol Böreği", price: 85 },
+      { name: "Su Böreği", price: 95 },
+      { name: "Kapalı Pizza", price: 75 },
+      { name: "Mini Pizza", price: 55 },
+      { name: "Kurabiye Çeşitleri", price: 80 },
+    ],
+  },
+  {
+    id: "hamarat_cat_yas_pasta",
+    name: "Yaş Pasta",
+    imageUrl: null,
+    items: [
+      { name: "Yaş Pasta 01", price: 145 },
+      { name: "Yaş Pasta 02", price: 150 },
+      { name: "Yaş Pasta 03", price: 155 },
+      { name: "Baton Yaş Pasta", price: 450 },
+      { name: "Mini Baton Yaş Pasta", price: 250 },
+      { name: "Mozaik Pasta", price: 110 },
+    ],
+  },
+  {
+    id: "hamarat_cat_adet_pasta",
+    name: "Adet Pasta",
+    imageUrl: null,
+    items: [
+      { name: "Köstebek Pasta Mini", price: 95 },
+      { name: "Ekler Mini", price: 85 },
+      { name: "Muffin", price: 80 },
+      { name: "Magnolia", price: 125 },
+      { name: "Profiterol", price: 115 },
+      { name: "Supangle", price: 110 },
+      { name: "Cheesecake", price: 145 },
+      { name: "Malaga", price: 150 },
+    ],
+  },
+  {
+    id: "hamarat_cat_tatlilar",
+    name: "Tatlılar",
+    imageUrl: null,
+    items: [
+      { name: "Fındıklı ve Cevizli Baklava", price: 170 },
+      { name: "Soğuk Baklava", price: 160 },
+      { name: "Burma Kadayıf", price: 150 },
+      { name: "Laz Böreği", price: 125 },
+      { name: "Revani", price: 90 },
+      { name: "Şekerpare", price: 90 },
+      { name: "Sütlaç", price: 100 },
+      { name: "Kazandibi", price: 105 },
+    ],
+  },
+  {
+    id: "hamarat_cat_sicak_icecekler",
+    name: "Sıcak İçecekler",
+    imageUrl: null,
+    items: [
+      { name: "Küçük Çay", price: 30 },
+      { name: "Fincan Çay", price: 40 },
+      { name: "Türk Kahvesi", price: 80 },
+      { name: "Nescafe", price: 75 },
+      { name: "Filtre Kahve", price: 90 },
+      { name: "Sütlü Filtre Kahve", price: 105 },
+      { name: "Latte", price: 110 },
+      { name: "Sıcak Çikolata", price: 95 },
+      { name: "Sahlep", price: 95 },
+    ],
+  },
+  {
+    id: "hamarat_cat_soguk_icecekler",
+    name: "Soğuk İçecekler",
+    imageUrl: null,
+    items: [
+      { name: "Su", price: 25 },
+      { name: "Soda", price: 35 },
+      { name: "Meyveli Soda", price: 45 },
+      { name: "Şişe İçecek", price: 65 },
+      { name: "Limonata", price: 75 },
+      { name: "Hamarat Şerbeti", price: 80 },
+      { name: "Küçük Meyve Suyu", price: 40 },
+    ],
+  },
+];

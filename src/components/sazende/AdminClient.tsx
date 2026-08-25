@@ -3,12 +3,13 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { allergenLabels, getAllergenLabel } from "@/lib/sazende/allergens";
 import { publicAssetUrl } from "@/lib/sazende/assets";
+import { getBusinessProfile, getBusinessProfileBySlug } from "@/lib/sazende/business-info";
 import { formatKcal } from "@/lib/sazende/format";
 import { supabaseAnonKey, supabaseFetch, supabaseUrl } from "@/lib/sazende/supabase";
 import type { AllergenKey, BusinessMenu, MenuItem } from "@/types/menu";
 
-const TOKEN_KEY = "sazende_admin_token";
-const REFRESH_KEY = "sazende_admin_refresh";
+const TOKEN_KEY = "biply_admin_token";
+const REFRESH_KEY = "biply_admin_refresh";
 
 type AdminMode = "loading" | "login" | "ready";
 
@@ -29,7 +30,7 @@ function getStoredToken() {
 }
 
 function displayItemName(name: string) {
-  return name.replaceAll("Sazende", "Şazende");
+  return name;
 }
 
 async function signIn(email: string, password: string) {
@@ -52,9 +53,9 @@ async function signIn(email: string, password: string) {
   };
 }
 
-async function uploadImage(file: File, token: string) {
+async function uploadImage(file: File, token: string, slug: string) {
   const extension = file.name.split(".").pop()?.toLowerCase() || "jpg";
-  const key = `items/${crypto.randomUUID()}.${extension}`;
+  const key = `items/${slug}/${crypto.randomUUID()}.${extension}`;
   const response = await fetch(`${supabaseUrl}/storage/v1/object/menu-images/${key}`, {
     method: "POST",
     headers: {
@@ -85,6 +86,10 @@ async function loadAdminMenu(token: string, slug: string): Promise<BusinessMenu>
     businessParams,
     token,
   );
+
+  if (!business) {
+    throw new Error("Bu slug ile kayıtlı işletme bulunamadı.");
+  }
 
   const categoryParams = new URLSearchParams({
     select: "id,business_id,name,sort_order,is_active",
@@ -164,11 +169,7 @@ async function loadAdminMenu(token: string, slug: string): Promise<BusinessMenu>
   };
 }
 
-type AdminClientProps = {
-  slug?: string;
-};
-
-export function AdminClient({ slug = "sazende" }: AdminClientProps) {
+export function AdminClient({ slug = "sazende" }: { slug?: string }) {
   const [mode, setMode] = useState<AdminMode>(() => (getStoredToken() ? "loading" : "login"));
   const [token, setToken] = useState(getStoredToken);
   const [menu, setMenu] = useState<BusinessMenu | null>(null);
@@ -192,6 +193,7 @@ export function AdminClient({ slug = "sazende" }: AdminClientProps) {
   const categories = useMemo(() => menu?.categories ?? [], [menu]);
   const selectedCategory =
     categories.find((category) => category.id === selectedCategoryId) ?? categories[0];
+  const profile = menu ? getBusinessProfile(menu.business) : getBusinessProfileBySlug(slug);
   const hasChanges = dirtyItemIds.size > 0;
   const saveLabel = saving
     ? saveStage === "uploading"
@@ -205,8 +207,8 @@ export function AdminClient({ slug = "sazende" }: AdminClientProps) {
 
   function setMenuState(data: BusinessMenu) {
     setMenu(data);
-    setSelectedCategoryId((current) => current || data.categories[0]?.id || "");
-    setNewCategoryId((current) => current || data.categories[0]?.id || "");
+    setSelectedCategoryId(data.categories[0]?.id || "");
+    setNewCategoryId(data.categories[0]?.id || "");
     setPriceDrafts(
       Object.fromEntries(
         data.categories.flatMap((category) =>
@@ -283,11 +285,10 @@ export function AdminClient({ slug = "sazende" }: AdminClientProps) {
         .flatMap((category) => category.items)
         .filter((item) => dirtyItemIds.has(item.id)) as EditableItem[];
 
-      const invalidItem = dirtyItems
-        .find((item) => {
-          const draft = priceDrafts[item.id]?.trim() ?? "";
-          return draft === "" || Number.isNaN(Number(draft));
-        });
+      const invalidItem = dirtyItems.find((item) => {
+        const draft = priceDrafts[item.id]?.trim() ?? "";
+        return draft !== "" && Number.isNaN(Number(draft));
+      });
 
       if (invalidItem) {
         setMessage(`${invalidItem.name} için geçerli bir fiyat gir.`);
@@ -311,7 +312,7 @@ export function AdminClient({ slug = "sazende" }: AdminClientProps) {
         let imageUrl = item.imageUrl;
         if (item.imageFile) {
           setSaveStage("uploading");
-          imageUrl = await uploadImage(item.imageFile, token);
+          imageUrl = await uploadImage(item.imageFile, token, slug);
         }
 
         setSaveStage("saving");
@@ -324,7 +325,10 @@ export function AdminClient({ slug = "sazende" }: AdminClientProps) {
             method: "PATCH",
             headers: { Prefer: "return=minimal" },
             body: JSON.stringify({
-              price: Number(priceDrafts[item.id]),
+              price:
+                priceDrafts[item.id]?.trim() === ""
+                  ? null
+                  : Number(priceDrafts[item.id]),
               weight: item.weight?.trim() || null,
               kcal: item.kcal,
               kcal_is_estimated: item.kcalIsEstimated,
@@ -353,8 +357,14 @@ export function AdminClient({ slug = "sazende" }: AdminClientProps) {
 
   async function handleCreate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!menu || !newCategoryId || !newName.trim() || !newPrice.trim()) {
-      setMessage("Ürün adı, kategori ve fiyat gerekli.");
+    if (!menu || !newCategoryId || !newName.trim()) {
+      setMessage("Ürün adı ve kategori gerekli.");
+      return;
+    }
+
+    const normalizedPrice = newPrice.trim();
+    if (normalizedPrice && Number.isNaN(Number(normalizedPrice))) {
+      setMessage("Fiyat için geçerli bir sayı gir.");
       return;
     }
 
@@ -368,7 +378,7 @@ export function AdminClient({ slug = "sazende" }: AdminClientProps) {
     setSaveStage(newImage ? "uploading" : "saving");
     setMessage("");
     try {
-      const imageUrl = newImage ? await uploadImage(newImage, token) : null;
+      const imageUrl = newImage ? await uploadImage(newImage, token, slug) : null;
       const category = menu.categories.find((entry) => entry.id === newCategoryId);
       const sortOrder =
         Math.max(0, ...(category?.items.map((item) => item.sortOrder) ?? [0])) + 10;
@@ -385,7 +395,7 @@ export function AdminClient({ slug = "sazende" }: AdminClientProps) {
             category_id: newCategoryId,
             name: newName.trim(),
             description: newDescription.trim() || null,
-            price: Number(newPrice),
+            price: normalizedPrice ? Number(normalizedPrice) : null,
             weight: newWeight.trim() || null,
             image_url: imageUrl,
             sort_order: sortOrder,
@@ -478,7 +488,7 @@ export function AdminClient({ slug = "sazende" }: AdminClientProps) {
       <main className="admin-shell login-shell">
         <form className="login-panel" onSubmit={handleLogin}>
           <p className="eyebrow">Admin</p>
-          <h1>Şazende Menü Yönetimi</h1>
+          <h1>{profile.displayName} Menü Yönetimi</h1>
           <label>
             E-posta
             <input value={email} onChange={(event) => setEmail(event.target.value)} type="email" />
@@ -502,7 +512,7 @@ export function AdminClient({ slug = "sazende" }: AdminClientProps) {
     <main className={`admin-shell ${saving ? "is-saving" : ""}`}>
       <header className="admin-header">
         <div>
-          <p className="eyebrow">Şazende</p>
+          <p className="eyebrow">{profile.displayName}</p>
           <h1>Menü Yönetimi</h1>
         </div>
         <button type="button" className="ghost-button" onClick={logout} disabled={saving}>

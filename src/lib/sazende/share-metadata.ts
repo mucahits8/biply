@@ -18,6 +18,13 @@ const shareOverrides: Record<string, ShareOverride> = {
     imageWidth: 1731,
     imageHeight: 909,
   },
+  hamarat: {
+    name: "Hamarat",
+    description: "Pastane • Kafe • Fast Food",
+    shareImageUrl: "/images/hamarat-hero.png",
+    imageWidth: 1448,
+    imageHeight: 1086,
+  },
 };
 
 function absoluteUrl(path: string) {

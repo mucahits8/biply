@@ -1,36 +1,38 @@
 "use client";
 
-import Image from "next/image";
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { getAllergenLabel } from "@/lib/sazende/allergens";
 import { publicAssetUrl } from "@/lib/sazende/assets";
-import { businessInfo } from "@/lib/sazende/business-info";
+import type { BusinessCampaign, BusinessProfile, BusinessTheme } from "@/lib/sazende/business-info";
+import { getCampaignStorageKey } from "@/lib/sazende/business-info";
 import { formatKcal, formatPrice } from "@/lib/sazende/format";
 import type { BusinessMenu, MenuCategory, MenuItem } from "@/types/menu";
 
 type Props = {
   menu: BusinessMenu;
+  profile: BusinessProfile;
 };
-
-const CAMPAIGN_STORAGE_KEY = "sazende_campaign_seen";
-const GOOGLE_REVIEW_URL =
-  "https://search.google.com/local/writereview?placeid=ChIJk0HAOki3yhQR0cXgHJDKO-I";
 
 function allergenText(item: MenuItem) {
   return item.allergens.map(getAllergenLabel).join(" · ");
 }
 
 function displayItemName(name: string) {
-  return name.replaceAll("Sazende", "Şazende");
+  return name;
 }
 
-function getFallbackDescription(item: MenuItem, category?: MenuCategory) {
+function getFallbackDescription(item: MenuItem, profile: BusinessProfile, category?: MenuCategory) {
   if (item.description) {
     return item.description;
   }
 
+  if (!profile.useFallbackDescriptions) {
+    return "";
+  }
+
   if (category?.name === "Çorbalar") {
-    return "Şazende mutfağında sıcak servis edilen, geleneksel usulde hazırlanan lezzet.";
+    return `${profile.displayName} mutfağında sıcak servis edilen, geleneksel usulde hazırlanan lezzet.`;
   }
 
   if (category?.name === "Fırınlar") {
@@ -38,14 +40,14 @@ function getFallbackDescription(item: MenuItem, category?: MenuCategory) {
   }
 
   if (category?.name.includes("Döner")) {
-    return "Günlük hazırlanan döner lezzeti, Şazende sunumuyla servis edilir.";
+    return `Günlük hazırlanan döner lezzeti, ${profile.displayName} sunumuyla servis edilir.`;
   }
 
   if (category?.name === "İçecekler") {
     return "Menü lezzetlerine eşlik eden içecek seçeneği.";
   }
 
-  return "Şazende menüsünden özenle hazırlanan restoran lezzeti.";
+  return `${profile.displayName} menüsünden özenle hazırlanan restoran lezzeti.`;
 }
 
 function FoodVisual({ item, className = "" }: { item: MenuItem; className?: string }) {
@@ -77,6 +79,7 @@ function ProductCard({
 }) {
   const allergenLabels = item.allergens.map(getAllergenLabel);
   const allergens = allergenLabels.join(" · ");
+  const price = formatPrice(item.price);
 
   return (
     <button
@@ -94,13 +97,21 @@ function ProductCard({
         {item.weight ? <p className="weight">{item.weight}</p> : null}
         {item.kcal !== null ? <p className="kcal-text">{formatKcal(item.kcal, item.kcalIsEstimated)}</p> : null}
         {allergens ? <p className="allergen-line">{allergens}</p> : null}
-        <strong>{formatPrice(item.price)}</strong>
+        {price ? <strong>{price}</strong> : null}
       </div>
     </button>
   );
 }
 
-function CampaignModal({ onClose }: { onClose: () => void }) {
+function CampaignModal({
+  campaign,
+  onClose,
+  reviewUrl,
+}: {
+  campaign: BusinessCampaign;
+  onClose: () => void;
+  reviewUrl?: string;
+}) {
   return (
     <div className="modal-backdrop campaign-backdrop" role="presentation">
       <section
@@ -113,26 +124,25 @@ function CampaignModal({ onClose }: { onClose: () => void }) {
           ×
         </button>
         <div className="campaign-content">
-          <p className="campaign-badge">Kampanya</p>
-          <h2 id="campaign-title">
-            Google&apos;da yorum yap,
-            <span>%10 indirim kazan!</span>
-          </h2>
-          <p className="campaign-copy">
-            Yorumunuzu gösterin, hesabınızda %10 indirim fırsatını yakalayın.
-          </p>
-          <p className="campaign-info">Kasada personelimize göstermeniz yeterli.</p>
+          <p className="campaign-badge">{campaign.badge}</p>
+          <h2 id="campaign-title">{campaign.title}</h2>
+          <p className="campaign-copy">{campaign.copy}</p>
+          <p className="campaign-info">{campaign.info}</p>
         </div>
-        <div className="campaign-photo" aria-hidden="true">
-          <img src={publicAssetUrl("/menu-default.png")} alt="" />
-        </div>
+        {campaign.photoUrl ? (
+          <div className="campaign-photo" aria-hidden="true">
+            <img src={publicAssetUrl(campaign.photoUrl)} alt="" />
+          </div>
+        ) : null}
         <div className="campaign-actions">
-          <a href={GOOGLE_REVIEW_URL} target="_blank" rel="noreferrer">
-            <span>G</span>
-            Google&apos;da Yorum Yap
-          </a>
+          {reviewUrl ? (
+            <a href={reviewUrl} target="_blank" rel="noreferrer">
+              <span>G</span>
+              {campaign.actionLabel}
+            </a>
+          ) : null}
           <button type="button" onClick={onClose}>
-            Menüye Devam Et
+            {campaign.continueLabel}
           </button>
         </div>
       </section>
@@ -144,12 +154,17 @@ function ProductDetailModal({
   category,
   item,
   onClose,
+  profile,
 }: {
   category?: MenuCategory;
   item: MenuItem;
   onClose: () => void;
+  profile: BusinessProfile;
 }) {
   const allergens = allergenText(item);
+  const price = formatPrice(item.price);
+  const kcal = item.kcal !== null ? formatKcal(item.kcal, item.kcalIsEstimated) : "";
+  const description = getFallbackDescription(item, profile, category);
 
   return (
     <div className="modal-backdrop product-backdrop" role="presentation">
@@ -169,11 +184,13 @@ function ProductDetailModal({
         <div className="product-detail-body">
           <p className="detail-category">{category?.name}</p>
           <h2 id="product-title">{displayItemName(item.name)}</h2>
-          <p className="detail-description">{getFallbackDescription(item, category)}</p>
-          <div className="detail-price-row">
-            <strong>{formatPrice(item.price)}</strong>
-            {item.kcal !== null ? <span>{formatKcal(item.kcal, item.kcalIsEstimated)}</span> : null}
-          </div>
+          {description ? <p className="detail-description">{description}</p> : null}
+          {price || kcal ? (
+            <div className="detail-price-row">
+              {price ? <strong>{price}</strong> : null}
+              {kcal ? <span>{kcal}</span> : null}
+            </div>
+          ) : null}
           <div className="detail-facts">
             {item.weight ? (
               <p>
@@ -194,57 +211,99 @@ function ProductDetailModal({
   );
 }
 
-function BusinessInfoFooter() {
+function BusinessInfoFooter({ profile }: { profile: BusinessProfile }) {
+  const hasContact = profile.phones.length > 0 || profile.address || profile.instagramUrl;
+  const hasPayments = profile.acceptedPayments.length > 0;
+
+  if (!hasContact && !hasPayments) {
+    return null;
+  }
+
   return (
     <section className="business-info" aria-labelledby="business-info-title">
       <div className="business-info-top">
         <div className="business-info-heading">
           <p className="eyebrow">İletişim</p>
-          <h2 id="business-info-title">{businessInfo.displayName}</h2>
-          <p className="business-subtitle">{businessInfo.subtitle}</p>
+          <h2 id="business-info-title">{profile.displayName}</h2>
+          <p className="business-subtitle">{profile.subtitle}</p>
         </div>
-        <a className="business-instagram" href={businessInfo.instagramUrl} target="_blank" rel="noreferrer">
-          <InstagramMark />
-          @{businessInfo.instagramHandle}
-        </a>
+        {profile.instagramUrl && profile.instagramHandle ? (
+          <a className="business-instagram" href={profile.instagramUrl} target="_blank" rel="noreferrer">
+            <InstagramMark />
+            @{profile.instagramHandle}
+          </a>
+        ) : null}
       </div>
 
       <div className="business-info-grid">
-        <div className="business-info-block">
-          <h3>Telefon</h3>
-          <div className="contact-link-list">
-            {businessInfo.phones.map((phone) => (
-              <a href={phone.href} key={phone.href}>
-                <span>Ara</span>
-                <strong>{phone.label}</strong>
-              </a>
-            ))}
+        {profile.phones.length > 0 ? (
+          <div className="business-info-block">
+            <h3>Telefon</h3>
+            <div className="contact-link-list">
+              {profile.phones.map((phone) => (
+                <a href={phone.href} key={phone.href}>
+                  <span>Ara</span>
+                  <strong>{phone.label}</strong>
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : null}
 
-        <div className="business-info-block">
-          <h3>Adres</h3>
-          <p className="address-line">
-            <span>Konum</span>
-            {businessInfo.address}
-          </p>
-        </div>
+        {profile.address ? (
+          <div className="business-info-block">
+            <h3>Adres</h3>
+            {profile.mapUrl ? (
+              <a className="address-line" href={profile.mapUrl} target="_blank" rel="noreferrer">
+                <span>Konum</span>
+                {profile.address}
+              </a>
+            ) : (
+              <p className="address-line">
+                <span>Konum</span>
+                {profile.address}
+              </p>
+            )}
+          </div>
+        ) : null}
 
-        <div className="business-info-block business-info-block-wide">
-          <h3>Ödeme Seçenekleri</h3>
-          <p className="payment-note">Yemek kartları ve kartlı ödeme kabul edilir.</p>
-          <ul className="payment-strip" aria-label="Geçerli ödeme yöntemleri">
-            {businessInfo.acceptedPayments.map((payment) => (
-              <li key={payment}>{payment}</li>
-            ))}
-          </ul>
-        </div>
+        {hasPayments ? (
+          <div className="business-info-block business-info-block-wide">
+            <h3>Ödeme Seçenekleri</h3>
+            <p className="payment-note">Yemek kartları ve kartlı ödeme kabul edilir.</p>
+            <ul className="payment-strip" aria-label="Geçerli ödeme yöntemleri">
+              {profile.acceptedPayments.map((payment) => (
+                <li key={payment}>{payment}</li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </div>
     </section>
   );
 }
 
-export function MenuClient({ menu }: Props) {
+function getThemeStyle(theme?: BusinessTheme): CSSProperties {
+  return {
+    "--menu-bg": theme?.background,
+    "--menu-surface": theme?.surface,
+    "--menu-surface-strong": theme?.surfaceStrong,
+    "--menu-ink": theme?.ink,
+    "--menu-soft": theme?.soft,
+    "--menu-faint": theme?.faint,
+    "--menu-gold": theme?.accent,
+    "--menu-gold-strong": theme?.accentStrong,
+    "--menu-line": theme?.line,
+    "--menu-shadow": theme?.shadow,
+    "--menu-font": theme?.fontFamily,
+    "--menu-heading-font": theme?.headingFontFamily,
+    "--menu-glow": theme?.glow,
+    "--menu-wash": theme?.wash,
+    "--menu-grid-line": theme?.gridLine,
+  } as CSSProperties;
+}
+
+export function MenuClient({ menu, profile }: Props) {
   const visibleCategories = useMemo(
     () => menu.categories.filter((category) => category.items.length > 0),
     [menu.categories],
@@ -256,11 +315,15 @@ export function MenuClient({ menu }: Props) {
     visibleCategories.find((category) => category.id === selectedId) ?? visibleCategories[0];
 
   useEffect(() => {
-    const hasSeenCampaign = sessionStorage.getItem(CAMPAIGN_STORAGE_KEY);
+    if (!profile.campaign?.enabled) {
+      return;
+    }
+
+    const hasSeenCampaign = sessionStorage.getItem(getCampaignStorageKey(profile.slug));
     if (!hasSeenCampaign) {
       window.setTimeout(() => setCampaignOpen(true), 0);
     }
-  }, []);
+  }, [profile.campaign?.enabled, profile.slug]);
 
   useEffect(() => {
     if (!campaignOpen && !selectedItem) {
@@ -285,28 +348,55 @@ export function MenuClient({ menu }: Props) {
   }, [campaignOpen, selectedItem]);
 
   function closeCampaign() {
-    sessionStorage.setItem(CAMPAIGN_STORAGE_KEY, "true");
+    sessionStorage.setItem(getCampaignStorageKey(profile.slug), "true");
     setCampaignOpen(false);
   }
 
+  const isPosterHero = profile.heroMode === "poster" && profile.heroImageUrl;
+
   return (
-    <main className="menu-shell">
-      <header className="brand-header">
-        <div className="brand-emblem">
-          <Image
-            src="/images/sazende-header.png"
-            alt={`${businessInfo.displayName} Dijital Menü`}
-            width={1448}
-            height={1086}
-            priority
-            sizes="(max-width: 520px) 92vw, 560px"
-          />
-        </div>
-        <a className="header-social-link" href={businessInfo.instagramUrl} target="_blank" rel="noreferrer">
-          <InstagramMark />
-          @{businessInfo.instagramHandle}
-        </a>
-      </header>
+    <main
+      className={`menu-shell ${profile.theme?.mode === "dark" ? "menu-shell-dark" : ""}`}
+      style={getThemeStyle(profile.theme)}
+    >
+      {isPosterHero ? (
+        <header className="brand-header brand-header-poster" aria-label={`${profile.displayName} dijital menü`}>
+          <img src={publicAssetUrl(profile.heroImageUrl) ?? ""} alt="" />
+          <div className="sr-only">
+            <p>Dijital Menü</p>
+            <h1>{profile.displayName}</h1>
+            {profile.brandDescriptor ? <p>{profile.brandDescriptor}</p> : null}
+            {profile.tagline ? <p>{profile.tagline}</p> : null}
+            <p>{profile.subtitle}</p>
+          </div>
+        </header>
+      ) : (
+        <header className={`brand-header ${profile.heroImageUrl ? "brand-header-visual" : ""}`}>
+          <p className="eyebrow">Dijital Menü</p>
+          <div className="brand-lockup">
+            <h1>{profile.displayName}</h1>
+            {profile.brandDescriptor ? (
+              <p className="brand-descriptor">{profile.brandDescriptor}</p>
+            ) : null}
+          </div>
+          {profile.tagline ? <p className="brand-tagline">{profile.tagline}</p> : null}
+          <div className="ornament" />
+          <p className="brand-subtitle">
+            <span>{profile.subtitle}</span>
+          </p>
+          {profile.instagramUrl && profile.instagramHandle ? (
+            <a className="header-social-link" href={profile.instagramUrl} target="_blank" rel="noreferrer">
+              <InstagramMark />
+              @{profile.instagramHandle}
+            </a>
+          ) : null}
+          {profile.heroImageUrl ? (
+            <div className="brand-storefront" aria-hidden="true">
+              <img src={publicAssetUrl(profile.heroImageUrl) ?? ""} alt="" />
+            </div>
+          ) : null}
+        </header>
+      )}
 
       <nav className="category-grid" aria-label="Menü kategorileri">
         {visibleCategories.map((category) => (
@@ -339,7 +429,7 @@ export function MenuClient({ menu }: Props) {
         </section>
       ) : null}
 
-      <BusinessInfoFooter />
+      <BusinessInfoFooter profile={profile} />
 
       <footer className="menu-notes">
         <p>
@@ -352,12 +442,19 @@ export function MenuClient({ menu }: Props) {
           sipariş vermeden önce işletme personeline danışınız.
         </p>
       </footer>
-      {campaignOpen ? <CampaignModal onClose={closeCampaign} /> : null}
+      {campaignOpen && profile.campaign?.enabled ? (
+        <CampaignModal
+          campaign={profile.campaign}
+          onClose={closeCampaign}
+          reviewUrl={profile.reviewUrl}
+        />
+      ) : null}
       {selectedItem ? (
         <ProductDetailModal
           category={selectedCategory}
           item={selectedItem}
           onClose={() => setSelectedItem(null)}
+          profile={profile}
         />
       ) : null}
     </main>

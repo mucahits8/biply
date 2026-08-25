@@ -1,10 +1,12 @@
-type SeedCategory = {
+export type SeedCategory = {
   id: string;
   name: string;
+  imageUrl?: string | null;
   items: Array<{
     name: string;
     price: number | null;
     weight?: string;
+    imageUrl?: string | null;
     active?: boolean;
   }>;
 };
