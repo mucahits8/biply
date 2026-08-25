@@ -103,6 +103,51 @@ function ProductCard({
   );
 }
 
+function renderHighlightedText(text: string, highlight?: string) {
+  if (!highlight) {
+    return text;
+  }
+
+  const highlightIndex = text.toLocaleLowerCase("tr-TR").indexOf(highlight.toLocaleLowerCase("tr-TR"));
+  if (highlightIndex === -1) {
+    return text;
+  }
+
+  const before = text.slice(0, highlightIndex);
+  const highlighted = text.slice(highlightIndex, highlightIndex + highlight.length);
+  const after = text.slice(highlightIndex + highlight.length);
+
+  return (
+    <>
+      {before}
+      <span>{highlighted}</span>
+      {after}
+    </>
+  );
+}
+
+function getGiftLabelParts(label?: string) {
+  if (!label) {
+    return null;
+  }
+
+  const parts = label.split(" ").filter(Boolean);
+
+  if (parts.length < 3) {
+    return {
+      lead: "",
+      main: label,
+      tail: "",
+    };
+  }
+
+  return {
+    lead: parts[0],
+    main: parts.slice(1, -1).join(" "),
+    tail: parts.at(-1) ?? "",
+  };
+}
+
 function CampaignModal({
   campaign,
   businessName,
@@ -116,14 +161,19 @@ function CampaignModal({
   onClose: () => void;
   reviewUrl?: string;
 }) {
+  const giftLabel = getGiftLabelParts(campaign.giftLabel);
+
   return (
     <div className="modal-backdrop campaign-backdrop" role="presentation">
       <section
         aria-labelledby="campaign-title"
         aria-modal="true"
-        className="campaign-modal"
+        className={`campaign-modal ${campaign.photoUrl ? "campaign-modal-with-art" : ""}`}
         role="dialog"
       >
+        <span className="campaign-sparkle campaign-sparkle-one" aria-hidden="true" />
+        <span className="campaign-sparkle campaign-sparkle-two" aria-hidden="true" />
+        <span className="campaign-sparkle campaign-sparkle-three" aria-hidden="true" />
         <button className="modal-close" type="button" onClick={onClose} aria-label="Kampanyayı kapat">
           ×
         </button>
@@ -132,19 +182,42 @@ function CampaignModal({
             <img className="campaign-logo" src={publicAssetUrl(logoUrl) ?? ""} alt={`${businessName} logosu`} />
           ) : null}
           <p className="campaign-badge">{campaign.badge}</p>
-          <h2 id="campaign-title">{campaign.title}</h2>
-          <p className="campaign-copy">{campaign.copy}</p>
-          <p className="campaign-info">{campaign.info}</p>
-        </div>
-        {campaign.photoUrl ? (
-          <div className="campaign-photo" aria-hidden="true">
-            <img src={publicAssetUrl(campaign.photoUrl)} alt="" />
+          <h2 id="campaign-title">{renderHighlightedText(campaign.title, campaign.titleHighlight)}</h2>
+          <div className="campaign-divider" aria-hidden="true">
+            <span />
           </div>
-        ) : null}
+          <p className="campaign-copy">{renderHighlightedText(campaign.copy, campaign.copyHighlight)}</p>
+          {(campaign.photoUrl || giftLabel) ? (
+            <div className="campaign-visual-row" aria-hidden="true">
+              {campaign.photoUrl ? (
+                <div className="campaign-treat">
+                  <img src={publicAssetUrl(campaign.photoUrl)} alt="" />
+                </div>
+              ) : null}
+              {giftLabel ? (
+                <div className="campaign-gift-badge">
+                  {giftLabel.lead ? <span>{giftLabel.lead}</span> : null}
+                  <strong>{giftLabel.main}</strong>
+                  {giftLabel.tail ? <small>{giftLabel.tail}</small> : null}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+          <p className="campaign-info">
+            <span aria-hidden="true">i</span>
+            {campaign.info}
+          </p>
+          {campaign.chip ? (
+            <p className="campaign-chip">
+              <span aria-hidden="true" />
+              {campaign.chip}
+            </p>
+          ) : null}
+        </div>
         <div className="campaign-actions">
           {reviewUrl ? (
-            <a href={reviewUrl} target="_blank" rel="noreferrer">
-              <span>G</span>
+            <a href={reviewUrl} target="_blank" rel="noreferrer" onClick={onClose}>
+              <span className="campaign-google-mark" aria-hidden="true">G</span>
               {campaign.actionLabel}
             </a>
           ) : null}

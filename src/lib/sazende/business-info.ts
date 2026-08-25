@@ -28,8 +28,12 @@ export type BusinessCampaign = {
   enabled: boolean;
   badge: string;
   title: string;
+  titleHighlight?: string;
   copy: string;
+  copyHighlight?: string;
   info: string;
+  chip?: string;
+  giftLabel?: string;
   actionLabel: string;
   continueLabel: string;
   photoUrl?: string;
@@ -107,12 +111,17 @@ const profileOverrides: Record<string, ProfileOverride> = {
     reviewUrl: "https://search.google.com/local/writereview?placeid=ChIJE16N8ZoVZEAR1PHCiOdvjIs",
     campaign: {
       enabled: true,
-      badge: "Hamarat'tan",
-      title: "Tatlı molana küçük bir sürpriz",
-      copy: "Google yorumunu göster, kasada sana özel ikram fırsatını sor.",
+      badge: "HAMARAT'TAN",
+      title: "Yorumunu göster, tatlı sürprizi yakala",
+      titleHighlight: "tatlı sürprizi",
+      copy: "Google'da yorumunu yap, kasada göster; sana özel küçük ikram fırsatını sor.",
+      copyHighlight: "küçük ikram fırsatını",
       info: "Kampanya koşulları işletme tarafından güncellenebilir.",
+      chip: "Google yoruma özel",
+      giftLabel: "Küçük İkram Fırsatı",
       actionLabel: "Google'da Yorum Yap",
       continueLabel: "Menüye Geç",
+      photoUrl: "/images/hamarat-yas-pasta.png",
     },
     theme: {
       background: "#f5ead9",
