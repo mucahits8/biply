@@ -11,7 +11,7 @@ export const hamaratCategories: SeedCategory[] = [
   {
     id: "hamarat_cat_fast_food",
     name: "Fast Food",
-    imageUrl: null,
+    imageUrl: "/images/hamarat-fast-food.png",
     items: [
       { name: "Hamburger", price: 135 },
       { name: "Hamarat Burger", price: 165 },
@@ -24,7 +24,7 @@ export const hamaratCategories: SeedCategory[] = [
   {
     id: "hamarat_cat_unlu_mamuller",
     name: "Unlu Mamüller",
-    imageUrl: null,
+    imageUrl: "/images/hamarat-unlu-mamuller.png",
     items: [
       { name: "Simit", price: 25 },
       { name: "Poğaça", price: 35 },
@@ -40,7 +40,7 @@ export const hamaratCategories: SeedCategory[] = [
   {
     id: "hamarat_cat_yas_pasta",
     name: "Yaş Pasta",
-    imageUrl: null,
+    imageUrl: "/images/hamarat-yas-pasta.png",
     items: [
       { name: "Yaş Pasta 01", price: 145 },
       { name: "Yaş Pasta 02", price: 150 },
@@ -53,7 +53,7 @@ export const hamaratCategories: SeedCategory[] = [
   {
     id: "hamarat_cat_adet_pasta",
     name: "Adet Pasta",
-    imageUrl: null,
+    imageUrl: "/images/hamarat-yas-pasta.png",
     items: [
       { name: "Köstebek Pasta Mini", price: 95 },
       { name: "Ekler Mini", price: 85 },
@@ -68,7 +68,7 @@ export const hamaratCategories: SeedCategory[] = [
   {
     id: "hamarat_cat_tatlilar",
     name: "Tatlılar",
-    imageUrl: null,
+    imageUrl: "/images/hamarat-tatlilar.png",
     items: [
       { name: "Fındıklı ve Cevizli Baklava", price: 170 },
       { name: "Soğuk Baklava", price: 160 },
@@ -83,7 +83,7 @@ export const hamaratCategories: SeedCategory[] = [
   {
     id: "hamarat_cat_sicak_icecekler",
     name: "Sıcak İçecekler",
-    imageUrl: null,
+    imageUrl: "/images/hamarat-sicak-icecekler.png",
     items: [
       { name: "Küçük Çay", price: 30 },
       { name: "Fincan Çay", price: 40 },
@@ -99,7 +99,7 @@ export const hamaratCategories: SeedCategory[] = [
   {
     id: "hamarat_cat_soguk_icecekler",
     name: "Soğuk İçecekler",
-    imageUrl: null,
+    imageUrl: "/images/hamarat-soguk-icecekler.jpg",
     items: [
       { name: "Su", price: 25 },
       { name: "Soda", price: 35 },
