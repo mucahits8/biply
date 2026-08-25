@@ -5,7 +5,6 @@ import { allergenLabels, getAllergenLabel } from "@/lib/sazende/allergens";
 import { publicAssetUrl } from "@/lib/sazende/assets";
 import { getBusinessProfile, getBusinessProfileBySlug } from "@/lib/sazende/business-info";
 import { formatKcal } from "@/lib/sazende/format";
-import { getSeedMenu } from "@/lib/sazende/menu";
 import { supabaseAnonKey, supabaseFetch, supabaseUrl } from "@/lib/sazende/supabase";
 import type { AllergenKey, BusinessMenu, MenuItem } from "@/types/menu";
 
@@ -34,6 +33,24 @@ function displayItemName(name: string) {
   return name;
 }
 
+function getUserIdFromToken(token: string) {
+  try {
+    const payload = token.split(".")[1];
+    const normalizedPayload = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const paddedPayload = normalizedPayload.padEnd(
+      normalizedPayload.length + ((4 - (normalizedPayload.length % 4)) % 4),
+      "=",
+    );
+    const decoded = JSON.parse(atob(paddedPayload)) as {
+      sub?: string;
+    };
+
+    return decoded.sub ?? "";
+  } catch {
+    return "";
+  }
+}
+
 async function signIn(email: string, password: string) {
   const response = await fetch(`${supabaseUrl}/auth/v1/token?grant_type=password`, {
     method: "POST",
@@ -52,6 +69,40 @@ async function signIn(email: string, password: string) {
     access_token: string;
     refresh_token: string;
   };
+}
+
+async function assertCanManageBusiness(token: string, businessId: string) {
+  const userId = getUserIdFromToken(token);
+
+  if (!userId) {
+    throw new Error("Oturum doğrulanamadı. Tekrar giriş yap.");
+  }
+
+  try {
+    const grants = await supabaseFetch<Array<{ business_id: string }>>(
+      "business_admins",
+      new URLSearchParams({
+        select: "business_id",
+        business_id: `eq.${businessId}`,
+        user_id: `eq.${userId}`,
+        limit: "1",
+      }),
+      token,
+    );
+
+    if (!grants || grants.length === 0) {
+      throw new Error("Bu hesabın bu işletme için yetkisi yok.");
+    }
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      (error.message.includes("business_admins") || error.message.includes("schema cache"))
+    ) {
+      return;
+    }
+
+    throw error;
+  }
 }
 
 async function uploadImage(file: File, token: string, slug: string) {
@@ -89,13 +140,10 @@ async function loadAdminMenu(token: string, slug: string): Promise<BusinessMenu>
   );
 
   if (!business) {
-    const bootstrapped = await bootstrapSeedMenu(token, slug);
-    if (bootstrapped) {
-      return bootstrapped;
-    }
-
     throw new Error("Bu slug ile kayıtlı işletme bulunamadı.");
   }
+
+  await assertCanManageBusiness(token, business.id);
 
   const categoryParams = new URLSearchParams({
     select: "id,business_id,name,sort_order,is_active",
@@ -173,74 +221,6 @@ async function loadAdminMenu(token: string, slug: string): Promise<BusinessMenu>
       items: mappedItems.filter((item) => item.categoryId === category.id),
     })),
   };
-}
-
-async function bootstrapSeedMenu(token: string, slug: string): Promise<BusinessMenu | null> {
-  const seedMenu = getSeedMenu(slug);
-
-  if (!seedMenu) {
-    return null;
-  }
-
-  const [business] = await supabaseFetch<BusinessMenu["business"][]>(
-    "businesses",
-    undefined,
-    token,
-    {
-      method: "POST",
-      body: JSON.stringify({
-        name: seedMenu.business.name,
-        slug: seedMenu.business.slug,
-        subtitle: seedMenu.business.subtitle,
-      }),
-    },
-  );
-
-  for (const category of seedMenu.categories) {
-    const [createdCategory] = await supabaseFetch<
-      Array<{
-        id: string;
-      }>
-    >("menu_categories", undefined, token, {
-      method: "POST",
-      body: JSON.stringify({
-        business_id: business.id,
-        name: category.name,
-        sort_order: category.sortOrder,
-        is_active: true,
-      }),
-    });
-
-    if (category.items.length === 0) {
-      continue;
-    }
-
-    await supabaseFetch("menu_items", undefined, token, {
-      method: "POST",
-      headers: { Prefer: "return=minimal" },
-      body: JSON.stringify(
-        category.items.map((item) => ({
-          business_id: business.id,
-          category_id: createdCategory.id,
-          name: item.name,
-          description: item.description,
-          price: item.price,
-          weight: item.weight,
-          image_url: item.imageUrl,
-          sort_order: item.sortOrder,
-          is_active: item.isActive,
-          is_available: item.isAvailable,
-          kcal: item.kcal,
-          kcal_is_estimated: item.kcalIsEstimated,
-          allergens: item.allergens,
-          allergen_note: item.allergenNote,
-          allergen_is_verified: item.allergenIsVerified,
-        })),
-      ),
-    });
-  }
-
-  return loadAdminMenu(token, slug);
 }
 
 export function AdminClient({ slug = "sazende" }: { slug?: string }) {
@@ -390,7 +370,10 @@ export function AdminClient({ slug = "sazende" }: { slug?: string }) {
         }
 
         setSaveStage("saving");
-        const params = new URLSearchParams({ id: `eq.${item.id}` });
+        const params = new URLSearchParams({
+          id: `eq.${item.id}`,
+          business_id: `eq.${menu.business.id}`,
+        });
         await supabaseFetch(
           "menu_items",
           params,
@@ -502,7 +485,7 @@ export function AdminClient({ slug = "sazende" }: { slug?: string }) {
   }
 
   async function handleDelete(itemId: string) {
-    if (saving) {
+    if (!menu || saving) {
       return;
     }
 
@@ -512,7 +495,10 @@ export function AdminClient({ slug = "sazende" }: { slug?: string }) {
     try {
       await supabaseFetch(
         "menu_items",
-        new URLSearchParams({ id: `eq.${itemId}` }),
+        new URLSearchParams({
+          id: `eq.${itemId}`,
+          business_id: `eq.${menu.business.id}`,
+        }),
         token,
         {
           method: "PATCH",
