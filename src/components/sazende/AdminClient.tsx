@@ -487,6 +487,13 @@ export function AdminClient({ slug = "sazende" }: { slug?: string }) {
     return (
       <main className="admin-shell login-shell">
         <form className="login-panel" onSubmit={handleLogin}>
+          {profile.logoUrl ? (
+            <img
+              className="admin-logo"
+              src={publicAssetUrl(profile.logoUrl) ?? ""}
+              alt={`${profile.displayName} logosu`}
+            />
+          ) : null}
           <p className="eyebrow">Admin</p>
           <h1>{profile.displayName} Menü Yönetimi</h1>
           <label>
@@ -511,9 +518,18 @@ export function AdminClient({ slug = "sazende" }: { slug?: string }) {
   return (
     <main className={`admin-shell ${saving ? "is-saving" : ""}`}>
       <header className="admin-header">
-        <div>
-          <p className="eyebrow">{profile.displayName}</p>
-          <h1>Menü Yönetimi</h1>
+        <div className="admin-title-row">
+          {profile.logoUrl ? (
+            <img
+              className="admin-header-logo"
+              src={publicAssetUrl(profile.logoUrl) ?? ""}
+              alt={`${profile.displayName} logosu`}
+            />
+          ) : null}
+          <div>
+            <p className="eyebrow">{profile.displayName}</p>
+            <h1>Menü Yönetimi</h1>
+          </div>
         </div>
         <button type="button" className="ghost-button" onClick={logout} disabled={saving}>
           Çıkış

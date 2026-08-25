@@ -105,10 +105,14 @@ function ProductCard({
 
 function CampaignModal({
   campaign,
+  businessName,
+  logoUrl,
   onClose,
   reviewUrl,
 }: {
   campaign: BusinessCampaign;
+  businessName: string;
+  logoUrl?: string;
   onClose: () => void;
   reviewUrl?: string;
 }) {
@@ -124,6 +128,9 @@ function CampaignModal({
           ×
         </button>
         <div className="campaign-content">
+          {logoUrl ? (
+            <img className="campaign-logo" src={publicAssetUrl(logoUrl) ?? ""} alt={`${businessName} logosu`} />
+          ) : null}
           <p className="campaign-badge">{campaign.badge}</p>
           <h2 id="campaign-title">{campaign.title}</h2>
           <p className="campaign-copy">{campaign.copy}</p>
@@ -222,10 +229,20 @@ function BusinessInfoFooter({ profile }: { profile: BusinessProfile }) {
   return (
     <section className="business-info" aria-labelledby="business-info-title">
       <div className="business-info-top">
-        <div className="business-info-heading">
-          <p className="eyebrow">İletişim</p>
-          <h2 id="business-info-title">{profile.displayName}</h2>
-          <p className="business-subtitle">{profile.subtitle}</p>
+        <div className="business-info-brand">
+          {profile.logoUrl ? (
+            <img
+              className="business-logo"
+              src={publicAssetUrl(profile.logoUrl) ?? ""}
+              alt={`${profile.displayName} logosu`}
+              loading="lazy"
+            />
+          ) : null}
+          <div className="business-info-heading">
+            <p className="eyebrow">İletişim</p>
+            <h2 id="business-info-title">{profile.displayName}</h2>
+            <p className="business-subtitle">{profile.subtitle}</p>
+          </div>
         </div>
         {profile.instagramUrl && profile.instagramHandle ? (
           <a className="business-instagram" href={profile.instagramUrl} target="_blank" rel="noreferrer">
@@ -444,7 +461,9 @@ export function MenuClient({ menu, profile }: Props) {
       </footer>
       {campaignOpen && profile.campaign?.enabled ? (
         <CampaignModal
+          businessName={profile.displayName}
           campaign={profile.campaign}
+          logoUrl={profile.logoUrl}
           onClose={closeCampaign}
           reviewUrl={profile.reviewUrl}
         />

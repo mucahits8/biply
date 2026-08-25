@@ -44,6 +44,7 @@ export type BusinessProfile = {
   useFallbackDescriptions?: boolean;
   heroMode?: "composed" | "poster";
   heroImageUrl?: string;
+  logoUrl?: string;
   instagramHandle?: string;
   instagramUrl?: string;
   address?: string;
@@ -97,6 +98,7 @@ const profileOverrides: Record<string, ProfileOverride> = {
     useFallbackDescriptions: false,
     heroMode: "poster",
     heroImageUrl: "/images/hamarat-hero.png",
+    logoUrl: "/images/hamarat-logo.png",
     address: "Yaylacık, Düzköy Cd. No:16, 61300 Akçaabat/Trabzon",
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=Yaylac%C4%B1k%2C%20D%C3%BCzk%C3%B6y%20Cd.%20No%3A16%2C%2061300%20Ak%C3%A7aabat%2FTrabzon",
@@ -153,6 +155,7 @@ export function getBusinessProfile(business: BusinessSummary): BusinessProfile {
     useFallbackDescriptions: override.useFallbackDescriptions ?? false,
     heroMode: override.heroMode,
     heroImageUrl: override.heroImageUrl,
+    logoUrl: override.logoUrl,
     phones: override.phones ?? [],
     acceptedPayments: override.acceptedPayments ?? [],
     instagramHandle: override.instagramHandle,
@@ -178,6 +181,7 @@ export function getBusinessProfileBySlug(slug: string): BusinessProfile {
     useFallbackDescriptions: override.useFallbackDescriptions ?? false,
     heroMode: override.heroMode,
     heroImageUrl: override.heroImageUrl,
+    logoUrl: override.logoUrl,
     phones: override.phones ?? [],
     acceptedPayments: override.acceptedPayments ?? [],
     instagramHandle: override.instagramHandle,
