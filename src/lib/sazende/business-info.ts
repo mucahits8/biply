@@ -106,6 +106,8 @@ const profileOverrides: Record<string, ProfileOverride> = {
     address: "Yaylacık, Düzköy Cd. No:16, 61300 Akçaabat/Trabzon",
     mapUrl:
       "https://www.google.com/maps/search/?api=1&query=Yaylac%C4%B1k%2C%20D%C3%BCzk%C3%B6y%20Cd.%20No%3A16%2C%2061300%20Ak%C3%A7aabat%2FTrabzon",
+    instagramHandle: "hamaratlezzetcomtr",
+    instagramUrl: "https://www.instagram.com/hamaratlezzetcomtr/",
     phones: [{ label: "(0462) 228 61 94", href: "tel:+904622286194" }],
     acceptedPayments: [],
     reviewUrl: "https://search.google.com/local/writereview?placeid=ChIJE16N8ZoVZEAR1PHCiOdvjIs",

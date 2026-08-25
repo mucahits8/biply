@@ -1,3 +1,5 @@
+import type { AllergenKey } from "@/types/menu";
+
 export type SeedCategory = {
   id: string;
   name: string;
@@ -7,6 +9,9 @@ export type SeedCategory = {
     price: number | null;
     weight?: string;
     imageUrl?: string | null;
+    kcal?: number | null;
+    allergens?: AllergenKey[];
+    allergenNote?: string | null;
     active?: boolean;
   }>;
 };

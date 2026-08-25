@@ -5,6 +5,7 @@ import { allergenLabels, getAllergenLabel } from "@/lib/sazende/allergens";
 import { publicAssetUrl } from "@/lib/sazende/assets";
 import { getBusinessProfile, getBusinessProfileBySlug } from "@/lib/sazende/business-info";
 import { formatKcal } from "@/lib/sazende/format";
+import { getSeedMenu } from "@/lib/sazende/menu";
 import { supabaseAnonKey, supabaseFetch, supabaseUrl } from "@/lib/sazende/supabase";
 import type { AllergenKey, BusinessMenu, MenuItem } from "@/types/menu";
 
@@ -88,6 +89,11 @@ async function loadAdminMenu(token: string, slug: string): Promise<BusinessMenu>
   );
 
   if (!business) {
+    const bootstrapped = await bootstrapSeedMenu(token, slug);
+    if (bootstrapped) {
+      return bootstrapped;
+    }
+
     throw new Error("Bu slug ile kayıtlı işletme bulunamadı.");
   }
 
@@ -167,6 +173,74 @@ async function loadAdminMenu(token: string, slug: string): Promise<BusinessMenu>
       items: mappedItems.filter((item) => item.categoryId === category.id),
     })),
   };
+}
+
+async function bootstrapSeedMenu(token: string, slug: string): Promise<BusinessMenu | null> {
+  const seedMenu = getSeedMenu(slug);
+
+  if (!seedMenu) {
+    return null;
+  }
+
+  const [business] = await supabaseFetch<BusinessMenu["business"][]>(
+    "businesses",
+    undefined,
+    token,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        name: seedMenu.business.name,
+        slug: seedMenu.business.slug,
+        subtitle: seedMenu.business.subtitle,
+      }),
+    },
+  );
+
+  for (const category of seedMenu.categories) {
+    const [createdCategory] = await supabaseFetch<
+      Array<{
+        id: string;
+      }>
+    >("menu_categories", undefined, token, {
+      method: "POST",
+      body: JSON.stringify({
+        business_id: business.id,
+        name: category.name,
+        sort_order: category.sortOrder,
+        is_active: true,
+      }),
+    });
+
+    if (category.items.length === 0) {
+      continue;
+    }
+
+    await supabaseFetch("menu_items", undefined, token, {
+      method: "POST",
+      headers: { Prefer: "return=minimal" },
+      body: JSON.stringify(
+        category.items.map((item) => ({
+          business_id: business.id,
+          category_id: createdCategory.id,
+          name: item.name,
+          description: item.description,
+          price: item.price,
+          weight: item.weight,
+          image_url: item.imageUrl,
+          sort_order: item.sortOrder,
+          is_active: item.isActive,
+          is_available: item.isAvailable,
+          kcal: item.kcal,
+          kcal_is_estimated: item.kcalIsEstimated,
+          allergens: item.allergens,
+          allergen_note: item.allergenNote,
+          allergen_is_verified: item.allergenIsVerified,
+        })),
+      ),
+    });
+  }
+
+  return loadAdminMenu(token, slug);
 }
 
 export function AdminClient({ slug = "sazende" }: { slug?: string }) {
@@ -584,7 +658,7 @@ export function AdminClient({ slug = "sazende" }: { slug?: string }) {
             <input
               value={newWeight}
               onChange={(event) => setNewWeight(event.target.value)}
-              placeholder="Gramaj"
+              placeholder="Porsiyon / gramaj"
               disabled={saving}
             />
             <input
@@ -672,11 +746,11 @@ export function AdminClient({ slug = "sazende" }: { slug?: string }) {
                   </label>
                   <div className="admin-field-grid">
                     <label>
-                      Gramaj
+                      Porsiyon / gramaj
                       <input
                         value={item.weight ?? ""}
                         onChange={(event) => updateItem(item.id, { weight: event.target.value })}
-                        placeholder="110 gr"
+                        placeholder="1 adet / 110 gr"
                         disabled={saving}
                       />
                     </label>

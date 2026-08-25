@@ -154,6 +154,23 @@
   width: 100%;
 }
 
+.poster-social-link {
+  backdrop-filter: blur(12px);
+  background: rgba(255, 252, 245, 0.88);
+  bottom: 12px;
+  box-shadow: 0 12px 28px rgba(61, 37, 12, 0.18);
+  left: 50%;
+  margin-top: 0;
+  max-width: calc(100% - 28px);
+  position: absolute;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.poster-social-link:active {
+  transform: translateX(-50%) scale(0.98);
+}
+
 .brand-header-visual {
   background:
     linear-gradient(180deg, rgba(255, 252, 245, 0.88), rgba(255, 245, 229, 0.72)),
@@ -611,7 +628,7 @@
 .food-card-body {
   display: grid;
   gap: 4px;
-  min-height: 118px;
+  min-height: 132px;
   padding: 10px 10px 11px;
 }
 
@@ -634,12 +651,34 @@
   margin: 0;
 }
 
+.food-meta-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-height: 24px;
+}
+
+.meta-pill {
+  background: rgba(180, 122, 25, 0.08);
+  border: 1px solid rgba(180, 122, 25, 0.13);
+  border-radius: 999px;
+  color: #7d6035;
+  display: inline-flex;
+  font-size: 0.7rem;
+  font-weight: 750;
+  line-height: 1.15;
+  max-width: 100%;
+  min-height: 22px;
+  padding: 4px 7px;
+}
+
 .kcal-text,
 .allergen-line {
   color: var(--menu-soft);
   display: -webkit-box;
-  font-size: 0.78rem;
-  -webkit-line-clamp: 1;
+  font-size: 0.74rem;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   line-height: 1.28;
   margin: 0;
@@ -1222,6 +1261,7 @@
   color: var(--menu-ink);
   font-size: 0.98rem;
   font-weight: 700;
+  line-height: 1.3;
 }
 
 .business-info {
@@ -1429,11 +1469,19 @@
   }
 
   .food-card-body {
+    min-height: 136px;
     padding: 9px;
   }
 
   .food-card h3 {
     font-size: 0.96rem;
+  }
+
+  .meta-pill {
+    font-size: 0.66rem;
+    min-height: 21px;
+    padding-left: 6px;
+    padding-right: 6px;
   }
 
   .brand-header-visual {
@@ -1445,6 +1493,14 @@
   .brand-header-poster {
     border-radius: 18px;
     margin-bottom: 12px;
+  }
+
+  .poster-social-link {
+    bottom: 8px;
+    font-size: 0.74rem;
+    min-height: 31px;
+    padding-left: 8px;
+    padding-right: 10px;
   }
 
   .brand-header-visual h1 {

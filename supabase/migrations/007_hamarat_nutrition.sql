@@ -1,0 +1,70 @@
+with nutrition_seed(category_name, name, weight, kcal, allergens, allergen_note) as (
+  values
+    ('Fast Food', 'Hamburger', '1 adet', 480, array['gluten', 'milk', 'eggs', 'sesame']::text[], null),
+    ('Fast Food', 'Hamarat Burger', '1 adet', 650, array['gluten', 'milk', 'eggs', 'sesame', 'mustard']::text[], null),
+    ('Fast Food', 'Patso', '1 adet', 520, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Fast Food', 'Karışık Tost', '1 adet', 520, array['gluten', 'milk']::text[], null),
+    ('Fast Food', 'Peynirli Tost', '1 adet', 400, array['gluten', 'milk']::text[], null),
+    ('Fast Food', 'Sandviç', '1 adet', 380, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Unlu Mamüller', 'Simit', '1 adet', 330, array['gluten', 'sesame']::text[], null),
+    ('Unlu Mamüller', 'Poğaça', '1 adet', 300, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Unlu Mamüller', 'Açma', '1 adet', 350, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Unlu Mamüller', 'Gül Böreği', '1 porsiyon', 390, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Unlu Mamüller', 'Kol Böreği', '1 porsiyon', 430, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Unlu Mamüller', 'Su Böreği', '1 porsiyon', 450, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Unlu Mamüller', 'Kapalı Pizza', '1 adet', 500, array['gluten', 'milk']::text[], null),
+    ('Unlu Mamüller', 'Mini Pizza', '1 adet', 220, array['gluten', 'milk']::text[], null),
+    ('Unlu Mamüller', 'Kurabiye Çeşitleri', '1 adet / ~50 g', 230, array['gluten', 'milk', 'eggs', 'nuts']::text[], 'Çeşide göre sert kabuklu yemiş içerebilir.'),
+    ('Yaş Pasta', 'Yaş Pasta 01', '1 dilim', 360, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Yaş Pasta', 'Yaş Pasta 02', '1 dilim', 390, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Yaş Pasta', 'Yaş Pasta 03', '1 dilim', 410, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Yaş Pasta', 'Baton Yaş Pasta', '1 dilim', 380, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Yaş Pasta', 'Mini Baton Yaş Pasta', '1 adet', 520, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Yaş Pasta', 'Mozaik Pasta', '1 dilim', 420, array['gluten', 'milk', 'nuts']::text[], 'Çeşide göre fındık içerebilir.'),
+    ('Adet Pasta', 'Köstebek Pasta Mini', '1 adet', 330, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Adet Pasta', 'Ekler Mini', '1 adet', 170, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Adet Pasta', 'Muffin', '1 adet', 380, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Adet Pasta', 'Magnolia', '1 porsiyon', 430, array['milk', 'gluten', 'nuts']::text[], 'Çeşide göre fındık içerebilir.'),
+    ('Adet Pasta', 'Profiterol', '1 porsiyon', 480, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Adet Pasta', 'Supangle', '1 porsiyon', 330, array['milk', 'gluten']::text[], null),
+    ('Adet Pasta', 'Cheesecake', '1 dilim', 450, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Adet Pasta', 'Malaga', '1 adet', 430, array['gluten', 'milk', 'eggs', 'nuts']::text[], 'Çeşide göre fındık içerebilir.'),
+    ('Tatlılar', 'Fındıklı ve Cevizli Baklava', '1 porsiyon / ~100 g', 520, array['gluten', 'milk', 'nuts']::text[], 'Fındık ve ceviz içerir.'),
+    ('Tatlılar', 'Soğuk Baklava', '1 porsiyon / ~100 g', 470, array['gluten', 'milk', 'nuts']::text[], 'Antep fıstığı veya diğer sert kabuklu yemişler içerebilir.'),
+    ('Tatlılar', 'Burma Kadayıf', '1 porsiyon / ~100 g', 500, array['gluten', 'milk', 'nuts']::text[], 'Antep fıstığı veya ceviz içerebilir.'),
+    ('Tatlılar', 'Laz Böreği', '1 porsiyon', 420, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Tatlılar', 'Revani', '1 dilim', 330, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Tatlılar', 'Şekerpare', '2 adet', 360, array['gluten', 'milk', 'eggs']::text[], null),
+    ('Tatlılar', 'Sütlaç', '1 kase', 280, array['milk']::text[], null),
+    ('Tatlılar', 'Kazandibi', '1 porsiyon', 300, array['milk']::text[], null),
+    ('Sıcak İçecekler', 'Küçük Çay', 'şekersiz', 2, '{}'::text[], null),
+    ('Sıcak İçecekler', 'Fincan Çay', 'şekersiz', 2, '{}'::text[], null),
+    ('Sıcak İçecekler', 'Türk Kahvesi', 'şekersiz', 7, '{}'::text[], null),
+    ('Sıcak İçecekler', 'Nescafe', 'sade', 5, '{}'::text[], null),
+    ('Sıcak İçecekler', 'Filtre Kahve', 'sade', 5, '{}'::text[], null),
+    ('Sıcak İçecekler', 'Sütlü Filtre Kahve', '1 fincan', 90, array['milk']::text[], null),
+    ('Sıcak İçecekler', 'Latte', '~300 ml', 170, array['milk']::text[], null),
+    ('Sıcak İçecekler', 'Sıcak Çikolata', '~300 ml', 250, array['milk', 'soy']::text[], 'Ürüne göre soya içerebilir.'),
+    ('Sıcak İçecekler', 'Sahlep', '~250 ml', 220, array['milk']::text[], null),
+    ('Soğuk İçecekler', 'Su', '1 şişe', 0, '{}'::text[], null),
+    ('Soğuk İçecekler', 'Soda', '1 şişe', 0, '{}'::text[], null),
+    ('Soğuk İçecekler', 'Meyveli Soda', '1 şişe', 70, '{}'::text[], null),
+    ('Soğuk İçecekler', 'Şişe İçecek', '~330 ml', 140, '{}'::text[], 'Alerjen bilgisi ürüne göre değişebilir.'),
+    ('Soğuk İçecekler', 'Limonata', '~300 ml', 150, '{}'::text[], null),
+    ('Soğuk İçecekler', 'Hamarat Şerbeti', '~300 ml', 180, array['nuts']::text[], 'Reçeteye göre sert kabuklu yemiş içerebilir.'),
+    ('Soğuk İçecekler', 'Küçük Meyve Suyu', '~200 ml', 90, '{}'::text[], null)
+)
+update public.menu_items item
+set weight = nutrition_seed.weight,
+    kcal = nutrition_seed.kcal,
+    kcal_is_estimated = true,
+    allergens = nutrition_seed.allergens,
+    allergen_note = nutrition_seed.allergen_note,
+    allergen_is_verified = false
+from public.menu_categories category
+join public.businesses business on business.id = category.business_id
+join nutrition_seed on nutrition_seed.category_name = category.name
+where item.business_id = business.id
+  and item.category_id = category.id
+  and item.name = nutrition_seed.name
+  and business.slug = 'hamarat';

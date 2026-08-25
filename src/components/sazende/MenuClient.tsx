@@ -18,6 +18,15 @@ function allergenText(item: MenuItem) {
   return item.allergens.map(getAllergenLabel).join(" · ");
 }
 
+function getPortionLabel(weight?: string | null) {
+  if (!weight) {
+    return "Porsiyon";
+  }
+
+  const normalizedWeight = weight.toLocaleLowerCase("tr-TR");
+  return normalizedWeight.includes("gr") || normalizedWeight.includes("g") ? "Porsiyon / gramaj" : "Porsiyon";
+}
+
 function displayItemName(name: string) {
   return name;
 }
@@ -77,9 +86,9 @@ function ProductCard({
   item: MenuItem;
   onSelect: (item: MenuItem) => void;
 }) {
-  const allergenLabels = item.allergens.map(getAllergenLabel);
-  const allergens = allergenLabels.join(" · ");
+  const allergens = allergenText(item);
   const price = formatPrice(item.price);
+  const kcal = item.kcal !== null ? formatKcal(item.kcal, item.kcalIsEstimated) : "";
 
   return (
     <button
@@ -94,9 +103,13 @@ function ProductCard({
       </div>
       <div className="food-card-body">
         <h3>{displayItemName(item.name)}</h3>
-        {item.weight ? <p className="weight">{item.weight}</p> : null}
-        {item.kcal !== null ? <p className="kcal-text">{formatKcal(item.kcal, item.kcalIsEstimated)}</p> : null}
-        {allergens ? <p className="allergen-line">{allergens}</p> : null}
+        {item.weight || kcal ? (
+          <div className="food-meta-row">
+            {item.weight ? <span className="meta-pill">{item.weight}</span> : null}
+            {kcal ? <span className="meta-pill">{kcal}</span> : null}
+          </div>
+        ) : null}
+        {allergens ? <p className="allergen-line">Olası: {allergens}</p> : null}
         {price ? <strong>{price}</strong> : null}
       </div>
     </button>
@@ -274,7 +287,7 @@ function ProductDetailModal({
           <div className="detail-facts">
             {item.weight ? (
               <p>
-                <span>Gramaj</span>
+                <span>{getPortionLabel(item.weight)}</span>
                 <strong>{item.weight}</strong>
               </p>
             ) : null}
@@ -282,6 +295,12 @@ function ProductDetailModal({
               <p>
                 <span>Alerjenler</span>
                 <strong>{allergens}</strong>
+              </p>
+            ) : null}
+            {item.allergenNote ? (
+              <p>
+                <span>Not</span>
+                <strong>{item.allergenNote}</strong>
               </p>
             ) : null}
           </div>
@@ -452,6 +471,12 @@ export function MenuClient({ menu, profile }: Props) {
       {isPosterHero ? (
         <header className="brand-header brand-header-poster" aria-label={`${profile.displayName} dijital menü`}>
           <img src={publicAssetUrl(profile.heroImageUrl) ?? ""} alt="" />
+          {profile.instagramUrl && profile.instagramHandle ? (
+            <a className="header-social-link poster-social-link" href={profile.instagramUrl} target="_blank" rel="noreferrer">
+              <InstagramMark />
+              @{profile.instagramHandle}
+            </a>
+          ) : null}
           <div className="sr-only">
             <p>Dijital Menü</p>
             <h1>{profile.displayName}</h1>

@@ -129,8 +129,8 @@ export function getSeedMenu(slug: string): BusinessMenu | null {
       ...(() => {
         const nutrition = getNutritionInfo(category.name, item.name);
         return {
-          kcal: nutrition?.kcal ?? null,
-          allergens: nutrition?.allergens ?? [],
+          kcal: item.kcal ?? nutrition?.kcal ?? null,
+          allergens: item.allergens ?? nutrition?.allergens ?? [],
         };
       })(),
       id: seedItemId(category.id, itemIndex),
@@ -145,7 +145,7 @@ export function getSeedMenu(slug: string): BusinessMenu | null {
       isActive: item.active !== false,
       isAvailable: true,
       kcalIsEstimated: true,
-      allergenNote: null,
+      allergenNote: item.allergenNote ?? null,
       allergenIsVerified: false,
     }));
 
