@@ -766,10 +766,10 @@
   box-shadow: 0 30px 90px rgba(31, 21, 9, 0.34);
   color: var(--menu-ink);
   max-height: calc(100svh - 20px);
-  max-width: 560px;
+  max-width: 510px;
   overflow: auto;
   position: relative;
-  width: min(100%, 560px);
+  width: min(100%, 510px);
 }
 
 .campaign-modal::before,
@@ -791,11 +791,11 @@
 .campaign-modal .modal-close {
   background: rgba(255, 252, 245, 0.94);
   color: #5b321c;
-  font-size: 2.35rem;
-  height: 54px;
-  right: 20px;
-  top: 20px;
-  width: 54px;
+  font-size: 2rem;
+  height: 46px;
+  right: 18px;
+  top: 18px;
+  width: 46px;
 }
 
 .campaign-sparkle {
@@ -838,7 +838,7 @@
 }
 
 .campaign-content {
-  padding: 38px 28px 16px;
+  padding: 30px 24px 13px;
   position: relative;
   text-align: center;
   z-index: 1;
@@ -852,10 +852,10 @@
     0 0 0 1px rgba(180, 122, 25, 0.38),
     0 12px 28px rgba(65, 37, 18, 0.16);
   display: block;
-  height: 92px;
-  margin: 0 auto 18px;
+  height: 76px;
+  margin: 0 auto 14px;
   object-fit: cover;
-  width: 92px;
+  width: 76px;
 }
 
 .campaign-badge {
@@ -866,11 +866,11 @@
   color: #8f442e;
   display: inline-flex;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: 0;
-  margin: 0 0 14px;
-  padding: 8px 24px;
+  margin: 0 0 11px;
+  padding: 7px 20px;
   text-transform: uppercase;
 }
 
@@ -894,7 +894,7 @@
 
 .campaign-content h2 {
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(2.35rem, 9vw, 4.05rem);
+  font-size: clamp(2.08rem, 8vw, 3.34rem);
   font-weight: 500;
   letter-spacing: 0;
   line-height: 0.95;
@@ -910,8 +910,8 @@
   display: flex;
   gap: 12px;
   justify-content: center;
-  margin: 16px auto 14px;
-  max-width: 260px;
+  margin: 13px auto 11px;
+  max-width: 230px;
 }
 
 .campaign-divider::before,
@@ -931,17 +931,17 @@
   border-radius: 50%;
   box-shadow: 0 5px 14px rgba(180, 122, 25, 0.22);
   display: block;
-  height: 16px;
+  height: 14px;
   transform: rotate(45deg);
-  width: 16px;
+  width: 14px;
 }
 
 .campaign-copy {
   color: var(--menu-ink);
-  font-size: clamp(1.02rem, 3.6vw, 1.26rem);
+  font-size: clamp(0.96rem, 3.2vw, 1.12rem);
   line-height: 1.42;
   margin: 0 auto;
-  max-width: 440px;
+  max-width: 400px;
 }
 
 .campaign-copy span {
@@ -951,16 +951,16 @@
 .campaign-visual-row {
   align-items: center;
   display: grid;
-  gap: 14px;
+  gap: 12px;
   grid-template-columns: minmax(0, 1fr) auto;
-  margin: 16px auto 0;
-  max-width: 410px;
+  margin: 13px auto 0;
+  max-width: 370px;
 }
 
 .campaign-treat {
   align-items: end;
   aspect-ratio: 16 / 9;
-  border-radius: 16px;
+  border-radius: 14px;
   display: flex;
   justify-content: center;
   min-width: 0;
@@ -998,24 +998,24 @@
   display: inline-flex;
   flex: 0 0 auto;
   flex-direction: column;
-  height: 96px;
+  height: 84px;
   justify-content: center;
   line-height: 1;
   text-align: center;
   text-transform: uppercase;
   transform: rotate(5deg);
-  width: 96px;
+  width: 84px;
 }
 
 .campaign-gift-badge span,
 .campaign-gift-badge small {
-  font-size: 0.72rem;
+  font-size: 0.64rem;
   letter-spacing: 0;
 }
 
 .campaign-gift-badge strong {
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.12rem;
+  font-size: 0.98rem;
   margin: 4px 0;
 }
 
@@ -1027,20 +1027,20 @@
   box-shadow: 0 7px 18px rgba(65, 37, 18, 0.08);
   color: #5e3d19;
   display: inline-flex;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 850;
   justify-content: center;
-  margin: 12px auto 0;
-  min-height: 42px;
-  padding: 0 18px;
+  margin: 10px auto 0;
+  min-height: 36px;
+  padding: 0 15px;
 }
 
 .campaign-chip span {
   background: linear-gradient(180deg, #dfa640, #a85d18);
-  height: 14px;
-  margin-right: 11px;
+  height: 12px;
+  margin-right: 9px;
   transform: rotate(45deg);
-  width: 14px;
+  width: 12px;
 }
 
 .campaign-info {
@@ -1051,12 +1051,12 @@
   box-shadow: 0 8px 20px rgba(65, 37, 18, 0.08);
   color: #604629;
   display: flex;
-  font-size: 0.86rem;
+  font-size: 0.8rem;
   justify-content: center;
   line-height: 1.32;
-  margin: 14px auto 0;
-  max-width: 420px;
-  padding: 9px 14px 9px 10px;
+  margin: 12px auto 0;
+  max-width: 380px;
+  padding: 8px 12px 8px 9px;
 }
 
 .campaign-info span {
@@ -1066,19 +1066,19 @@
   color: white;
   display: inline-flex;
   flex: 0 0 auto;
-  font-size: 0.76rem;
+  font-size: 0.7rem;
   font-weight: 800;
-  height: 24px;
+  height: 22px;
   justify-content: center;
-  margin-right: 10px;
-  width: 24px;
+  margin-right: 9px;
+  width: 22px;
 }
 
 .campaign-actions {
   background: transparent;
   display: grid;
-  gap: 12px;
-  padding: 0 28px 28px;
+  gap: 10px;
+  padding: 0 24px 24px;
   position: relative;
   z-index: 1;
 }
@@ -1088,10 +1088,10 @@
   align-items: center;
   border-radius: 10px;
   display: inline-flex;
-  font-size: clamp(1.04rem, 4.5vw, 1.38rem);
+  font-size: clamp(0.98rem, 4vw, 1.18rem);
   font-weight: 800;
   justify-content: center;
-  min-height: 58px;
+  min-height: 52px;
   text-decoration: none;
 }
 
@@ -1108,14 +1108,17 @@
   align-items: center;
   background: white;
   border-radius: 50%;
-  color: #4285f4;
   display: inline-flex;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 1.28rem;
-  height: 36px;
+  height: 34px;
   justify-content: center;
-  margin-right: 14px;
-  width: 36px;
+  margin-right: 12px;
+  width: 34px;
+}
+
+.campaign-google-mark svg {
+  display: block;
+  height: 22px;
+  width: 22px;
 }
 
 .campaign-actions button {
@@ -1571,38 +1574,38 @@
   }
 
   .campaign-content {
-    padding: 32px 18px 14px;
+    padding: 26px 16px 12px;
   }
 
   .campaign-logo {
-    height: 78px;
-    width: 78px;
+    height: 66px;
+    width: 66px;
   }
 
   .campaign-badge {
-    font-size: 0.76rem;
-    padding: 7px 18px;
+    font-size: 0.72rem;
+    padding: 6px 16px;
   }
 
   .campaign-content h2 {
-    font-size: clamp(2.08rem, 12vw, 2.72rem);
+    font-size: clamp(1.92rem, 10.8vw, 2.36rem);
   }
 
   .campaign-copy {
-    font-size: 1rem;
+    font-size: 0.94rem;
   }
 
   .campaign-info {
     align-items: flex-start;
     border-radius: 14px;
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     padding-right: 12px;
     text-align: left;
   }
 
   .campaign-chip {
-    font-size: 0.82rem;
-    min-height: 38px;
+    font-size: 0.78rem;
+    min-height: 34px;
   }
 
   .campaign-actions {
@@ -1612,14 +1615,19 @@
 
   .campaign-actions a,
   .campaign-actions button {
-    font-size: 1.04rem;
-    min-height: 54px;
+    font-size: 0.96rem;
+    min-height: 50px;
   }
 
   .campaign-google-mark {
-    height: 32px;
-    margin-right: 11px;
-    width: 32px;
+    height: 30px;
+    margin-right: 10px;
+    width: 30px;
+  }
+
+  .campaign-google-mark svg {
+    height: 20px;
+    width: 20px;
   }
 
   .campaign-sparkle-one {
@@ -1660,7 +1668,7 @@
     padding-bottom: 10px;
     padding-left: 16px;
     padding-right: 16px;
-    padding-top: 26px;
+    padding-top: 22px;
   }
 
   .campaign-logo {
@@ -1676,7 +1684,7 @@
   }
 
   .campaign-content h2 {
-    font-size: 1.88rem;
+    font-size: 1.72rem;
   }
 
   .campaign-divider {
@@ -1685,7 +1693,7 @@
   }
 
   .campaign-copy {
-    font-size: 0.94rem;
+    font-size: 0.86rem;
   }
 
   .campaign-visual-row {
@@ -1742,13 +1750,18 @@
 
   .campaign-actions a,
   .campaign-actions button {
-    font-size: 0.98rem;
-    min-height: 48px;
+    font-size: 0.9rem;
+    min-height: 46px;
   }
 
   .campaign-google-mark {
-    height: 28px;
-    width: 28px;
+    height: 26px;
+    width: 26px;
+  }
+
+  .campaign-google-mark svg {
+    height: 18px;
+    width: 18px;
   }
 }
 
