@@ -15,4 +15,5 @@ join public.businesses business on business.id = category.business_id
 join image_seed on image_seed.category_name = category.name
 where item.business_id = business.id
   and item.category_id = category.id
-  and business.slug = 'hamarat';
+  and business.slug = 'hamarat'
+  and item.image_url is null;

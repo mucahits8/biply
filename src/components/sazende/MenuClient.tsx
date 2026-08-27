@@ -432,15 +432,22 @@ function getThemeStyle(theme?: BusinessTheme): CSSProperties {
 }
 
 export function MenuClient({ menu, profile }: Props) {
-  const visibleCategories = useMemo(
-    () => menu.categories.filter((category) => category.items.length > 0),
-    [menu.categories],
-  );
+  const visibleCategories = useMemo(() => menu.categories, [menu.categories]);
   const [selectedId, setSelectedId] = useState(visibleCategories[0]?.id ?? "");
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [campaignOpen, setCampaignOpen] = useState(false);
   const selectedCategory =
     visibleCategories.find((category) => category.id === selectedId) ?? visibleCategories[0];
+
+  useEffect(() => {
+    if (visibleCategories.length === 0) {
+      return;
+    }
+
+    if (!visibleCategories.some((category) => category.id === selectedId)) {
+      setSelectedId(visibleCategories[0].id);
+    }
+  }, [selectedId, visibleCategories]);
 
   useEffect(() => {
     if (!profile.campaign?.enabled) {
@@ -555,11 +562,18 @@ export function MenuClient({ menu, profile }: Props) {
               <p>{selectedCategory.items.length} ürün</p>
             </div>
           </div>
-          <div className="items-list">
-            {selectedCategory.items.map((item) => (
-              <ProductCard key={item.id} item={item} onSelect={setSelectedItem} />
-            ))}
-          </div>
+          {selectedCategory.items.length > 0 ? (
+            <div className="items-list">
+              {selectedCategory.items.map((item) => (
+                <ProductCard key={item.id} item={item} onSelect={setSelectedItem} />
+              ))}
+            </div>
+          ) : (
+            <div className="empty-category-state">
+              <h3>Bu kategori hazırlanıyor</h3>
+              <p>Ürünler admin panelden eklendiğinde burada otomatik görünecek.</p>
+            </div>
+          )}
         </section>
       ) : null}
 

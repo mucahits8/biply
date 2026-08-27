@@ -531,6 +531,31 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.empty-category-state {
+  background: rgba(255, 252, 245, 0.66);
+  border: 1px dashed rgba(180, 122, 25, 0.26);
+  border-radius: 8px;
+  color: var(--menu-soft);
+  display: grid;
+  gap: 6px;
+  padding: 22px 18px;
+  text-align: center;
+}
+
+.empty-category-state h3 {
+  color: var(--menu-ink);
+  font-family: var(--menu-heading-font);
+  font-size: 1.08rem;
+  margin: 0;
+}
+
+.empty-category-state p {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin: 0 auto;
+  max-width: 32rem;
+}
+
 .food-card {
   background: var(--menu-surface);
   border: 1px solid rgba(180, 122, 25, 0.14);
