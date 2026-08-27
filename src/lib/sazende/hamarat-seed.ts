@@ -130,6 +130,12 @@ export const hamaratCategories: SeedCategory[] = [
     ],
   },
   {
+    id: "hamarat_cat_kiloluk_tatlilar",
+    name: "Kiloluk Tatlılar",
+    imageUrl: "/images/hamarat-tatlilar.png",
+    items: [],
+  },
+  {
     id: "hamarat_cat_sicak_icecekler",
     name: "Sıcak İçecekler",
     imageUrl: "/images/hamarat-sicak-icecekler.png",
