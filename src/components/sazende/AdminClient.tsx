@@ -339,6 +339,15 @@ export function AdminClient({ slug = "sazende" }: { slug?: string }) {
         .flatMap((category) => category.items)
         .filter((item) => dirtyItemIds.has(item.id)) as EditableItem[];
 
+      const invalidNameItem = dirtyItems.find((item) => !item.name.trim());
+
+      if (invalidNameItem) {
+        setMessage("Ürün adı boş bırakılamaz.");
+        setSaving(false);
+        setSaveStage("idle");
+        return;
+      }
+
       const invalidItem = dirtyItems.find((item) => {
         const draft = priceDrafts[item.id]?.trim() ?? "";
         return draft !== "" && Number.isNaN(Number(draft));
@@ -382,6 +391,7 @@ export function AdminClient({ slug = "sazende" }: { slug?: string }) {
             method: "PATCH",
             headers: { Prefer: "return=minimal" },
             body: JSON.stringify({
+              name: item.name.trim(),
               price:
                 priceDrafts[item.id]?.trim() === ""
                   ? null
@@ -698,7 +708,7 @@ export function AdminClient({ slug = "sazende" }: { slug?: string }) {
                       loading="lazy"
                     />
                     <div>
-                      <h3>{displayItemName(item.name)}</h3>
+                      <h3>{displayItemName(item.name.trim() || "Ürün adı boş")}</h3>
                       {item.kcal !== null ? (
                         <p>{formatKcal(item.kcal, item.kcalIsEstimated)}</p>
                       ) : null}
@@ -715,6 +725,15 @@ export function AdminClient({ slug = "sazende" }: { slug?: string }) {
                       Sil
                     </button>
                   </div>
+                  <label className="admin-name-field">
+                    Ürün adı
+                    <input
+                      value={item.name}
+                      onChange={(event) => updateItem(item.id, { name: event.target.value })}
+                      placeholder="Ürün adı"
+                      disabled={saving}
+                    />
+                  </label>
                   <label>
                     Fiyat
                     <input

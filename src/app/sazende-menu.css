@@ -2338,6 +2338,11 @@
   color: var(--admin-muted);
 }
 
+.admin-name-field input {
+  color: var(--admin-ink);
+  font-weight: 850;
+}
+
 .danger-button {
   background: rgba(122, 54, 42, 0.08);
   border: 1px solid rgba(122, 54, 42, 0.22);
