@@ -67,7 +67,6 @@ type PaymentState = {
 };
 
 type ManualItemInput = {
-  name: string;
   amountInput: string;
 };
 
@@ -940,7 +939,7 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
     }
   }
 
-  async function addManualItem({ name, amountInput }: ManualItemInput) {
+  async function addManualItem({ amountInput }: ManualItemInput) {
     if (busy) {
       return false;
     }
@@ -959,7 +958,7 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
         id: "",
         orderId: order.id,
         menuItemId: null,
-        name: name || "Elle Girilen Tutar",
+        name: "Diğer",
         unitPrice: amount,
         quantity: 1,
         lineTotal: amount,
@@ -1936,7 +1935,6 @@ function OrderView({
   tableOptions: PosTable[];
   targetTableId: string;
 }) {
-  const [manualName, setManualName] = useState("");
   const [manualAmount, setManualAmount] = useState("");
   const itemImages = useMemo(
     () =>
@@ -1952,12 +1950,10 @@ function OrderView({
   async function submitManualItem(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const wasAdded = await onAddManualItem({
-      name: manualName.trim(),
       amountInput: manualAmount,
     });
 
     if (wasAdded) {
-      setManualName("");
       setManualAmount("");
     }
   }
@@ -2114,13 +2110,7 @@ function OrderView({
               <span>Menü dışı veya hızlı giriş</span>
             </div>
             <div className="pos-manual-fields">
-              <input
-                aria-label="Elle girilen tutar açıklaması"
-                maxLength={42}
-                onChange={(event) => setManualName(event.target.value)}
-                placeholder="Açıklama"
-                value={manualName}
-              />
+              <span className="pos-manual-label">Diğer</span>
               <label className="pos-manual-amount">
                 <span>₺</span>
                 <input

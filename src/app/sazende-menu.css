@@ -3312,10 +3312,11 @@
 .pos-manual-fields {
   display: grid;
   gap: 9px;
-  grid-template-columns: minmax(0, 1fr) minmax(92px, 0.7fr) 92px;
+  grid-template-columns: minmax(96px, 0.8fr) minmax(110px, 1fr) 96px;
 }
 
 .pos-manual-fields input,
+.pos-manual-label,
 .pos-manual-fields button {
   border-radius: 8px;
   font: inherit;
@@ -3328,6 +3329,16 @@
   color: var(--pos-ink);
   font-weight: 800;
   min-width: 0;
+  padding: 0 12px;
+}
+
+.pos-manual-label {
+  align-items: center;
+  background: #fff4e7;
+  border: 1px solid rgba(221, 101, 0, 0.18);
+  color: var(--pos-orange-strong);
+  display: flex;
+  font-weight: 950;
   padding: 0 12px;
 }
 
