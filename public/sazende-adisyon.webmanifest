@@ -1,27 +1,27 @@
 {
-  "name": "Hamarat Adisyon",
-  "short_name": "Hamarat POS",
-  "description": "Hamarat Pastane ve Kafe icin masa, kasa ve gun sonu adisyon uygulamasi.",
-  "start_url": "/pos/hamarat",
+  "name": "Sazende Adisyon",
+  "short_name": "Sazende POS",
+  "description": "Sazende icin masa, kasa ve gun sonu adisyon uygulamasi.",
+  "start_url": "/pos/sazende",
   "scope": "/pos/",
   "display": "standalone",
   "background_color": "#fbf7f0",
-  "theme_color": "#dd6500",
+  "theme_color": "#6b3a16",
   "icons": [
     {
-      "src": "/images/hamarat-adisyon-180.png",
+      "src": "/images/sazende-adisyon-180.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/hamarat-adisyon-192.png",
+      "src": "/images/sazende-adisyon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/hamarat-adisyon-512.png",
+      "src": "/images/sazende-adisyon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

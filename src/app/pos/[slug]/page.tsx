@@ -10,9 +10,23 @@ type Props = {
   }>;
 };
 
+const posAppAssets: Record<string, { manifest: string; icon: string; appleIcon: string }> = {
+  hamarat: {
+    manifest: "/hamarat-adisyon.webmanifest",
+    icon: "/images/hamarat-adisyon-192.png",
+    appleIcon: "/images/hamarat-adisyon-180.png",
+  },
+  sazende: {
+    manifest: "/sazende-adisyon.webmanifest",
+    icon: "/images/sazende-adisyon-192.png",
+    appleIcon: "/images/sazende-adisyon-180.png",
+  },
+};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const menu = (await getMenuBySlug(slug).catch(() => null)) ?? getSeedMenu(slug);
+  const appAssets = posAppAssets[slug];
 
   if (!menu) {
     return {
@@ -31,19 +45,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: {
       absolute: `${menu.business.name} Adisyon`,
     },
-    manifest: slug === "hamarat" ? "/hamarat-adisyon.webmanifest" : undefined,
+    manifest: appAssets?.manifest,
     appleWebApp: {
       capable: true,
       statusBarStyle: "default",
       title: `${menu.business.name} Adisyon`,
     },
-    icons:
-      slug === "hamarat"
-        ? {
-            icon: "/images/hamarat-adisyon-192.png",
-            apple: "/images/hamarat-adisyon-192.png",
-          }
-        : undefined,
+    icons: appAssets
+      ? {
+          icon: appAssets.icon,
+          apple: appAssets.appleIcon,
+        }
+      : undefined,
     robots: {
       index: false,
       follow: false,
