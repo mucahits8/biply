@@ -2261,6 +2261,9 @@ function HistoryView({
   setSelectedOrderId: (id: string) => void;
   tables: PosTable[];
 }) {
+  const [openDayKeys, setOpenDayKeys] = useState<Set<string>>(
+    () => new Set([selectedOrder ? dateKey(selectedOrder.closedAt ?? selectedOrder.openedAt) : todayKey()]),
+  );
   const groupedOrders = useMemo(() => {
     const groups = new Map<string, PosOrder[]>();
 
@@ -2279,6 +2282,18 @@ function HistoryView({
       }))
       .sort((a, b) => b.key.localeCompare(a.key));
   }, [historyOrders]);
+
+  function toggleDay(key: string) {
+    setOpenDayKeys((current) => {
+      const next = new Set(current);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  }
 
   return (
     <>
@@ -2299,33 +2314,45 @@ function HistoryView({
           </div>
           {groupedOrders.map((group) => (
             <section className="pos-history-day" key={group.key}>
-              <div className="pos-history-day-head">
-                <strong>{reportDateLabel(group.key)}</strong>
+              <button
+                aria-expanded={openDayKeys.has(group.key)}
+                className="pos-history-day-head"
+                onClick={() => toggleDay(group.key)}
+                type="button"
+              >
+                <span className="pos-history-day-title">
+                  <i aria-hidden="true">{openDayKeys.has(group.key) ? "⌄" : "›"}</i>
+                  <strong>{reportDateLabel(group.key)}</strong>
+                </span>
                 <span>
                   {group.orders.length} adisyon · {formatPrice(group.paidTotal)}
                 </span>
-              </div>
-              {group.orders.map((order) => {
-                const tableName = order.tableId
-                  ? tables.find((table) => table.id === order.tableId)?.name ?? "Masa"
-                  : "Kasa";
-                return (
-                  <button
-                    className={`pos-history-row ${selectedOrderId === order.id ? "selected" : ""}`}
-                    key={order.id}
-                    onClick={() => setSelectedOrderId(order.id)}
-                    type="button"
-                  >
-                    <span>#{order.orderNo}</span>
-                    <span>{tableName}</span>
-                    <span className={order.status === "paid" ? "paid" : "cancelled"}>
-                      {order.status === "paid" ? "Ödendi" : "İptal"}
-                    </span>
-                    <strong>{formatPrice(order.totalAmount)}</strong>
-                    <span>{timeOnly(order.closedAt)}</span>
-                  </button>
-                );
-              })}
+              </button>
+              {openDayKeys.has(group.key) ? (
+                <div className="pos-history-day-body">
+                  {group.orders.map((order) => {
+                    const tableName = order.tableId
+                      ? tables.find((table) => table.id === order.tableId)?.name ?? "Masa"
+                      : "Kasa";
+                    return (
+                      <button
+                        className={`pos-history-row ${selectedOrderId === order.id ? "selected" : ""}`}
+                        key={order.id}
+                        onClick={() => setSelectedOrderId(order.id)}
+                        type="button"
+                      >
+                        <span>#{order.orderNo}</span>
+                        <span>{tableName}</span>
+                        <span className={order.status === "paid" ? "paid" : "cancelled"}>
+                          {order.status === "paid" ? "Ödendi" : "İptal"}
+                        </span>
+                        <strong>{formatPrice(order.totalAmount)}</strong>
+                        <span>{timeOnly(order.closedAt)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : null}
             </section>
           ))}
           {historyOrders.length === 0 ? (
