@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
+import type { FormEvent } from "react";
 import type { BusinessProfile } from "@/lib/sazende/business-info";
 import { formatPrice } from "@/lib/sazende/format";
 import { supabaseFetch } from "@/lib/sazende/supabase";
@@ -63,6 +64,11 @@ type PaymentState = {
   method: PaymentMethod;
   cash: string;
   card: string;
+};
+
+type ManualItemInput = {
+  name: string;
+  amountInput: string;
 };
 
 type LocalSnapshot = {
@@ -301,6 +307,26 @@ async function sha256Hex(value: string) {
 
 function sumItems(items: PosOrderItem[]) {
   return items.reduce((total, item) => total + item.unitPrice * item.quantity, 0);
+}
+
+function parseMoneyInput(input: string) {
+  const cleaned = input.trim().replace(/[₺\s]/g, "");
+  const hasComma = cleaned.includes(",");
+  const dotParts = cleaned.split(".");
+  const looksLikeTurkishThousands =
+    !hasComma && dotParts.length > 1 && dotParts.slice(1).every((part) => part.length === 3);
+  const normalized = hasComma
+    ? cleaned.replaceAll(".", "").replace(",", ".")
+    : looksLikeTurkishThousands
+      ? cleaned.replaceAll(".", "")
+      : cleaned;
+  const amount = Number(normalized);
+
+  if (!Number.isFinite(amount)) {
+    return Number.NaN;
+  }
+
+  return Math.round(amount * 100) / 100;
 }
 
 function readableDate(date: Date) {
@@ -892,6 +918,68 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
       await refreshPosState();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Ürün eklenemedi.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function addManualItem({ name, amountInput }: ManualItemInput) {
+    if (busy) {
+      return false;
+    }
+
+    const amount = parseMoneyInput(amountInput);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setMessage("Elle girilen tutar 0'dan büyük olmalı.");
+      return false;
+    }
+
+    setBusy(true);
+    setMessage("");
+    try {
+      const order = await ensureWorkingOrder();
+      const manualItem: PosOrderItem = {
+        id: "",
+        orderId: order.id,
+        menuItemId: null,
+        name: name || "Elle Girilen Tutar",
+        unitPrice: amount,
+        quantity: 1,
+        lineTotal: amount,
+      };
+      const nextItems = [...order.items, manualItem];
+
+      if (dataMode === "local") {
+        upsertLocalOrder({
+          ...order,
+          items: nextItems.map((entry) => ({
+            ...entry,
+            id: entry.id || createLocalId("local-item"),
+            lineTotal: entry.unitPrice * entry.quantity,
+          })),
+          totalAmount: sumItems(nextItems),
+        });
+        return true;
+      }
+
+      await supabaseFetch("pos_order_items", undefined, undefined, {
+        method: "POST",
+        headers: { Prefer: "return=minimal" },
+        body: JSON.stringify({
+          order_id: order.id,
+          menu_item_id: null,
+          name_snapshot: manualItem.name,
+          unit_price: amount,
+          quantity: 1,
+        }),
+      });
+
+      await patchOrderTotal(order.id, sumItems(nextItems));
+      await refreshPosState();
+      return true;
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Elle tutar eklenemedi.");
+      return false;
     } finally {
       setBusy(false);
     }
@@ -1563,6 +1651,7 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
               favoriteItems={favoriteItems}
               onBack={() => switchView("tables")}
               onAddItem={addItem}
+              onAddManualItem={addManualItem}
               onCancelOrder={cancelOrder}
               onChangeQuantity={changeQuantity}
               onMerge={mergeOrder}
@@ -1589,6 +1678,7 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
               isCounter
               onBack={() => undefined}
               onAddItem={addItem}
+              onAddManualItem={addManualItem}
               onCancelOrder={cancelOrder}
               onChangeQuantity={changeQuantity}
               onMerge={mergeOrder}
@@ -1796,6 +1886,7 @@ function OrderView({
   favoriteItems,
   isCounter = false,
   onAddItem,
+  onAddManualItem,
   onBack,
   onCancelOrder,
   onChangeQuantity,
@@ -1818,6 +1909,7 @@ function OrderView({
   favoriteItems: MenuItem[];
   isCounter?: boolean;
   onAddItem: (item: MenuItem) => void;
+  onAddManualItem: (input: ManualItemInput) => Promise<boolean>;
   onBack: () => void;
   onCancelOrder: (order: PosOrder) => void;
   onChangeQuantity: (order: PosOrder, item: PosOrderItem, change: -1 | 1) => void;
@@ -1833,6 +1925,22 @@ function OrderView({
   tableOptions: PosTable[];
   targetTableId: string;
 }) {
+  const [manualName, setManualName] = useState("");
+  const [manualAmount, setManualAmount] = useState("");
+
+  async function submitManualItem(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const wasAdded = await onAddManualItem({
+      name: manualName.trim(),
+      amountInput: manualAmount,
+    });
+
+    if (wasAdded) {
+      setManualName("");
+      setManualAmount("");
+    }
+  }
+
   return (
     <>
       <div className="pos-screen-head compact">
@@ -1960,6 +2068,35 @@ function OrderView({
           )}
 
           {activeOrder?.note ? <p className="pos-note">Not: {activeOrder.note}</p> : null}
+
+          <form className="pos-manual-entry" onSubmit={submitManualItem}>
+            <div className="pos-manual-head">
+              <strong>Elle Tutar Ekle</strong>
+              <span>Menü dışı veya hızlı giriş</span>
+            </div>
+            <div className="pos-manual-fields">
+              <input
+                aria-label="Elle girilen tutar açıklaması"
+                maxLength={42}
+                onChange={(event) => setManualName(event.target.value)}
+                placeholder="Açıklama"
+                value={manualName}
+              />
+              <label className="pos-manual-amount">
+                <span>₺</span>
+                <input
+                  aria-label="Elle girilen tutar"
+                  inputMode="decimal"
+                  onChange={(event) => setManualAmount(event.target.value)}
+                  placeholder="50"
+                  value={manualAmount}
+                />
+              </label>
+              <button disabled={!manualAmount.trim()} type="submit">
+                Elle Gir
+              </button>
+            </div>
+          </form>
 
           <div className="pos-total">
             <span>Toplam</span>
