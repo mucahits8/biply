@@ -445,7 +445,8 @@ export function MenuClient({ menu, profile }: Props) {
     }
 
     if (!visibleCategories.some((category) => category.id === selectedId)) {
-      setSelectedId(visibleCategories[0].id);
+      const timeout = window.setTimeout(() => setSelectedId(visibleCategories[0].id), 0);
+      return () => window.clearTimeout(timeout);
     }
   }, [selectedId, visibleCategories]);
 
