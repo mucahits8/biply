@@ -522,7 +522,6 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
   const [payment, setPayment] = useState<PaymentState | null>(null);
   const [pin, setPin] = useState("");
   const [reportsUnlocked, setReportsUnlocked] = useState(false);
-  const [actionsOpen, setActionsOpen] = useState(false);
   const [targetTableId, setTargetTableId] = useState("");
 
   const allItems = useMemo(
@@ -772,7 +771,6 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
 
   function switchView(view: PosView) {
     setMessage("");
-    setActionsOpen(false);
     setPayment(null);
     if (view !== "reports") {
       setReportsUnlocked(false);
@@ -1264,7 +1262,7 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
           nextOrderNo: nextLocalOrderNo,
         });
         setSelectedTableId(targetTableId);
-        setActionsOpen(false);
+        setTargetTableId("");
         return;
       }
 
@@ -1282,7 +1280,7 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
         },
       );
       setSelectedTableId(targetTableId);
-      setActionsOpen(false);
+      setTargetTableId("");
       await refreshPosState();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Masa taşınamadı.");
@@ -1351,7 +1349,7 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
           nextOrderNo: nextLocalOrderNo,
         });
         setSelectedTableId(targetTableId);
-        setActionsOpen(false);
+        setTargetTableId("");
         return;
       }
 
@@ -1410,7 +1408,7 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
       );
 
       setSelectedTableId(targetTableId);
-      setActionsOpen(false);
+      setTargetTableId("");
       await refreshPosState();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Masalar birleştirilemedi.");
@@ -1589,9 +1587,6 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
               aria-label="Ara"
             />
           </div>
-          <span className={`pos-mode-pill ${dataMode}`}>
-            {dataMode === "remote" ? "Buluta bağlı" : "Bu cihazda kayıt"}
-          </span>
         </div>
       </header>
 
@@ -1653,7 +1648,6 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
             <OrderView
               activeOrder={selectedTableOrder}
               activeTitle={selectedTable?.name ?? "Masa"}
-              actionsOpen={actionsOpen}
               categories={menu.categories}
               favoriteItems={favoriteItems}
               onBack={() => switchView("tables")}
@@ -1664,7 +1658,6 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
               onMerge={mergeOrder}
               onMove={moveOrder}
               onOpenPayment={openPayment}
-              onToggleActions={() => setActionsOpen((current) => !current)}
               onUpdateNote={updateNote}
               products={visibleItems}
               selectedCategoryId={selectedCategoryId}
@@ -1679,7 +1672,6 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
             <OrderView
               activeOrder={counterOrder}
               activeTitle="Kasa"
-              actionsOpen={false}
               categories={menu.categories}
               favoriteItems={favoriteItems}
               isCounter
@@ -1691,7 +1683,6 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
               onMerge={mergeOrder}
               onMove={moveOrder}
               onOpenPayment={openPayment}
-              onToggleActions={() => undefined}
               onUpdateNote={updateNote}
               products={visibleItems}
               selectedCategoryId={selectedCategoryId}
@@ -1888,7 +1879,6 @@ function TablesView({
 function OrderView({
   activeOrder,
   activeTitle,
-  actionsOpen,
   categories,
   favoriteItems,
   isCounter = false,
@@ -1900,7 +1890,6 @@ function OrderView({
   onMerge,
   onMove,
   onOpenPayment,
-  onToggleActions,
   onUpdateNote,
   products,
   selectedCategoryId,
@@ -1911,7 +1900,6 @@ function OrderView({
 }: {
   activeOrder: PosOrder | null;
   activeTitle: string;
-  actionsOpen: boolean;
   categories: MenuCategory[];
   favoriteItems: MenuItem[];
   isCounter?: boolean;
@@ -1923,7 +1911,6 @@ function OrderView({
   onMerge: (order: PosOrder) => void;
   onMove: (order: PosOrder) => void;
   onOpenPayment: (order: PosOrder, method?: PaymentMethod) => void;
-  onToggleActions: () => void;
   onUpdateNote: (order: PosOrder) => void;
   products: MenuItem[];
   selectedCategoryId: string;
@@ -1974,17 +1961,13 @@ function OrderView({
         <div className="pos-head-actions">
           {activeOrder ? <span>{activeOrder.items.length} ürün</span> : <span>Yeni adisyon</span>}
           {activeOrder ? <span>#{activeOrder.orderNo}</span> : null}
-          {!isCounter ? (
-            <button className="pos-icon-button" onClick={onToggleActions} type="button" aria-label="Adisyon işlemleri">
-              •••
-            </button>
-          ) : null}
         </div>
       </div>
 
-      {actionsOpen && activeOrder ? (
+      {!isCounter ? (
         <div className="pos-action-strip">
           <select
+            disabled={!activeOrder}
             value={targetTableId}
             onChange={(event) => setTargetTableId(event.target.value)}
             aria-label="Hedef masa"
@@ -1996,16 +1979,21 @@ function OrderView({
               </option>
             ))}
           </select>
-          <button onClick={() => onMove(activeOrder)} type="button">
+          <button disabled={!activeOrder} onClick={() => activeOrder && onMove(activeOrder)} type="button">
             Masa Taşı
           </button>
-          <button onClick={() => onMerge(activeOrder)} type="button">
+          <button disabled={!activeOrder} onClick={() => activeOrder && onMerge(activeOrder)} type="button">
             Masa Birleştir
           </button>
-          <button onClick={() => onUpdateNote(activeOrder)} type="button">
+          <button disabled={!activeOrder} onClick={() => activeOrder && onUpdateNote(activeOrder)} type="button">
             Not
           </button>
-          <button className="danger" onClick={() => onCancelOrder(activeOrder)} type="button">
+          <button
+            className="danger"
+            disabled={!activeOrder}
+            onClick={() => activeOrder && onCancelOrder(activeOrder)}
+            type="button"
+          >
             İptal
           </button>
         </div>
@@ -2273,11 +2261,30 @@ function HistoryView({
   setSelectedOrderId: (id: string) => void;
   tables: PosTable[];
 }) {
+  const groupedOrders = useMemo(() => {
+    const groups = new Map<string, PosOrder[]>();
+
+    historyOrders.forEach((order) => {
+      const key = dateKey(order.closedAt ?? order.openedAt);
+      groups.set(key, [...(groups.get(key) ?? []), order]);
+    });
+
+    return Array.from(groups.entries())
+      .map(([key, orders]) => ({
+        key,
+        orders,
+        paidTotal: orders
+          .filter((order) => order.status === "paid")
+          .reduce((total, order) => total + order.totalAmount, 0),
+      }))
+      .sort((a, b) => b.key.localeCompare(a.key));
+  }, [historyOrders]);
+
   return (
     <>
       <div className="pos-screen-head">
         <div>
-          <p>Bugünkü kayıtlar</p>
+          <p>Gün gün ayrılmış kayıtlar</p>
           <h1>Geçmiş Adisyonlar</h1>
         </div>
       </div>
@@ -2290,29 +2297,39 @@ function HistoryView({
             <span>Tutar</span>
             <span>Saat</span>
           </div>
-          {historyOrders.map((order) => {
-            const tableName = order.tableId
-              ? tables.find((table) => table.id === order.tableId)?.name ?? "Masa"
-              : "Kasa";
-            return (
-              <button
-                className={`pos-history-row ${selectedOrderId === order.id ? "selected" : ""}`}
-                key={order.id}
-                onClick={() => setSelectedOrderId(order.id)}
-                type="button"
-              >
-                <span>#{order.orderNo}</span>
-                <span>{tableName}</span>
-                <span className={order.status === "paid" ? "paid" : "cancelled"}>
-                  {order.status === "paid" ? "Ödendi" : "İptal"}
+          {groupedOrders.map((group) => (
+            <section className="pos-history-day" key={group.key}>
+              <div className="pos-history-day-head">
+                <strong>{reportDateLabel(group.key)}</strong>
+                <span>
+                  {group.orders.length} adisyon · {formatPrice(group.paidTotal)}
                 </span>
-                <strong>{formatPrice(order.totalAmount)}</strong>
-                <span>{timeOnly(order.closedAt)}</span>
-              </button>
-            );
-          })}
+              </div>
+              {group.orders.map((order) => {
+                const tableName = order.tableId
+                  ? tables.find((table) => table.id === order.tableId)?.name ?? "Masa"
+                  : "Kasa";
+                return (
+                  <button
+                    className={`pos-history-row ${selectedOrderId === order.id ? "selected" : ""}`}
+                    key={order.id}
+                    onClick={() => setSelectedOrderId(order.id)}
+                    type="button"
+                  >
+                    <span>#{order.orderNo}</span>
+                    <span>{tableName}</span>
+                    <span className={order.status === "paid" ? "paid" : "cancelled"}>
+                      {order.status === "paid" ? "Ödendi" : "İptal"}
+                    </span>
+                    <strong>{formatPrice(order.totalAmount)}</strong>
+                    <span>{timeOnly(order.closedAt)}</span>
+                  </button>
+                );
+              })}
+            </section>
+          ))}
           {historyOrders.length === 0 ? (
-            <div className="pos-empty-state compact">Bugün için adisyon kaydı yok.</div>
+            <div className="pos-empty-state compact">Adisyon kaydı yok.</div>
           ) : null}
         </div>
         <aside className="pos-history-detail">
@@ -2353,7 +2370,7 @@ function HistoryView({
               {selectedOrder.note ? <p className="pos-note">Not: {selectedOrder.note}</p> : null}
             </>
           ) : (
-            <p className="pos-empty-basket">Bugün kapanmış adisyon yok.</p>
+            <p className="pos-empty-basket">Kapanmış adisyon seçilmedi.</p>
           )}
         </aside>
       </div>
