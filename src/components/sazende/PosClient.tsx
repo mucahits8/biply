@@ -517,6 +517,7 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
   const [historySearch, setHistorySearch] = useState("");
   const [selectedReportDate, setSelectedReportDate] = useState("");
   const [message, setMessage] = useState("");
+  const [isOffline, setIsOffline] = useState(false);
   const [busy, setBusy] = useState(false);
   const [now, setNow] = useState<Date | null>(null);
   const [payment, setPayment] = useState<PaymentState | null>(null);
@@ -751,6 +752,17 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
     return () => {
       window.clearTimeout(initial);
       window.clearInterval(timer);
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateConnection = () => setIsOffline(!navigator.onLine);
+    updateConnection();
+    window.addEventListener("online", updateConnection);
+    window.addEventListener("offline", updateConnection);
+    return () => {
+      window.removeEventListener("online", updateConnection);
+      window.removeEventListener("offline", updateConnection);
     };
   }, []);
 
@@ -1627,6 +1639,11 @@ export function PosClient({ menu, profile }: { menu: BusinessMenu; profile: Busi
         </nav>
 
         <section className="pos-content">
+          {isOffline ? (
+            <p className="pos-offline-banner">
+              Bağlantı yok. Yeni işlem almadan önce interneti kontrol et; kayıt buluta yazılamayabilir.
+            </p>
+          ) : null}
           {message ? <p className="pos-message">{message}</p> : null}
 
           {activeView === "tables" ? (

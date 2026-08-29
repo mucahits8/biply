@@ -2672,6 +2672,30 @@
   padding: 12px 14px;
 }
 
+.pos-offline-banner {
+  align-items: center;
+  background: var(--pos-red-soft);
+  border: 1px solid rgba(184, 69, 53, 0.2);
+  border-radius: 9px;
+  color: var(--pos-red);
+  display: flex;
+  font-weight: 850;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+}
+
+.pos-offline-banner::before {
+  content: "!";
+  background: rgba(184, 69, 53, 0.12);
+  border-radius: 50%;
+  display: inline-grid;
+  flex: 0 0 24px;
+  height: 24px;
+  place-items: center;
+  width: 24px;
+}
+
 .pos-screen-head {
   align-items: center;
   display: flex;

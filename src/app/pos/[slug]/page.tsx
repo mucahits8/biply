@@ -27,9 +27,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
+    applicationName: `${menu.business.name} Adisyon`,
     title: {
       absolute: `${menu.business.name} Adisyon`,
     },
+    manifest: slug === "hamarat" ? "/hamarat-adisyon.webmanifest" : undefined,
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: `${menu.business.name} Adisyon`,
+    },
+    icons:
+      slug === "hamarat"
+        ? {
+            icon: "/images/hamarat-adisyon-192.png",
+            apple: "/images/hamarat-adisyon-192.png",
+          }
+        : undefined,
     robots: {
       index: false,
       follow: false,
