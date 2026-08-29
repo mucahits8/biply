@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
-import type { FormEvent } from "react";
+import type { CSSProperties, FormEvent } from "react";
 import type { BusinessProfile } from "@/lib/sazende/business-info";
 import { formatPrice } from "@/lib/sazende/format";
 import { supabaseFetch } from "@/lib/sazende/supabase";
@@ -254,6 +254,13 @@ function itemInitials(name: string) {
   const first = parts[0]?.slice(0, 1) ?? "";
   const second = parts.length > 1 ? parts[1]?.slice(0, 1) ?? "" : "";
   return `${first}${second}`.toLocaleUpperCase("tr-TR");
+}
+
+function imageBackgroundStyle(imageUrl: string): CSSProperties {
+  const safeUrl = imageUrl.replace(/["\\\n\r]/g, "");
+  return {
+    backgroundImage: `url("${safeUrl}")`,
+  };
 }
 
 function paymentLabel(summary: string | null, payments: PosPayment[]) {
@@ -1927,6 +1934,16 @@ function OrderView({
 }) {
   const [manualName, setManualName] = useState("");
   const [manualAmount, setManualAmount] = useState("");
+  const itemImages = useMemo(
+    () =>
+      new Map(
+        categories
+          .flatMap((category) => category.items)
+          .filter((item) => item.imageUrl)
+          .map((item) => [item.id, item.imageUrl as string]),
+      ),
+    [categories],
+  );
 
   async function submitManualItem(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -2026,7 +2043,13 @@ function OrderView({
               onClick={() => onAddItem(item)}
               type="button"
             >
-              <span>{itemInitials(item.name)}</span>
+              <span
+                aria-hidden="true"
+                className={`pos-product-visual ${item.imageUrl ? "has-image" : ""}`}
+                style={item.imageUrl ? imageBackgroundStyle(item.imageUrl) : undefined}
+              >
+                {item.imageUrl ? "" : itemInitials(item.name)}
+              </span>
               <strong>{item.name}</strong>
               <em>{formatPrice(item.price)}</em>
               {!item.isAvailable ? <small>Bitti</small> : null}
@@ -2042,24 +2065,35 @@ function OrderView({
 
           {activeOrder && activeOrder.items.length > 0 ? (
             <div className="pos-basket-lines">
-              {activeOrder.items.map((item) => (
-                <div className="pos-basket-line" key={item.id}>
-                  <div>
-                    <strong>{item.name}</strong>
-                    <span>{formatPrice(item.unitPrice)}</span>
+              {activeOrder.items.map((item) => {
+                const imageUrl = item.menuItemId ? itemImages.get(item.menuItemId) : null;
+
+                return (
+                  <div className="pos-basket-line" key={item.id}>
+                    <i
+                      aria-hidden="true"
+                      className={`pos-basket-visual ${imageUrl ? "has-image" : ""}`}
+                      style={imageUrl ? imageBackgroundStyle(imageUrl) : undefined}
+                    >
+                      {imageUrl ? "" : itemInitials(item.name)}
+                    </i>
+                    <div className="pos-basket-line-detail">
+                      <strong>{item.name}</strong>
+                      <span>{formatPrice(item.unitPrice)}</span>
+                    </div>
+                    <div className="pos-qty">
+                      <button onClick={() => onChangeQuantity(activeOrder, item, -1)} type="button">
+                        −
+                      </button>
+                      <span>{item.quantity}</span>
+                      <button onClick={() => onChangeQuantity(activeOrder, item, 1)} type="button">
+                        +
+                      </button>
+                    </div>
+                    <em>{formatPrice(item.unitPrice * item.quantity)}</em>
                   </div>
-                  <div className="pos-qty">
-                    <button onClick={() => onChangeQuantity(activeOrder, item, -1)} type="button">
-                      −
-                    </button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => onChangeQuantity(activeOrder, item, 1)} type="button">
-                      +
-                    </button>
-                  </div>
-                  <em>{formatPrice(item.unitPrice * item.quantity)}</em>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="pos-empty-basket">
