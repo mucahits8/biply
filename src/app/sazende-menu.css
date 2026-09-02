@@ -927,10 +927,10 @@
 
 .campaign-content h2 {
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(2.08rem, 8vw, 3.34rem);
+  font-size: clamp(2rem, 8vw, 3.28rem);
   font-weight: 500;
   letter-spacing: 0;
-  line-height: 0.95;
+  line-height: 1.02;
   margin: 0;
 }
 
@@ -985,8 +985,13 @@
   align-items: center;
   display: grid;
   gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 16px auto 0;
+  max-width: 390px;
+}
+
+.campaign-modal-has-gift .campaign-visual-row {
   grid-template-columns: minmax(0, 1fr) auto;
-  margin: 13px auto 0;
   max-width: 370px;
 }
 
@@ -1012,8 +1017,7 @@
 .campaign-treat img {
   display: block;
   height: 100%;
-  object-fit: contain;
-  transform: scale(1.08);
+  object-fit: cover;
   width: 100%;
 }
 
@@ -1128,7 +1132,7 @@
   text-decoration: none;
 }
 
-.campaign-actions a {
+.campaign-primary-action {
   background: linear-gradient(180deg, #d99925, #b36a10);
   border: 1px solid rgba(129, 76, 9, 0.46);
   box-shadow:
@@ -1137,7 +1141,8 @@
   color: white;
 }
 
-.campaign-google-mark {
+.campaign-google-mark,
+.campaign-menu-mark {
   align-items: center;
   background: white;
   border-radius: 50%;
@@ -1154,10 +1159,32 @@
   width: 22px;
 }
 
-.campaign-actions button {
+.campaign-menu-mark {
+  background: transparent;
+  color: white;
+}
+
+.campaign-menu-mark svg {
+  display: block;
+  fill: none;
+  height: 30px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.9;
+  width: 30px;
+}
+
+.campaign-secondary-action {
   background: rgba(255, 252, 245, 0.55);
   border: 1px solid rgba(180, 122, 25, 0.5);
   color: #5a3616;
+}
+
+.campaign-secondary-action .instagram-mark {
+  height: 28px;
+  margin-right: 12px;
+  width: 28px;
 }
 
 .product-backdrop {
@@ -1652,7 +1679,8 @@
     min-height: 50px;
   }
 
-  .campaign-google-mark {
+  .campaign-google-mark,
+  .campaign-menu-mark {
     height: 30px;
     margin-right: 10px;
     width: 30px;
@@ -1661,6 +1689,17 @@
   .campaign-google-mark svg {
     height: 20px;
     width: 20px;
+  }
+
+  .campaign-menu-mark svg {
+    height: 28px;
+    width: 28px;
+  }
+
+  .campaign-secondary-action .instagram-mark {
+    height: 26px;
+    margin-right: 10px;
+    width: 26px;
   }
 
   .campaign-sparkle-one {
@@ -1787,7 +1826,8 @@
     min-height: 46px;
   }
 
-  .campaign-google-mark {
+  .campaign-google-mark,
+  .campaign-menu-mark {
     height: 26px;
     width: 26px;
   }
@@ -1795,6 +1835,16 @@
   .campaign-google-mark svg {
     height: 18px;
     width: 18px;
+  }
+
+  .campaign-menu-mark svg {
+    height: 24px;
+    width: 24px;
+  }
+
+  .campaign-secondary-action .instagram-mark {
+    height: 24px;
+    width: 24px;
   }
 }
 

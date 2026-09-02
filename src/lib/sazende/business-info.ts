@@ -34,7 +34,13 @@ export type BusinessCampaign = {
   info: string;
   chip?: string;
   giftLabel?: string;
+  storageKey?: string;
   actionLabel: string;
+  actionHref?: string | null;
+  actionIcon?: "google" | "menu";
+  secondaryActionLabel?: string;
+  secondaryActionHref?: string;
+  secondaryActionIcon?: "instagram";
   continueLabel: string;
   photoUrl?: string;
 };
@@ -86,14 +92,20 @@ const profileOverrides: Record<string, ProfileOverride> = {
     reviewUrl:
       "https://www.google.com/search?q=%C5%9Eazende+Pa%C3%A7a+%C4%B0%C5%9Fkembe+Kebap+Google+yorum",
     campaign: {
-      enabled: false,
-      badge: "Kampanya",
-      title: "Google'da yorum yap, %10 indirim kazan!",
-      copy: "Yorumunuzu gösterin, hesabınızda %10 indirim fırsatını yakalayın.",
-      info: "Kasada personelimize göstermeniz yeterli.",
-      actionLabel: "Google'da Yorum Yap",
+      enabled: true,
+      badge: "Hoş Geldiniz",
+      title: "Sazende Menüsü Artık Dijitalde!",
+      copy: "Çorbalar, kebaplar, pideler ve daha fazlasını tek ekranda kolayca inceleyin.",
+      info: "Ürün detayları, fiyat, kcal ve alerjen bilgileri menüde yer alır.",
+      storageKey: "welcome-v1",
+      actionLabel: "Menüyü Keşfet",
+      actionHref: null,
+      actionIcon: "menu",
+      secondaryActionLabel: "Instagram'da Takip Et",
+      secondaryActionHref: "https://www.instagram.com/sazendecorba/",
+      secondaryActionIcon: "instagram",
       continueLabel: "Menüye Devam Et",
-      photoUrl: "/menu-default.png",
+      photoUrl: "/images/sazende-karisik-izgara.jpg",
     },
   },
   hamarat: {
@@ -208,6 +220,6 @@ export function getBusinessProfileBySlug(slug: string): BusinessProfile {
   };
 }
 
-export function getCampaignStorageKey(slug: string) {
-  return `biply_campaign_seen_${slug}`;
+export function getCampaignStorageKey(slug: string, campaignKey = "default") {
+  return `biply_campaign_seen_${slug}_${campaignKey}`;
 }
