@@ -56,6 +56,7 @@ export type BusinessProfile = {
   phones: BusinessPhone[];
   acceptedPayments: string[];
   reviewUrl?: string;
+  priceUpdatedText?: string;
   campaign?: BusinessCampaign;
   theme?: BusinessTheme;
 };
@@ -81,6 +82,7 @@ const profileOverrides: Record<string, ProfileOverride> = {
       { label: "0507 087 00 11", href: "tel:+905070870011" },
     ],
     acceptedPayments: ["Sodexo", "Ticket Restaurant", "Multinet", "Visa", "Mastercard"],
+    priceUpdatedText: "Fiyatlar 31.08.2026 tarihinde güncellenmiştir.",
     reviewUrl:
       "https://www.google.com/search?q=%C5%9Eazende+Pa%C3%A7a+%C4%B0%C5%9Fkembe+Kebap+Google+yorum",
     campaign: {
@@ -173,6 +175,7 @@ export function getBusinessProfile(business: BusinessSummary): BusinessProfile {
     address: override.address,
     mapUrl: override.mapUrl,
     reviewUrl: override.reviewUrl,
+    priceUpdatedText: override.priceUpdatedText,
     campaign: override.campaign,
     theme: override.theme,
   };
@@ -199,6 +202,7 @@ export function getBusinessProfileBySlug(slug: string): BusinessProfile {
     address: override.address,
     mapUrl: override.mapUrl,
     reviewUrl: override.reviewUrl,
+    priceUpdatedText: override.priceUpdatedText,
     campaign: override.campaign,
     theme: override.theme,
   };

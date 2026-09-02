@@ -745,6 +745,14 @@
   margin-top: 9px;
 }
 
+.menu-notes .price-updated-note {
+  color: color-mix(in srgb, var(--menu-soft) 78%, white);
+  font-size: 0.68rem;
+  letter-spacing: 0;
+  margin-top: 11px;
+  text-align: center;
+}
+
 .modal-backdrop {
   align-items: center;
   animation: backdrop-in 180ms ease both;

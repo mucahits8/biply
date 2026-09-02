@@ -590,6 +590,9 @@ export function MenuClient({ menu, profile }: Props) {
           Reçeteler ve çapraz temas koşulları değişebileceğinden, ciddi alerjiniz varsa
           sipariş vermeden önce işletme personeline danışınız.
         </p>
+        {profile.priceUpdatedText ? (
+          <p className="price-updated-note">{profile.priceUpdatedText}</p>
+        ) : null}
       </footer>
       {campaignOpen && profile.campaign?.enabled ? (
         <CampaignModal
