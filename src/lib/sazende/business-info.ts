@@ -86,7 +86,7 @@ const profileOverrides: Record<string, ProfileOverride> = {
     reviewUrl:
       "https://www.google.com/search?q=%C5%9Eazende+Pa%C3%A7a+%C4%B0%C5%9Fkembe+Kebap+Google+yorum",
     campaign: {
-      enabled: true,
+      enabled: false,
       badge: "Kampanya",
       title: "Google'da yorum yap, %10 indirim kazan!",
       copy: "Yorumunuzu gösterin, hesabınızda %10 indirim fırsatını yakalayın.",
