@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import type { BusinessCardProfile } from "@/data/business-cards";
 import { CopyIcon, NfcIcon, PlusIcon } from "@/components/icons";
@@ -84,10 +85,15 @@ export function BusinessCardClient({ profile }: BusinessCardClientProps) {
             baglanti
           </div>
 
-          <div className="relative mx-auto grid h-28 w-28 place-items-center rounded-full border border-zinc-200 bg-[#f7f9fc] p-1 shadow-inner">
-            <div className="grid h-full w-full place-items-center rounded-full bg-[#174A9C] text-3xl font-black text-white">
-              MS
-            </div>
+          <div className="relative mx-auto h-28 w-28 overflow-hidden rounded-full border border-zinc-200 bg-[#f7f9fc] p-1 shadow-inner">
+            <Image
+              src="/images/mucahit-sevim-profile.png"
+              alt={`${profile.fullName} profil fotoğrafı`}
+              width={112}
+              height={112}
+              priority
+              className="h-full w-full rounded-full object-cover"
+            />
           </div>
 
           <div className="relative mt-4">

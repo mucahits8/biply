@@ -23,6 +23,7 @@ export async function GET(_request: Request, context: RouteContext<"/kartvizit/[
     `TEL;TYPE=CELL,VOICE:${profile.phone}`,
     `EMAIL;TYPE=INTERNET:${profile.email}`,
     `URL:${profile.website}`,
+    `PHOTO;VALUE=URI:${profile.photoUrl}`,
     `ADR;TYPE=WORK:;;${escapeVCardValue(profile.address)};;;;`,
     `NOTE:${escapeVCardValue(profile.summary)}`,
     "END:VCARD",

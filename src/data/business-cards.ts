@@ -23,6 +23,7 @@ export type BusinessCardProfile = {
   email: string;
   website: string;
   profileUrl: string;
+  photoUrl: string;
   accent: string;
   links: BusinessCardLink[];
 };
@@ -45,6 +46,7 @@ export const businessCardProfiles: BusinessCardProfile[] = [
     email: "mucahit@biply.com.tr",
     website: "https://www.biply.com.tr",
     profileUrl: "https://www.biply.com.tr/kartvizit/mucahitsevim",
+    photoUrl: "https://www.biply.com.tr/images/mucahit-sevim-profile.png",
     accent: "#174A9C",
     links: [
       {
