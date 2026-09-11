@@ -9,7 +9,7 @@ import { ProductFamily } from "@/components/landing/ProductFamily";
 import { SectionHeader } from "@/components/landing/SectionHeader";
 import { MobileSwipeHint } from "@/components/ui/MobileSwipeHint";
 import { comparisonRows, faqs, products, sectors, testimonials } from "@/data/catalog";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, whatsappUrl } from "@/lib/format";
 
 export function HomePage() {
   return (
@@ -20,6 +20,7 @@ export function HomePage() {
       <MobileSignalFlow />
       <QuickBuyStrip />
       <ProofStrip />
+      <DigitalCardExtension />
 
       <section id="urunler" className="section-pad hidden lg:block">
         <SectionHeader
@@ -199,6 +200,7 @@ function Header() {
         <nav className="hidden items-center gap-6 text-sm font-bold text-zinc-600 md:flex">
           <a href="#mobil-urunler" className="lg:hidden">Ürünler</a>
           <a href="#urunler" className="hidden lg:inline">Ürünler</a>
+          <a href="#dijital-kartvizit">Dijital Kartvizit</a>
           <a href="#paketler">Paket Oluştur</a>
           <a href="#sss">SSS</a>
         </nav>
@@ -336,9 +338,93 @@ function ProofStrip() {
   );
 }
 
+function DigitalCardExtension() {
+  const extensionMessage =
+    "Merhaba, Biply Dijital Kartvizit uzantısını aktif kullanmak istiyorum. NFC kart + dijital profil + rehbere kaydet akışı için bilgi alabilir miyim?";
+
+  return (
+    <section id="dijital-kartvizit" className="section-pad pt-0">
+      <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-stretch">
+        <div className="smooth-card flex flex-col justify-between border border-zinc-200 bg-white p-5 shadow-xl shadow-zinc-950/8 md:p-7">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-700">Yeni Biply uzantısı</p>
+            <h2 className="mt-3 max-w-xl text-4xl font-black leading-[0.94] tracking-[-0.055em] text-zinc-950 md:text-5xl">
+              NFC kartvizit artık Biply içinde aktif.
+            </h2>
+            <p className="mt-4 max-w-xl text-base font-semibold leading-7 text-zinc-600">
+              Fiziksel kart sadece sabit profil linkini taşır. Telefon, unvan, sosyal medya veya şirket bilgisi değiştiğinde kartı yeniden programlamadan dijital profili güncelleriz.
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            {[
+              ["vCard", "Tek dokunuşla rehbere kaydet"],
+              ["Linkler", "LinkedIn, Instagram, WhatsApp, web"],
+              ["Analitik", "Görüntüleme ve aksiyon ölçümü hazır altyapı"],
+            ].map(([title, copy]) => (
+              <div key={title} className="rounded-[1rem] border border-zinc-200 bg-[#f7f3ed] p-4">
+                <h3 className="text-lg font-black tracking-[-0.04em] text-zinc-950">{title}</h3>
+                <p className="mt-1 text-sm font-bold leading-5 text-zinc-600">{copy}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/kartvizit/mucahitsevim"
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-zinc-950 px-6 text-sm font-black text-white shadow-xl shadow-zinc-950/15 transition hover:-translate-y-0.5"
+            >
+              Demo Kartı Aç
+            </Link>
+            <a
+              href={whatsappUrl(extensionMessage)}
+              className="inline-flex min-h-12 items-center justify-center rounded-full border border-zinc-300 bg-white px-6 text-sm font-black text-zinc-950 transition hover:-translate-y-0.5"
+            >
+              Aktif Kullanmak İstiyorum
+            </a>
+          </div>
+        </div>
+
+        <div className="smooth-card overflow-hidden border border-zinc-200 bg-[#eef5ff] p-4 shadow-xl shadow-zinc-950/8 md:p-6">
+          <div className="mx-auto max-w-[340px] rounded-[2rem] border-[10px] border-zinc-950 bg-[#f6f8fb] p-3 shadow-2xl shadow-blue-950/20">
+            <div className="rounded-[1.45rem] bg-white p-4 text-center shadow-lg shadow-blue-950/8">
+              <div className="mx-auto grid h-20 w-20 place-items-center rounded-full border border-zinc-200 bg-[#174A9C] text-2xl font-black text-white">
+                MS
+              </div>
+              <h3 className="mt-3 text-2xl font-black tracking-[-0.05em] text-zinc-950">Mücahit Sevim</h3>
+              <p className="mt-1 text-sm font-bold text-zinc-600">Sales & Business Development</p>
+              <p className="mt-1 text-sm font-black text-blue-700">Biply</p>
+              <div className="mt-4 rounded-[1rem] bg-[#123c80] px-4 py-3 text-sm font-black text-white">+ Rehbere Kaydet</div>
+              <div className="mt-3 grid grid-cols-4 gap-2">
+                {["Ara", "WP", "Mail", "Paylaş"].map((item) => (
+                  <div key={item} className="rounded-[0.85rem] border border-zinc-200 bg-white px-2 py-3 text-[11px] font-black text-zinc-700 shadow-sm">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="mt-3 grid gap-2">
+              {["LinkedIn Profili", "Instagram", "Web Sitesi"].map((item) => (
+                <div key={item} className="flex min-h-12 items-center justify-between rounded-[1rem] border border-zinc-200 bg-white px-3 text-sm font-black text-zinc-950 shadow-sm">
+                  <span>{item}</span>
+                  <span className="text-blue-700">↗</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-4 text-center text-[11px] font-bold text-zinc-500">
+              Powered by <span className="font-black text-blue-700">Biply</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function DealMarquee() {
   const items = [
     "Lansmana özel fiyatlar",
+    "Dijital kartvizit aktif",
     "Stand 2.000 TL",
     "Kare 1.250 TL",
     "Kişisel Kare 1.350 TL",
@@ -467,6 +553,8 @@ function Footer() {
         <Logo image />
         <div className="flex flex-wrap gap-4 text-sm font-bold text-zinc-500">
           <a href="#sss">Sıkça Sorulan Sorular</a>
+          <a href="#dijital-kartvizit">Dijital Kartvizit</a>
+          <Link href="/kartvizit/mucahitsevim">Demo Kartvizit</Link>
           <a href="#checkout">Sipariş Oluştur</a>
           <span>Google Review NFC Ürünleri</span>
         </div>
