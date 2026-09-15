@@ -17,6 +17,14 @@ export const ibanProfiles: IbanProfile[] = [
     bankName: "Garanti BBVA",
     description: "Arzum Kuaför",
   },
+  {
+    slug: "iban1",
+    businessName: "Örnek İşletme",
+    recipientName: "Örnek Hesap Sahibi",
+    iban: "TR00 0000 0000 0000 0000 0000 00",
+    bankName: "Örnek Banka",
+    description: "Örnek Açıklama",
+  },
 ];
 
 export function getIbanProfileBySlug(slug: string) {
