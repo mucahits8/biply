@@ -57,6 +57,46 @@ export const ibanProfiles: IbanProfile[] = [
     bankName: "Örnek Banka",
     description: "Örnek Açıklama 5",
   },
+  {
+    slug: "iban6",
+    businessName: "Örnek İşletme 6",
+    recipientName: "Örnek Hesap Sahibi 6",
+    iban: "TR00 0000 0000 0000 0000 0000 00",
+    bankName: "Örnek Banka",
+    description: "Örnek Açıklama 6",
+  },
+  {
+    slug: "iban7",
+    businessName: "Örnek İşletme 7",
+    recipientName: "Örnek Hesap Sahibi 7",
+    iban: "TR00 0000 0000 0000 0000 0000 00",
+    bankName: "Örnek Banka",
+    description: "Örnek Açıklama 7",
+  },
+  {
+    slug: "iban8",
+    businessName: "Örnek İşletme 8",
+    recipientName: "Örnek Hesap Sahibi 8",
+    iban: "TR00 0000 0000 0000 0000 0000 00",
+    bankName: "Örnek Banka",
+    description: "Örnek Açıklama 8",
+  },
+  {
+    slug: "iban9",
+    businessName: "Örnek İşletme 9",
+    recipientName: "Örnek Hesap Sahibi 9",
+    iban: "TR00 0000 0000 0000 0000 0000 00",
+    bankName: "Örnek Banka",
+    description: "Örnek Açıklama 9",
+  },
+  {
+    slug: "iban10",
+    businessName: "Örnek İşletme 10",
+    recipientName: "Örnek Hesap Sahibi 10",
+    iban: "TR00 0000 0000 0000 0000 0000 00",
+    bankName: "Örnek Banka",
+    description: "Örnek Açıklama 10",
+  },
 ];
 
 export function getIbanProfileBySlug(slug: string) {
