@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { getAllergenLabel } from "@/lib/sazende/allergens";
@@ -632,8 +633,20 @@ export function MenuClient({ menu, profile }: Props) {
           Reçeteler ve çapraz temas koşulları değişebileceğinden, ciddi alerjiniz varsa
           sipariş vermeden önce işletme personeline danışınız.
         </p>
+        {profile.taxIncludedText ? (
+          <p className="tax-included-note">{profile.taxIncludedText}</p>
+        ) : null}
         {profile.priceUpdatedText ? (
           <p className="price-updated-note">{profile.priceUpdatedText}</p>
+        ) : null}
+        {profile.footerLogoUrl ? (
+          <Image
+            className="menu-footer-logo"
+            src={profile.footerLogoUrl}
+            alt={profile.footerLogoAlt ?? ""}
+            width={1914}
+            height={822}
+          />
         ) : null}
       </footer>
       {campaignOpen && profile.campaign?.enabled ? (
