@@ -130,6 +130,10 @@ const profileOverrides: Record<string, ProfileOverride> = {
     instagramUrl: "https://www.instagram.com/hamaratlezzetcomtr/",
     phones: [{ label: "(0462) 228 61 94", href: "tel:+904622286194" }],
     acceptedPayments: [],
+    taxIncludedText: "Fiyatlarımıza vergi ve KDV dahildir.",
+    priceUpdatedText: "Fiyatlar 31.08.2026 tarihinde güncellenmiştir.",
+    footerLogoUrl: "/images/yerli-uretim-black.png",
+    footerLogoAlt: "Yerli Üretim",
     reviewUrl: "https://search.google.com/local/writereview?placeid=ChIJE16N8ZoVZEAR1PHCiOdvjIs",
     campaign: {
       enabled: true,
