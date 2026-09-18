@@ -60,18 +60,20 @@ export default async function IbanPage({ params }: IbanPageProps) {
   const compactIban = getCompactIban(profile.iban);
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(145deg,#fffaf0_0%,#fbf7ef_42%,#f6eddf_100%)] px-5 py-8 text-zinc-950 sm:px-6">
-      <section className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-xl flex-col">
-        <p className="text-[13px] font-black uppercase text-blue-700 sm:text-sm" style={{ letterSpacing: "0.36em" }}>
-          IBAN PAYLAŞIM KARTI
-        </p>
-
-        <div className="flex flex-1 flex-col justify-center py-10">
-          <div className="mx-auto mb-12 grid h-32 w-32 place-items-center rounded-full border border-zinc-200 bg-white shadow-xl shadow-zinc-950/10 sm:h-36 sm:w-36">
-            <Image src="/images/logo-biply-2026.png" alt="Biply" width={360} height={120} priority className="h-auto w-[92px] object-contain sm:w-[104px]" />
+    <main className="min-h-screen bg-[#f7f5f0] px-4 py-6 text-zinc-950 sm:px-6 sm:py-10">
+      <section className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-lg flex-col sm:min-h-[calc(100vh-5rem)]">
+        <header className="flex items-center justify-between border-b border-zinc-200 pb-5">
+          <div>
+            <p className="text-[11px] font-bold uppercase text-blue-700" style={{ letterSpacing: "0.18em" }}>
+              Güvenli ödeme bilgileri
+            </p>
+            <h1 className="mt-1.5 text-xl font-semibold leading-tight text-zinc-950 sm:text-2xl">{profile.businessName}</h1>
           </div>
+          <Image src="/images/logo-biply-2026.png" alt="Biply" width={360} height={120} priority className="h-auto w-[74px] object-contain sm:w-[82px]" />
+        </header>
 
-          <div className="grid gap-5 sm:gap-6">
+        <div className="flex flex-1 flex-col justify-center py-7 sm:py-10">
+          <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5">
             <InfoRow label="Hesap Sahibi" value={profile.recipientName} copyValue={profile.recipientName} copyLabel="Hesap sahibini kopyala" />
             <InfoRow label="IBAN" value={profile.iban} copyValue={compactIban} copyLabel="IBAN bilgisini kopyala" mono />
             {profile.bankName ? <InfoRow label="Banka" value={profile.bankName} copyValue={profile.bankName} copyLabel="Banka adını kopyala" /> : null}
@@ -81,11 +83,8 @@ export default async function IbanPage({ params }: IbanPageProps) {
           </div>
         </div>
 
-        <footer className="pb-3 text-center text-sm font-bold text-zinc-400">
-          <span className="inline-flex items-center justify-center gap-3">
-            <Image src="/images/logo-biply-2026.png" alt="Biply" width={360} height={120} className="h-auto w-[82px] object-contain opacity-45 grayscale" />
-            <span>biply.com.tr</span>
-          </span>
+        <footer className="pb-1 text-center text-xs font-medium text-zinc-400">
+          biply.com.tr
         </footer>
       </section>
     </main>
@@ -106,12 +105,12 @@ function InfoRow({
   mono?: boolean;
 }) {
   return (
-    <div className="flex min-h-28 items-center gap-4 rounded-[1.35rem] border border-zinc-200 bg-white px-5 py-5 shadow-sm shadow-zinc-950/5 sm:min-h-32 sm:px-7">
+    <div className="flex min-h-[88px] items-center gap-3 border-b border-zinc-100 px-4 py-4 last:border-b-0 sm:min-h-24 sm:px-5">
       <div className="min-w-0 flex-1">
-        <p className="text-xs font-black uppercase text-blue-700/75 sm:text-sm" style={{ letterSpacing: "0.28em" }}>
+        <p className="text-[10px] font-bold uppercase text-blue-700/70 sm:text-[11px]" style={{ letterSpacing: "0.16em" }}>
           {label}
         </p>
-        <p className={`mt-3 break-words text-2xl font-medium leading-8 text-zinc-950 sm:text-3xl ${mono ? "font-mono text-xl sm:text-2xl" : ""}`}>
+        <p className={`mt-1.5 break-words text-lg font-medium leading-6 text-zinc-950 sm:text-xl ${mono ? "font-mono text-base leading-6 sm:text-lg" : ""}`}>
           {value}
         </p>
       </div>
