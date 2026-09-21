@@ -82,7 +82,7 @@ select {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background-image: radial-gradient(circle, rgb(37 99 235 / 0.1) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgb(37 99 235 / 0.16) 1px, transparent 1px);
   background-size: 28px 28px;
   mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
   pointer-events: none;
@@ -94,18 +94,19 @@ select {
   width: 110%;
   height: 1px;
   overflow: hidden;
-  background: rgb(37 99 235 / 0.09);
+  background: rgb(37 99 235 / 0.16);
   transform: rotate(-4deg);
 }
 
 .iban-flow-line::after {
   position: absolute;
-  top: -1px;
+  top: -2px;
   left: 0;
   width: 14rem;
-  height: 3px;
+  height: 5px;
   border-radius: 999px;
-  background: linear-gradient(90deg, transparent, rgb(37 99 235 / 0.42), transparent);
+  background: linear-gradient(90deg, transparent, rgb(37 99 235 / 0.68), transparent);
+  box-shadow: 0 0 10px rgb(37 99 235 / 0.28);
   content: "";
   animation: iban-flow-slide 16s linear infinite;
 }
