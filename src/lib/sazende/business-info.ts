@@ -90,7 +90,7 @@ const profileOverrides: Record<string, ProfileOverride> = {
       { label: "0212 250 10 25", href: "tel:+902122501025" },
       { label: "0507 087 00 11", href: "tel:+905070870011" },
     ],
-    acceptedPayments: ["Sodexo", "Ticket Restaurant", "Multinet", "Visa", "Mastercard"],
+    acceptedPayments: ["Sodexo", "Setcard", "Ticket Restaurant", "Multinet", "Visa", "Mastercard"],
     taxIncludedText: "Fiyatlarımıza vergi ve KDV dahildir.",
     priceUpdatedText: "Fiyatlar 31.08.2026 tarihinde güncellenmiştir.",
     footerLogoUrl: "/images/yerli-uretim-black.png",
