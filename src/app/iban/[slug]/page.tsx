@@ -60,8 +60,14 @@ export default async function IbanPage({ params }: IbanPageProps) {
   const compactIban = getCompactIban(profile.iban);
 
   return (
-    <main className="min-h-screen bg-[#f7f5f0] px-4 py-6 text-zinc-950 sm:px-6 sm:py-10">
-      <section className="mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-lg flex-col sm:min-h-[calc(100vh-5rem)]">
+    <main className="relative isolate min-h-screen overflow-hidden bg-[#f7f5f0] px-4 py-6 text-zinc-950 sm:px-6 sm:py-10">
+      <div className="iban-flow-field" aria-hidden="true">
+        <span className="iban-flow-line iban-flow-line-one" />
+        <span className="iban-flow-line iban-flow-line-two" />
+        <span className="iban-flow-line iban-flow-line-three" />
+      </div>
+
+      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-lg flex-col sm:min-h-[calc(100vh-5rem)]">
         <header className="flex items-center justify-between border-b border-zinc-200 pb-5">
           <div>
             <p className="text-[11px] font-bold uppercase text-blue-700" style={{ letterSpacing: "0.18em" }}>
@@ -72,7 +78,7 @@ export default async function IbanPage({ params }: IbanPageProps) {
           <Image src="/images/logo-biply-2026.png" alt="Biply" width={360} height={120} priority className="h-auto w-[74px] object-contain sm:w-[82px]" />
         </header>
 
-        <div className="flex flex-1 flex-col justify-center py-7 sm:py-10">
+        <div className="pt-7 sm:pt-10">
           <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5">
             <InfoRow label="Hesap Sahibi" value={profile.recipientName} copyValue={profile.recipientName} copyLabel="Hesap sahibini kopyala" />
             <InfoRow label="IBAN" value={profile.iban} copyValue={compactIban} copyLabel="IBAN bilgisini kopyala" mono />
@@ -83,7 +89,7 @@ export default async function IbanPage({ params }: IbanPageProps) {
           </div>
         </div>
 
-        <footer className="pb-1 text-center text-xs font-medium text-zinc-400">
+        <footer className="mt-auto pt-8 pb-1 text-center text-xs font-medium text-zinc-400">
           biply.com.tr
         </footer>
       </section>

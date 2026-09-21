@@ -78,6 +78,71 @@ select {
   display: none;
 }
 
+.iban-flow-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-image: radial-gradient(circle, rgb(37 99 235 / 0.1) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+  pointer-events: none;
+}
+
+.iban-flow-line {
+  position: absolute;
+  left: -5%;
+  width: 110%;
+  height: 1px;
+  overflow: hidden;
+  background: rgb(37 99 235 / 0.09);
+  transform: rotate(-4deg);
+}
+
+.iban-flow-line::after {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 14rem;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgb(37 99 235 / 0.42), transparent);
+  content: "";
+  animation: iban-flow-slide 16s linear infinite;
+}
+
+.iban-flow-line-one {
+  top: 27%;
+}
+
+.iban-flow-line-two {
+  top: 56%;
+  transform: rotate(3deg);
+}
+
+.iban-flow-line-two::after {
+  animation-delay: -9s;
+  animation-duration: 20s;
+}
+
+.iban-flow-line-three {
+  top: 82%;
+  transform: rotate(-2deg);
+}
+
+.iban-flow-line-three::after {
+  animation-delay: -5s;
+  animation-duration: 24s;
+}
+
+@keyframes iban-flow-slide {
+  from {
+    transform: translateX(-14rem);
+  }
+  to {
+    transform: translateX(calc(110vw + 14rem));
+  }
+}
+
 .marquee-track {
   overflow: hidden;
   white-space: nowrap;
