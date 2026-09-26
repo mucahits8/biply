@@ -130,6 +130,7 @@ function InfoRow({
                 alt={bankBrand.logoAlt}
                 width={bankBrand.logoWidth}
                 height={bankBrand.logoHeight}
+                unoptimized
                 className={`h-auto max-h-6 object-contain ${bankBrand.imageClassName}`}
               />
             </span>
