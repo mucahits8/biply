@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { CopyButton } from "@/components/iban/CopyButton";
+import { getBankBrand, type BankBrand } from "@/data/bank-brands";
 import { getCompactIban, getIbanProfileBySlug, ibanProfiles } from "@/data/iban-profiles";
 
 type IbanPageProps = {
@@ -58,6 +59,7 @@ export default async function IbanPage({ params }: IbanPageProps) {
   if (!profile) notFound();
 
   const compactIban = getCompactIban(profile.iban);
+  const bankBrand = getBankBrand(profile.bankId);
 
   return (
     <main className="relative isolate min-h-screen overflow-hidden bg-[#f7f5f0] px-4 py-6 text-zinc-950 sm:px-6 sm:py-10">
@@ -82,7 +84,9 @@ export default async function IbanPage({ params }: IbanPageProps) {
           <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5">
             <InfoRow label="Hesap Sahibi" value={profile.recipientName} copyValue={profile.recipientName} copyLabel="Hesap sahibini kopyala" />
             <InfoRow label="IBAN" value={profile.iban} copyValue={compactIban} copyLabel="IBAN bilgisini kopyala" mono />
-            {profile.bankName ? <InfoRow label="Banka" value={profile.bankName} copyValue={profile.bankName} copyLabel="Banka adını kopyala" /> : null}
+            {profile.bankName ? (
+              <InfoRow label="Banka" value={profile.bankName} copyValue={profile.bankName} copyLabel="Banka adını kopyala" bankBrand={bankBrand} />
+            ) : null}
             {profile.description ? (
               <InfoRow label="Açıklama" value={profile.description} copyValue={profile.description} copyLabel="Açıklamayı kopyala" />
             ) : null}
@@ -102,12 +106,14 @@ function InfoRow({
   value,
   copyValue,
   copyLabel,
+  bankBrand,
   mono = false,
 }: {
   label: string;
   value: string;
   copyValue: string;
   copyLabel: string;
+  bankBrand?: BankBrand;
   mono?: boolean;
 }) {
   return (
@@ -116,9 +122,22 @@ function InfoRow({
         <p className="text-[10px] font-bold uppercase text-blue-700/70 sm:text-[11px]" style={{ letterSpacing: "0.16em" }}>
           {label}
         </p>
-        <p className={`mt-1.5 break-words text-lg font-medium leading-6 text-zinc-950 sm:text-xl ${mono ? "font-mono text-base leading-6 sm:text-lg" : ""}`}>
-          {value}
-        </p>
+        <div className="mt-1.5 flex min-w-0 items-center gap-2.5">
+          {bankBrand ? (
+            <span className={`grid h-8 w-20 shrink-0 place-items-center rounded-md border px-1.5 ${bankBrand.badgeClassName}`}>
+              <Image
+                src={bankBrand.logoSrc}
+                alt={bankBrand.logoAlt}
+                width={bankBrand.logoWidth}
+                height={bankBrand.logoHeight}
+                className={`h-auto max-h-6 object-contain ${bankBrand.imageClassName}`}
+              />
+            </span>
+          ) : null}
+          <p className={`min-w-0 break-words text-lg font-medium leading-6 text-zinc-950 sm:text-xl ${mono ? "font-mono text-base leading-6 sm:text-lg" : ""}`}>
+            {value}
+          </p>
+        </div>
       </div>
       <CopyButton value={copyValue} label={copyLabel} />
     </div>

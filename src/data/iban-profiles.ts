@@ -1,9 +1,12 @@
+import type { BankId } from "@/data/bank-brands";
+
 export type IbanProfile = {
   slug: string;
   businessName: string;
   recipientName: string;
   iban: string;
   bankName?: string;
+  bankId?: BankId;
   description?: string;
   draft?: boolean;
 };
@@ -15,6 +18,7 @@ export const ibanProfiles: IbanProfile[] = [
     recipientName: "Arzu Kaya",
     iban: "TR80 0006 2000 4590 0006 6747 57",
     bankName: "Garanti BBVA",
+    bankId: "garanti-bbva",
     description: "Arzum Kuaför",
   },
   {
@@ -23,6 +27,7 @@ export const ibanProfiles: IbanProfile[] = [
     recipientName: "Ali Tiryaki",
     iban: "TR93 0001 0002 4428 4039 7350 05",
     bankName: "Ziraat Bankası",
+    bankId: "ziraat-bankasi",
   },
   {
     slug: "iban2",
@@ -30,13 +35,15 @@ export const ibanProfiles: IbanProfile[] = [
     recipientName: "Berke Çildam",
     iban: "TR96 0004 6001 2088 8000 2540 21",
     bankName: "Akbank",
+    bankId: "akbank",
   },
   {
     slug: "iban3",
-    businessName: "Berke Çildam",
-    recipientName: "Berke Çildam",
-    iban: "TR96 0004 6001 2088 8000 2540 21",
-    bankName: "Akbank",
+    businessName: "Nedim Çildam",
+    recipientName: "Nedim Çildam",
+    iban: "TR78 0006 7010 0000 0021 2026 03",
+    bankName: "Yapı Kredi Bankası",
+    bankId: "yapi-kredi",
   },
   {
     slug: "iban4",
