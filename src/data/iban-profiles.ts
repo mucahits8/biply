@@ -31,9 +31,9 @@ export const ibanProfiles: IbanProfile[] = [
   },
   {
     slug: "iban2",
-    businessName: "Berke Çildam",
-    recipientName: "Berke Çildam",
-    iban: "TR96 0004 6001 2088 8000 2540 21",
+    businessName: "Dilara Cansu Onay",
+    recipientName: "Dilara Cansu Onay",
+    iban: "TR22 0004 6002 1488 8000 3070 10",
     bankName: "Akbank",
     bankId: "akbank",
   },
