@@ -95,11 +95,11 @@ export const ibanProfiles: IbanProfile[] = [
   },
   {
     slug: "iban10",
-    businessName: "Örnek İşletme 10",
-    recipientName: "Örnek Hesap Sahibi 10",
-    iban: "TR00 0000 0000 0000 0000 0000 00",
-    bankName: "Örnek Banka",
-    description: "Örnek Açıklama 10",
+    businessName: "Kaplan Erkek Kuaförü",
+    recipientName: "Mustafa Kablan",
+    iban: "TR94 0001 5001 5800 7321 3746 29",
+    bankName: "VakıfBank",
+    bankId: "vakifbank",
   },
   {
     slug: "iban11",

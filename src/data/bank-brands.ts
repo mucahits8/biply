@@ -1,4 +1,4 @@
-export type BankId = "akbank" | "garanti-bbva" | "yapi-kredi" | "ziraat-bankasi";
+export type BankId = "akbank" | "garanti-bbva" | "vakifbank" | "yapi-kredi" | "ziraat-bankasi";
 
 export type BankBrand = {
   id: BankId;
@@ -30,6 +30,16 @@ export const bankBrands: Record<BankId, BankBrand> = {
     logoWidth: 310,
     logoHeight: 59,
     badgeClassName: "border-emerald-100 bg-white",
+    imageClassName: "w-[68px]",
+  },
+  vakifbank: {
+    id: "vakifbank",
+    name: "VakıfBank",
+    logoSrc: "/images/banks/vakifbank.svg",
+    logoAlt: "VakıfBank logosu",
+    logoWidth: 250,
+    logoHeight: 32,
+    badgeClassName: "border-amber-200 bg-white",
     imageClassName: "w-[68px]",
   },
   "yapi-kredi": {
