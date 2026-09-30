@@ -79,11 +79,11 @@ export const ibanProfiles: IbanProfile[] = [
   },
   {
     slug: "iban8",
-    businessName: "Örnek İşletme 8",
-    recipientName: "Örnek Hesap Sahibi 8",
-    iban: "TR00 0000 0000 0000 0000 0000 00",
-    bankName: "Örnek Banka",
-    description: "Örnek Açıklama 8",
+    businessName: "Ahmet Kılınç",
+    recipientName: "Ahmet Kılınç",
+    iban: "TR68 0015 7000 0000 0148 7606 16",
+    bankName: "Enpara Bank",
+    bankId: "enpara",
   },
   {
     slug: "iban9",

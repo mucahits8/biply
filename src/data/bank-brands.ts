@@ -1,4 +1,4 @@
-export type BankId = "akbank" | "garanti-bbva" | "vakifbank" | "yapi-kredi" | "ziraat-bankasi";
+export type BankId = "akbank" | "enpara" | "garanti-bbva" | "vakifbank" | "yapi-kredi" | "ziraat-bankasi";
 
 export type BankBrand = {
   id: BankId;
@@ -21,6 +21,16 @@ export const bankBrands: Record<BankId, BankBrand> = {
     logoHeight: 28,
     badgeClassName: "border-red-100 bg-white",
     imageClassName: "w-[62px]",
+  },
+  enpara: {
+    id: "enpara",
+    name: "Enpara Bank",
+    logoSrc: "/images/banks/enpara.svg",
+    logoAlt: "Enpara logosu",
+    logoWidth: 86,
+    logoHeight: 45,
+    badgeClassName: "border-fuchsia-100 bg-white",
+    imageClassName: "w-[58px]",
   },
   "garanti-bbva": {
     id: "garanti-bbva",
