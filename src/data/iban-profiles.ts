@@ -63,11 +63,11 @@ export const ibanProfiles: IbanProfile[] = [
   },
   {
     slug: "iban6",
-    businessName: "Örnek İşletme 6",
-    recipientName: "Örnek Hesap Sahibi 6",
-    iban: "TR00 0000 0000 0000 0000 0000 00",
-    bankName: "Örnek Banka",
-    description: "Örnek Açıklama 6",
+    businessName: "İbrahim Sayan",
+    recipientName: "İbrahim Sayan",
+    iban: "TR76 0001 0001 3590 7857 0150 01",
+    bankName: "Ziraat Bankası",
+    bankId: "ziraat-bankasi",
   },
   {
     slug: "iban7",
