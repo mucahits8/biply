@@ -105,7 +105,7 @@ export const ibanProfiles: IbanProfile[] = [
     slug: "iban11",
     businessName: "Kaan Karaahmetoğlu",
     recipientName: "Kaan Karaahmetoğlu",
-    iban: "1100157000000000202642523",
+    iban: "TR11 0015 7000 0000 0202 6425 23",
     bankName: "Enpara Bank",
     bankId: "enpara",
   },
