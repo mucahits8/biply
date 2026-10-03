@@ -103,11 +103,11 @@ export const ibanProfiles: IbanProfile[] = [
   },
   {
     slug: "iban11",
-    businessName: "Örnek İşletme 11",
-    recipientName: "Örnek Hesap Sahibi 11",
-    iban: "TR00 0000 0000 0000 0000 0000 00",
-    bankName: "Örnek Banka",
-    description: "Örnek Açıklama 11",
+    businessName: "Kaan Karaahmetoğlu",
+    recipientName: "Kaan Karaahmetoğlu",
+    iban: "1100157000000000202642523",
+    bankName: "Enpara Bank",
+    bankId: "enpara",
   },
   {
     slug: "iban12",
