@@ -4,10 +4,22 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
-const ACCOUNT_HOLDER = "Örnek Ad Soyad";
-const IBAN = "TR00 0000 0000 0000 0000 0000 00";
+const PAYMENT_ACCOUNTS = [
+  {
+    accountHolder: "Şevval Yılmaz",
+    iban: "TR32 0006 2000 3940 0006 6408 32",
+  },
+  {
+    accountHolder: "Ömer Fatih Yılmaz",
+    iban: "TR45 0001 5001 5800 7277 7655 72",
+  },
+  {
+    accountHolder: "Eyüp Yılmaz",
+    iban: "TR81 0001 2001 3500 0001 1090 40",
+  },
+];
 
-type CopiedField = "accountHolder" | "iban" | null;
+type CopiedField = `${number}-${"accountHolder" | "iban"}` | null;
 
 export function ParmaxActions() {
   const [copiedField, setCopiedField] = useState<CopiedField>(null);
@@ -27,20 +39,27 @@ export function ParmaxActions() {
           </p>
         </div>
 
-        <PaymentRow
-          label="Hesap Sahibi"
-          value={ACCOUNT_HOLDER}
-          copied={copiedField === "accountHolder"}
-          onCopy={() => copy(ACCOUNT_HOLDER, "accountHolder")}
-        />
-        <PaymentRow
-          label="IBAN"
-          value={IBAN}
-          copied={copiedField === "iban"}
-          onCopy={() => copy(IBAN, "iban")}
-          tabular
-          last
-        />
+        {PAYMENT_ACCOUNTS.map((account, index) => (
+          <div
+            key={account.iban}
+            className="border-b border-[#3A332B] last:border-b-0"
+          >
+            <PaymentRow
+              label="Hesap Sahibi"
+              value={account.accountHolder}
+              copied={copiedField === `${index}-accountHolder`}
+              onCopy={() => copy(account.accountHolder, `${index}-accountHolder`)}
+            />
+            <PaymentRow
+              label="IBAN"
+              value={account.iban}
+              copied={copiedField === `${index}-iban`}
+              onCopy={() => copy(account.iban, `${index}-iban`)}
+              tabular
+              last
+            />
+          </div>
+        ))}
       </section>
 
       <div className="space-y-2.5">
