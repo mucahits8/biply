@@ -55,11 +55,11 @@ export const ibanProfiles: IbanProfile[] = [
   },
   {
     slug: "iban5",
-    businessName: "Örnek İşletme 5",
-    recipientName: "Örnek Hesap Sahibi 5",
-    iban: "TR00 0000 0000 0000 0000 0000 00",
-    bankName: "Örnek Banka",
-    description: "Örnek Açıklama 5",
+    businessName: "Alpaslan Ulusoy",
+    recipientName: "Alpaslan Ulusoy",
+    iban: "TR69 0001 5001 5800 7312 4957 96",
+    bankName: "VakıfBank",
+    bankId: "vakifbank",
   },
   {
     slug: "iban6",
