@@ -3,19 +3,18 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { CopyButton } from "@/components/iban/CopyButton";
 import { getBankBrand, type BankBrand } from "@/data/bank-brands";
-import { getCompactIban, getIbanProfileBySlug, ibanProfiles } from "@/data/iban-profiles";
+import { getCompactIban } from "@/data/iban-profiles";
+import { getCurrentIbanProfileBySlug } from "@/lib/iban/overrides";
+
+export const dynamic = "force-dynamic";
 
 type IbanPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export function generateStaticParams() {
-  return ibanProfiles.map((profile) => ({ slug: profile.slug }));
-}
-
 export async function generateMetadata({ params }: IbanPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const profile = getIbanProfileBySlug(slug);
+  const profile = await getCurrentIbanProfileBySlug(slug);
 
   if (!profile) {
     return {
@@ -54,7 +53,7 @@ export async function generateMetadata({ params }: IbanPageProps): Promise<Metad
 
 export default async function IbanPage({ params }: IbanPageProps) {
   const { slug } = await params;
-  const profile = getIbanProfileBySlug(slug);
+  const profile = await getCurrentIbanProfileBySlug(slug);
 
   if (!profile) notFound();
 
