@@ -269,11 +269,10 @@ export const ibanProfiles: IbanProfile[] = [
   },
   {
     slug: "iban32",
-    businessName: "Örnek İşletme 32",
-    recipientName: "Örnek Hesap Sahibi 32",
-    iban: "TR00 0000 0000 0000 0000 0000 00",
-    bankName: "Örnek Banka",
-    description: "Örnek Açıklama 32",
+    businessName: "Cihat Fakılı",
+    recipientName: "Cihat Fakılı",
+    iban: "TR65 0001 2009 4020 0001 0089 28",
+    bankName: "Halkbank",
   },
   {
     slug: "iban33",
