@@ -57,49 +57,6 @@ export async function POST(request: NextRequest) {
   const payload = await readJson(request);
   if (!isRecord(payload)) return json({ error: "Geçersiz giriş bilgileri." }, 400);
 
-  if (payload.action === "link") {
-    const email = typeof payload.email === "string" ? payload.email.trim().toLowerCase() : "";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
-      return json({ error: "Geçerli bir e-posta adresi girin." }, 400);
-    }
-    try {
-      const otpUrl = new URL("/auth/v1/otp", supabaseUrl);
-      otpUrl.searchParams.set("redirect_to", new URL("/iban-yonetim", request.url).toString());
-      const response = await fetch(otpUrl, {
-        method: "POST",
-        headers: { apikey: supabaseAnonKey, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          create_user: false,
-        }),
-        cache: "no-store",
-      });
-      if (!response.ok) return json({ error: "Bağlantı gönderilemedi. Biraz sonra tekrar deneyin." }, 429);
-      return json({ ok: true });
-    } catch {
-      return json({ error: "Bağlantı gönderilemedi. Biraz sonra tekrar deneyin." }, 503);
-    }
-  }
-
-  if (payload.action === "token") {
-    const token = typeof payload.accessToken === "string" ? payload.accessToken : "";
-    if (!token || token.length > 4096) return json({ error: "Giriş bağlantısı geçersiz." }, 400);
-    try {
-      if (!(await authorizeIbanAdmin(token))) return json({ error: "Bu hesap için IBAN yönetim yetkisi yok." }, 403);
-      const response = json({ ok: true });
-      response.cookies.set(IBAN_ADMIN_COOKIE, token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        path: "/api/iban-admin",
-        maxAge: 3600,
-      });
-      return response;
-    } catch {
-      return json({ error: "Giriş bağlantısı doğrulanamadı." }, 503);
-    }
-  }
-
   const email = typeof payload.email === "string" ? payload.email.trim() : "";
   const password = typeof payload.password === "string" ? payload.password : "";
   if (!email || !password || email.length > 254 || password.length > 1024) {
