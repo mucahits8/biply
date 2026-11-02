@@ -20,7 +20,10 @@ veritabanındaki bir kayıt varsa o gösterilir.
    on conflict (user_id) do nothing;
    ```
 
-3. Hesabın e-posta/şifresiyle `/iban-yonetim` adresinde giriş yap. Kaydedilen
+3. Supabase Auth URL yapılandırmasında `https://www.biply.com.tr/iban-yonetim`
+   adresini izin verilen yönlendirmelere ekle. Yeni hesap için daveti bu adrese
+   yönlendir. `/iban-yonetim` sayfasında e-posta adresini girip tek kullanımlık
+   giriş bağlantısı iste. Kaydedilen
    değişikliklerin `/iban/<sayfa>` adresinde göründüğünü doğrula.
 
 IBAN yöneticileri yalnızca `iban_admins` tablosunda kayıtlı kullanıcılar olabilir.

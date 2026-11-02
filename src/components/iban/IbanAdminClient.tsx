@@ -37,7 +37,6 @@ function sameForm(a: FormValues, b: FormValues) {
 export function IbanAdminClient() {
   const [view, setView] = useState<View>("loading");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [profiles, setProfiles] = useState<EditableIbanProfile[]>([]);
   const [selectedSlug, setSelectedSlug] = useState("iban1");
   const [form, setForm] = useState<FormValues | null>(null);
@@ -85,7 +84,23 @@ export function IbanAdminClient() {
 
   useEffect(() => {
     let active = true;
-    fetch("/api/iban-admin", { cache: "no-store" })
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    const accessToken = params.get("access_token");
+    const authError = params.get("error_description");
+    if (accessToken || authError) window.history.replaceState(null, "", window.location.pathname);
+    const authentication = accessToken
+      ? fetch("/api/iban-admin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "token", accessToken }),
+        }).then(async (response) => {
+          if (!response.ok) {
+            const data = (await response.json()) as { error?: string };
+            throw new Error(data.error ?? "Giriş bağlantısı geçersiz.");
+          }
+        })
+      : authError ? Promise.reject(new Error("Giriş bağlantısı geçersiz veya süresi dolmuş.")) : Promise.resolve();
+    authentication.then(() => fetch("/api/iban-admin", { cache: "no-store" }))
       .then(async (response) => {
         if (!active) return;
         if (response.status === 401) {
@@ -124,12 +139,11 @@ export function IbanAdminClient() {
       const response = await fetch("/api/iban-admin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ action: "link", email }),
       });
       const data = (await response.json()) as { error?: string };
       if (!response.ok) throw new Error(data.error ?? "Giriş yapılamadı.");
-      setPassword("");
-      await loadProfiles("iban1");
+      setNotice("Giriş bağlantısı e-posta adresinize gönderildi. Gelen kutunuzu kontrol edin.");
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Giriş yapılamadı.");
     } finally {
@@ -141,7 +155,6 @@ export function IbanAdminClient() {
     await fetch("/api/iban-admin", { method: "DELETE" });
     setProfiles([]);
     setForm(null);
-    setPassword("");
     setView("login");
     setNotice("");
     setError("");
@@ -207,10 +220,10 @@ export function IbanAdminClient() {
           <p className="mt-3 text-sm leading-6 text-zinc-600">Yetkili hesabınızla giriş yapın. Kaydettiğiniz bilgiler canlı sayfaya yansır.</p>
           <form onSubmit={signIn} className="mt-8 space-y-5">
             <Field label="E-posta" value={email} onChange={setEmail} type="email" autoComplete="username" required />
-            <Field label="Şifre" value={password} onChange={setPassword} type="password" autoComplete="current-password" required />
+            {notice && <p role="status" className="rounded-lg bg-blue-50 px-4 py-3 text-sm text-blue-800">{notice}</p>}
             {error && <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
             <button disabled={busy} className="w-full rounded-xl bg-blue-700 px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-blue-800 disabled:opacity-60">
-              {busy ? "Giriş yapılıyor…" : "Giriş yap"}
+              {busy ? "Gönderiliyor…" : "Giriş bağlantısı gönder"}
             </button>
           </form>
         </div>
