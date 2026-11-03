@@ -42,6 +42,19 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === "object" && !Array.isArray(value);
 }
 
+function accountInput(payload: Record<string, unknown>) {
+  const recipientName = typeof payload.recipientName === "string" ? payload.recipientName.trim() : "";
+  const iban = typeof payload.iban === "string" ? normalizeIban(payload.iban) : "";
+  const bankName = typeof payload.bankName === "string" ? payload.bankName.trim() : "";
+  if (!recipientName || recipientName.length > 120 || !isValidTurkishIban(iban) || !bankName || bankName.length > 120) return null;
+  const brand = Object.values(bankBrands).find((item) => item.name.toLocaleLowerCase("tr") === bankName.toLocaleLowerCase("tr"));
+  return { recipient_name: recipientName, iban, bank_name: bankName, bank_id: brand?.id ?? null };
+}
+
+function accountHeaders(token: string) {
+  return { apikey: supabaseAnonKey, Authorization: `Bearer ${token}`, "Content-Type": "application/json", Prefer: "return=representation" };
+}
+
 export async function GET() {
   try {
     const session = await getIbanAdminSession();
@@ -101,6 +114,24 @@ export async function PATCH(request: NextRequest) {
     const payload = await readJson(request);
     if (!isRecord(payload)) return json({ error: "Geçersiz kayıt." }, 400);
 
+    if (payload.accountId) {
+      const accountId = typeof payload.accountId === "string" ? payload.accountId : "";
+      const slug = typeof payload.slug === "string" ? payload.slug : "";
+      const input = accountInput(payload);
+      if (!getIbanProfileBySlug(slug) || !/^[0-9a-f-]{36}$/.test(accountId)) return json({ error: "Hesap bulunamadı." }, 404);
+      if (!input) return json({ error: "Ad soyad, IBAN ve banka bilgilerini kontrol edin." }, 400);
+      const url = new URL("/rest/v1/iban_additional_accounts", supabaseUrl);
+      url.searchParams.set("id", `eq.${accountId}`);
+      url.searchParams.set("slug", `eq.${slug}`);
+      const response = await fetch(url, {
+        method: "PATCH", headers: accountHeaders(session.token),
+        body: JSON.stringify({ ...input, updated_by: session.userId }), cache: "no-store",
+      });
+      if (!response.ok) return json({ error: "Ek IBAN kaydedilemedi." }, 503);
+      const rows = (await response.json()) as Array<{ id: string }>;
+      return rows[0]?.id === accountId ? json({ ok: true }) : json({ error: "Hesap bulunamadı." }, 404);
+    }
+
     const slug = typeof payload.slug === "string" ? payload.slug : "";
     const businessName = typeof payload.businessName === "string" ? payload.businessName.trim() : "";
     const recipientName = typeof payload.recipientName === "string" ? payload.recipientName.trim() : "";
@@ -157,8 +188,51 @@ export async function PATCH(request: NextRequest) {
   }
 }
 
+export async function PUT(request: NextRequest) {
+  if (!hasSameOrigin(request)) return json({ error: "Geçersiz istek kaynağı." }, 403);
+  try {
+    const session = await getIbanAdminSession();
+    if (!session) return json({ error: "Oturumunuz sona erdi. Tekrar giriş yapın." }, 401);
+    const payload = await readJson(request);
+    if (!isRecord(payload)) return json({ error: "Geçersiz kayıt." }, 400);
+    const slug = typeof payload.slug === "string" ? payload.slug : "";
+    const input = accountInput(payload);
+    if (!getIbanProfileBySlug(slug)) return json({ error: "IBAN sayfası bulunamadı." }, 404);
+    if (!input) return json({ error: "Ad soyad, IBAN ve banka bilgilerini kontrol edin." }, 400);
+    const response = await fetch(new URL("/rest/v1/iban_additional_accounts", supabaseUrl), {
+      method: "POST", headers: accountHeaders(session.token),
+      body: JSON.stringify({ slug, ...input, updated_by: session.userId }), cache: "no-store",
+    });
+    if (!response.ok) return json({ error: "Yeni IBAN eklenemedi." }, 503);
+    const rows = (await response.json()) as Array<{ id: string }>;
+    return rows[0]?.id ? json({ ok: true, id: rows[0].id }) : json({ error: "Kayıt doğrulanamadı." }, 503);
+  } catch {
+    return json({ error: "Yeni IBAN eklenemedi." }, 503);
+  }
+}
+
 export async function DELETE(request: NextRequest) {
   if (!hasSameOrigin(request)) return json({ error: "Geçersiz istek kaynağı." }, 403);
+  if (request.headers.get("content-type")?.startsWith("application/json")) {
+    try {
+      const session = await getIbanAdminSession();
+      if (!session) return json({ error: "Oturumunuz sona erdi. Tekrar giriş yapın." }, 401);
+      const payload = await readJson(request);
+      if (!isRecord(payload)) return json({ error: "Geçersiz kayıt." }, 400);
+      const accountId = typeof payload.accountId === "string" ? payload.accountId : "";
+      const slug = typeof payload.slug === "string" ? payload.slug : "";
+      if (!getIbanProfileBySlug(slug) || !/^[0-9a-f-]{36}$/.test(accountId)) return json({ error: "Hesap bulunamadı." }, 404);
+      const url = new URL("/rest/v1/iban_additional_accounts", supabaseUrl);
+      url.searchParams.set("id", `eq.${accountId}`);
+      url.searchParams.set("slug", `eq.${slug}`);
+      const response = await fetch(url, { method: "DELETE", headers: accountHeaders(session.token), cache: "no-store" });
+      if (!response.ok) return json({ error: "IBAN kaldırılamadı." }, 503);
+      const rows = (await response.json()) as Array<{ id: string }>;
+      return rows[0]?.id === accountId ? json({ ok: true }) : json({ error: "Hesap bulunamadı." }, 404);
+    } catch {
+      return json({ error: "IBAN kaldırılamadı." }, 503);
+    }
+  }
   const response = json({ ok: true });
   response.cookies.set(IBAN_ADMIN_COOKIE, "", {
     httpOnly: true,

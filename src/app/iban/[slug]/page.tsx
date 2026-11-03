@@ -79,8 +79,9 @@ export default async function IbanPage({ params }: IbanPageProps) {
           <Image src="/images/logo-biply-2026.png" alt="Biply" width={360} height={120} priority className="h-auto w-[74px] object-contain sm:w-[82px]" />
         </header>
 
-        <div className="pt-7 sm:pt-10">
+        <div className="space-y-4 pt-7 sm:pt-10">
           <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5">
+            {profile.additionalAccounts.length > 0 && <p className="border-b border-zinc-100 px-4 py-3 text-xs font-semibold text-blue-700 sm:px-5">Hesap 1</p>}
             <InfoRow label="Hesap Sahibi" value={profile.recipientName} copyValue={profile.recipientName} copyLabel="Hesap sahibini kopyala" />
             <InfoRow label="IBAN" value={profile.iban} copyValue={compactIban} copyLabel="IBAN bilgisini kopyala" mono />
             {profile.bankName ? (
@@ -90,6 +91,14 @@ export default async function IbanPage({ params }: IbanPageProps) {
               <InfoRow label="Açıklama" value={profile.description} copyValue={profile.description} copyLabel="Açıklamayı kopyala" />
             ) : null}
           </div>
+          {profile.additionalAccounts.map((account, index) => (
+            <div key={account.id} className="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-sm shadow-zinc-950/5">
+              <p className="border-b border-zinc-100 px-4 py-3 text-xs font-semibold text-blue-700 sm:px-5">Hesap {index + 2}</p>
+              <InfoRow label="Hesap Sahibi" value={account.recipientName} copyValue={account.recipientName} copyLabel="Hesap sahibini kopyala" />
+              <InfoRow label="IBAN" value={account.iban} copyValue={getCompactIban(account.iban)} copyLabel="IBAN bilgisini kopyala" mono />
+              <InfoRow label="Banka" value={account.bankName} copyValue={account.bankName} copyLabel="Banka adını kopyala" bankBrand={getBankBrand(account.bankId)} />
+            </div>
+          ))}
         </div>
 
         <footer className="mt-auto pt-8 pb-1 text-center text-xs font-medium text-zinc-400">

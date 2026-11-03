@@ -15,6 +15,24 @@ export type IbanOverrideRow = {
 
 export type EditableIbanProfile = IbanProfile & {
   updatedAt?: string;
+  additionalAccounts: AdditionalIbanAccount[];
+};
+
+export type AdditionalIbanAccount = {
+  id: string;
+  recipientName: string;
+  iban: string;
+  bankName: string;
+  bankId?: IbanProfile["bankId"];
+};
+
+type AdditionalAccountRow = {
+  id: string;
+  slug: string;
+  recipient_name: string;
+  iban: string;
+  bank_name: string;
+  bank_id: IbanProfile["bankId"] | null;
 };
 
 const select = "slug,business_name,recipient_name,iban,bank_name,bank_id,description,updated_at";
@@ -27,8 +45,8 @@ function overrideUrl(slug?: string) {
   return url;
 }
 
-function mergeProfile(base: IbanProfile, row?: IbanOverrideRow): EditableIbanProfile {
-  if (!row) return base;
+function mergeProfile(base: IbanProfile, accounts: AdditionalIbanAccount[], row?: IbanOverrideRow): EditableIbanProfile {
+  if (!row) return { ...base, additionalAccounts: accounts };
 
   return {
     ...base,
@@ -39,7 +57,37 @@ function mergeProfile(base: IbanProfile, row?: IbanOverrideRow): EditableIbanPro
     bankId: row.bank_id ?? undefined,
     description: row.description ?? undefined,
     updatedAt: row.updated_at,
+    additionalAccounts: accounts,
   };
+}
+
+async function fetchAdditionalAccounts(slug?: string): Promise<AdditionalAccountRow[]> {
+  const url = new URL("/rest/v1/iban_additional_accounts", supabaseUrl);
+  url.searchParams.set("select", "id,slug,recipient_name,iban,bank_name,bank_id");
+  url.searchParams.set("order", "created_at.asc,id.asc");
+  if (slug) url.searchParams.set("slug", `eq.${slug}`);
+  const response = await fetch(url, {
+    headers: { apikey: supabaseAnonKey, Authorization: `Bearer ${supabaseAnonKey}` },
+    cache: "no-store",
+  });
+  if (!response.ok) throw new Error("IBAN bilgileri şu anda yüklenemiyor.");
+  return (await response.json()) as AdditionalAccountRow[];
+}
+
+function mapAdditionalAccounts(rows: AdditionalAccountRow[]) {
+  const bySlug = new Map<string, AdditionalIbanAccount[]>();
+  for (const row of rows) {
+    const accounts = bySlug.get(row.slug) ?? [];
+    accounts.push({
+      id: row.id,
+      recipientName: row.recipient_name,
+      iban: formatIban(row.iban),
+      bankName: row.bank_name,
+      bankId: row.bank_id ?? undefined,
+    });
+    bySlug.set(row.slug, accounts);
+  }
+  return bySlug;
 }
 
 async function fetchOverrides(slug?: string): Promise<IbanOverrideRow[]> {
@@ -61,12 +109,13 @@ async function fetchOverrides(slug?: string): Promise<IbanOverrideRow[]> {
 export async function getCurrentIbanProfileBySlug(slug: string) {
   const base = getIbanProfileBySlug(slug);
   if (!base) return undefined;
-  const [row] = await fetchOverrides(slug);
-  return mergeProfile(base, row);
+  const [overrides, additional] = await Promise.all([fetchOverrides(slug), fetchAdditionalAccounts(slug)]);
+  return mergeProfile(base, mapAdditionalAccounts(additional).get(slug) ?? [], overrides[0]);
 }
 
 export async function getEditableIbanProfiles() {
-  const rows = await fetchOverrides();
+  const [rows, additional] = await Promise.all([fetchOverrides(), fetchAdditionalAccounts()]);
   const bySlug = new Map(rows.map((row) => [row.slug, row]));
-  return ibanProfiles.map((base) => mergeProfile(base, bySlug.get(base.slug)));
+  const accountsBySlug = mapAdditionalAccounts(additional);
+  return ibanProfiles.map((base) => mergeProfile(base, accountsBySlug.get(base.slug) ?? [], bySlug.get(base.slug)));
 }
