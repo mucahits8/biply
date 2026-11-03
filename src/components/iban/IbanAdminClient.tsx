@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { bankBrands } from "@/data/bank-brands";
 import type { EditableIbanProfile } from "@/lib/iban/overrides";
 import { formatIban, isValidTurkishIban } from "@/lib/iban/validation";
 
@@ -15,6 +16,11 @@ type FormValues = {
 type View = "loading" | "login" | "ready";
 type AccountForm = { recipientName: string; iban: string; bankName: string; description: string };
 const emptyAccount: AccountForm = { recipientName: "", iban: "", bankName: "", description: "" };
+const bankNames = [...new Set([
+  ...Object.values(bankBrands).map((bank) => bank.name),
+  "Albaraka Türk", "DenizBank", "Fibabanka", "Halkbank", "ING", "Kuveyt Türk",
+  "QNB", "Şekerbank", "TEB", "Türkiye Finans", "Türkiye İş Bankası",
+])].sort((a, b) => a.localeCompare(b, "tr"));
 
 function formFromProfile(profile: EditableIbanProfile): FormValues {
   return {
@@ -341,7 +347,7 @@ export function IbanAdminClient() {
                     <Field label="IBAN" value={form.iban} onChange={(value) => update("iban", value)} onBlur={() => update("iban", formatIban(form.iban))} maxLength={40} autoComplete="off" spellCheck={false} required />
                     <p className="mt-1.5 text-xs text-zinc-500">Türkiye IBAN’ı 26 karakterdir; kaydetmeden önce kontrol edilir.</p>
                   </div>
-                  <Field label="Banka (isteğe bağlı)" value={form.bankName} onChange={(value) => update("bankName", value)} maxLength={120} />
+                  <BankSelect key={selected.slug} value={form.bankName} onChange={(value) => update("bankName", value)} />
                   <Field label="Açıklama (isteğe bağlı)" value={form.description} onChange={(value) => update("description", value)} maxLength={240} />
                 </div>
 
@@ -386,7 +392,7 @@ export function IbanAdminClient() {
                     <h4 className="text-sm font-semibold">{editingAccountId ? "Ek IBAN’ı düzenle" : "Yeni IBAN"}</h4>
                     <div className="mt-4 grid gap-4 sm:grid-cols-2">
                       <Field label="Ad soyad" value={accountForm.recipientName} onChange={(value) => setAccountForm((current) => current && { ...current, recipientName: value })} maxLength={120} required />
-                      <Field label="Banka (isteğe bağlı)" value={accountForm.bankName} onChange={(value) => setAccountForm((current) => current && { ...current, bankName: value })} maxLength={120} />
+                      <BankSelect key={`${selected.slug}-${editingAccountId ?? "new"}`} value={accountForm.bankName} onChange={(value) => setAccountForm((current) => current && { ...current, bankName: value })} />
                       <div className="sm:col-span-2"><Field label="IBAN" value={accountForm.iban} onChange={(value) => setAccountForm((current) => current && { ...current, iban: value })} onBlur={() => setAccountForm((current) => current && { ...current, iban: formatIban(current.iban) })} maxLength={40} autoComplete="off" spellCheck={false} required /></div>
                       <div className="sm:col-span-2"><Field label="Açıklama (isteğe bağlı)" value={accountForm.description} onChange={(value) => setAccountForm((current) => current && { ...current, description: value })} maxLength={240} /></div>
                     </div>
@@ -402,6 +408,44 @@ export function IbanAdminClient() {
         </div>
       </div>
     </main>
+  );
+}
+
+function BankSelect({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+  const [other, setOther] = useState(() => !!value && !bankNames.includes(value));
+
+  return (
+    <div className="text-sm font-semibold text-zinc-700">
+      <label className="block">
+        Banka (isteğe bağlı)
+        <select
+          value={other ? "__other__" : value}
+          onChange={(event) => {
+            const selected = event.target.value;
+            setOther(selected === "__other__");
+            onChange(selected === "__other__" ? "" : selected);
+          }}
+          className="mt-2 block w-full rounded-lg border border-zinc-200 bg-white px-3.5 py-3 text-sm font-normal text-zinc-950 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+        >
+          <option value="">Belirtmek istemiyorum</option>
+          {bankNames.map((name) => <option key={name} value={name}>{name}</option>)}
+          <option value="__other__">Diğer banka (elle yaz)</option>
+        </select>
+      </label>
+      {other && (
+        <label className="mt-3 block">
+          Banka adı
+          <input
+            value={value}
+            onChange={(event) => onChange(event.target.value)}
+            maxLength={120}
+            required
+            className="mt-2 block w-full rounded-lg border border-zinc-200 bg-white px-3.5 py-3 text-sm font-normal text-zinc-950 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+          />
+        </label>
+      )}
+      <button type="button" onClick={() => { setOther(false); onChange(""); }} className="mt-2 text-xs font-semibold text-blue-700 hover:underline">Belirtmek istemiyorum</button>
+    </div>
   );
 }
 

@@ -30,6 +30,9 @@ veritabanındaki bir kayıt varsa o gösterilir.
 5. `supabase/migrations/021_iban_optional_details.sql` dosyasını uygula.
    İlk ve ek IBAN kayıtlarında banka ve açıklama alanları isteğe bağlıdır;
    boş bırakıldığında canlı sayfada bu satırlar gösterilmez.
+   Banka açılır menüden seçilebilir; listede olmayan bir banka için
+   **Diğer banka (elle yaz)**, banka göstermemek için **Belirtmek istemiyorum**
+   kullanılır.
 
 IBAN yöneticileri yalnızca `iban_admins` tablosunda kayıtlı kullanıcılar olabilir.
 RLS, herkese yalnızca canlı sayfalar için gereken okuma iznini verir. Yazma izni
