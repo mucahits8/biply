@@ -27,6 +27,9 @@ veritabanındaki bir kayıt varsa o gösterilir.
    Yönetim panelinde sayfayı seçip **Yeni IBAN ekle** ile ad soyad, IBAN ve banka
    gir. Ek hesaplar aynı canlı sayfada ayrı kartlar olarak görünür; panelden
    düzenlenebilir veya kaldırılabilir.
+5. `supabase/migrations/021_iban_optional_details.sql` dosyasını uygula.
+   İlk ve ek IBAN kayıtlarında banka ve açıklama alanları isteğe bağlıdır;
+   boş bırakıldığında canlı sayfada bu satırlar gösterilmez.
 
 IBAN yöneticileri yalnızca `iban_admins` tablosunda kayıtlı kullanıcılar olabilir.
 RLS, herkese yalnızca canlı sayfalar için gereken okuma iznini verir. Yazma izni

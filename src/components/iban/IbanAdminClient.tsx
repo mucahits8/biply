@@ -13,8 +13,8 @@ type FormValues = {
 };
 
 type View = "loading" | "login" | "ready";
-type AccountForm = { recipientName: string; iban: string; bankName: string };
-const emptyAccount: AccountForm = { recipientName: "", iban: "", bankName: "" };
+type AccountForm = { recipientName: string; iban: string; bankName: string; description: string };
+const emptyAccount: AccountForm = { recipientName: "", iban: "", bankName: "", description: "" };
 
 function formFromProfile(profile: EditableIbanProfile): FormValues {
   return {
@@ -341,7 +341,7 @@ export function IbanAdminClient() {
                     <Field label="IBAN" value={form.iban} onChange={(value) => update("iban", value)} onBlur={() => update("iban", formatIban(form.iban))} maxLength={40} autoComplete="off" spellCheck={false} required />
                     <p className="mt-1.5 text-xs text-zinc-500">Türkiye IBAN’ı 26 karakterdir; kaydetmeden önce kontrol edilir.</p>
                   </div>
-                  <Field label="Banka" value={form.bankName} onChange={(value) => update("bankName", value)} maxLength={120} required />
+                  <Field label="Banka (isteğe bağlı)" value={form.bankName} onChange={(value) => update("bankName", value)} maxLength={120} />
                   <Field label="Açıklama (isteğe bağlı)" value={form.description} onChange={(value) => update("description", value)} maxLength={240} />
                 </div>
 
@@ -370,10 +370,11 @@ export function IbanAdminClient() {
                         <div className="min-w-0">
                           <p className="text-xs font-semibold text-blue-700">Hesap {index + 2}</p>
                           <p className="mt-1 font-semibold">{account.recipientName}</p>
-                          <p className="break-all text-sm text-zinc-600">{account.iban} · {account.bankName}</p>
+                          <p className="break-all text-sm text-zinc-600">{account.iban}{account.bankName ? ` · ${account.bankName}` : ""}</p>
+                          {account.description && <p className="mt-1 text-sm text-zinc-500">{account.description}</p>}
                         </div>
                         <div className="flex gap-2">
-                          <button type="button" disabled={busy} onClick={() => { setAccountForm({ recipientName: account.recipientName, iban: account.iban, bankName: account.bankName }); setEditingAccountId(account.id); setError(""); setNotice(""); }} className="rounded-lg border border-zinc-200 px-3 py-2 text-xs font-semibold hover:bg-zinc-50">Düzenle</button>
+                          <button type="button" disabled={busy} onClick={() => { setAccountForm({ recipientName: account.recipientName, iban: account.iban, bankName: account.bankName ?? "", description: account.description ?? "" }); setEditingAccountId(account.id); setError(""); setNotice(""); }} className="rounded-lg border border-zinc-200 px-3 py-2 text-xs font-semibold hover:bg-zinc-50">Düzenle</button>
                           <button type="button" disabled={busy} onClick={() => removeAccount(account.id)} className="rounded-lg border border-red-200 px-3 py-2 text-xs font-semibold text-red-700 hover:bg-red-50">Kaldır</button>
                         </div>
                       </div>
@@ -385,8 +386,9 @@ export function IbanAdminClient() {
                     <h4 className="text-sm font-semibold">{editingAccountId ? "Ek IBAN’ı düzenle" : "Yeni IBAN"}</h4>
                     <div className="mt-4 grid gap-4 sm:grid-cols-2">
                       <Field label="Ad soyad" value={accountForm.recipientName} onChange={(value) => setAccountForm((current) => current && { ...current, recipientName: value })} maxLength={120} required />
-                      <Field label="Banka" value={accountForm.bankName} onChange={(value) => setAccountForm((current) => current && { ...current, bankName: value })} maxLength={120} required />
+                      <Field label="Banka (isteğe bağlı)" value={accountForm.bankName} onChange={(value) => setAccountForm((current) => current && { ...current, bankName: value })} maxLength={120} />
                       <div className="sm:col-span-2"><Field label="IBAN" value={accountForm.iban} onChange={(value) => setAccountForm((current) => current && { ...current, iban: value })} onBlur={() => setAccountForm((current) => current && { ...current, iban: formatIban(current.iban) })} maxLength={40} autoComplete="off" spellCheck={false} required /></div>
+                      <div className="sm:col-span-2"><Field label="Açıklama (isteğe bağlı)" value={accountForm.description} onChange={(value) => setAccountForm((current) => current && { ...current, description: value })} maxLength={240} /></div>
                     </div>
                     <div className="mt-5 flex gap-3">
                       <button type="submit" disabled={busy} className="rounded-xl bg-blue-700 px-5 py-2.5 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-60">{busy ? "Kaydediliyor…" : "IBAN’ı kaydet"}</button>

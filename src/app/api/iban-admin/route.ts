@@ -46,9 +46,10 @@ function accountInput(payload: Record<string, unknown>) {
   const recipientName = typeof payload.recipientName === "string" ? payload.recipientName.trim() : "";
   const iban = typeof payload.iban === "string" ? normalizeIban(payload.iban) : "";
   const bankName = typeof payload.bankName === "string" ? payload.bankName.trim() : "";
-  if (!recipientName || recipientName.length > 120 || !isValidTurkishIban(iban) || !bankName || bankName.length > 120) return null;
+  const description = typeof payload.description === "string" ? payload.description.trim() : "";
+  if (!recipientName || recipientName.length > 120 || !isValidTurkishIban(iban) || bankName.length > 120 || description.length > 240) return null;
   const brand = Object.values(bankBrands).find((item) => item.name.toLocaleLowerCase("tr") === bankName.toLocaleLowerCase("tr"));
-  return { recipient_name: recipientName, iban, bank_name: bankName, bank_id: brand?.id ?? null };
+  return { recipient_name: recipientName, iban, bank_name: bankName || null, bank_id: brand?.id ?? null, description: description || null };
 }
 
 function accountHeaders(token: string) {
@@ -119,7 +120,7 @@ export async function PATCH(request: NextRequest) {
       const slug = typeof payload.slug === "string" ? payload.slug : "";
       const input = accountInput(payload);
       if (!getIbanProfileBySlug(slug) || !/^[0-9a-f-]{36}$/.test(accountId)) return json({ error: "Hesap bulunamadı." }, 404);
-      if (!input) return json({ error: "Ad soyad, IBAN ve banka bilgilerini kontrol edin." }, 400);
+      if (!input) return json({ error: "Ad soyad, IBAN ve isteğe bağlı alanları kontrol edin." }, 400);
       const url = new URL("/rest/v1/iban_additional_accounts", supabaseUrl);
       url.searchParams.set("id", `eq.${accountId}`);
       url.searchParams.set("slug", `eq.${slug}`);
@@ -146,7 +147,7 @@ export async function PATCH(request: NextRequest) {
     if (!isValidTurkishIban(iban)) {
       return json({ error: "Geçerli bir Türkiye IBAN'ı girin." }, 400);
     }
-    if (!bankName || bankName.length > 120 || description.length > 240) {
+    if (bankName.length > 120 || description.length > 240) {
       return json({ error: "Banka adı veya açıklama uzunluğunu kontrol edin." }, 400);
     }
 
@@ -168,7 +169,7 @@ export async function PATCH(request: NextRequest) {
         business_name: businessName,
         recipient_name: recipientName,
         iban,
-        bank_name: bankName,
+        bank_name: bankName || null,
         bank_id: brand?.id ?? null,
         description: description || null,
         updated_at: new Date().toISOString(),
@@ -198,7 +199,7 @@ export async function PUT(request: NextRequest) {
     const slug = typeof payload.slug === "string" ? payload.slug : "";
     const input = accountInput(payload);
     if (!getIbanProfileBySlug(slug)) return json({ error: "IBAN sayfası bulunamadı." }, 404);
-    if (!input) return json({ error: "Ad soyad, IBAN ve banka bilgilerini kontrol edin." }, 400);
+    if (!input) return json({ error: "Ad soyad, IBAN ve isteğe bağlı alanları kontrol edin." }, 400);
     const response = await fetch(new URL("/rest/v1/iban_additional_accounts", supabaseUrl), {
       method: "POST", headers: accountHeaders(session.token),
       body: JSON.stringify({ slug, ...input, updated_by: session.userId }), cache: "no-store",

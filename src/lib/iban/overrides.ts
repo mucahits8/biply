@@ -7,7 +7,7 @@ export type IbanOverrideRow = {
   business_name: string;
   recipient_name: string;
   iban: string;
-  bank_name: string;
+  bank_name: string | null;
   bank_id: IbanProfile["bankId"] | null;
   description: string | null;
   updated_at: string;
@@ -22,8 +22,9 @@ export type AdditionalIbanAccount = {
   id: string;
   recipientName: string;
   iban: string;
-  bankName: string;
+  bankName?: string;
   bankId?: IbanProfile["bankId"];
+  description?: string;
 };
 
 type AdditionalAccountRow = {
@@ -31,8 +32,9 @@ type AdditionalAccountRow = {
   slug: string;
   recipient_name: string;
   iban: string;
-  bank_name: string;
+  bank_name: string | null;
   bank_id: IbanProfile["bankId"] | null;
+  description: string | null;
 };
 
 const select = "slug,business_name,recipient_name,iban,bank_name,bank_id,description,updated_at";
@@ -53,7 +55,7 @@ function mergeProfile(base: IbanProfile, accounts: AdditionalIbanAccount[], row?
     businessName: row.business_name,
     recipientName: row.recipient_name,
     iban: formatIban(row.iban),
-    bankName: row.bank_name,
+    bankName: row.bank_name ?? undefined,
     bankId: row.bank_id ?? undefined,
     description: row.description ?? undefined,
     updatedAt: row.updated_at,
@@ -63,7 +65,7 @@ function mergeProfile(base: IbanProfile, accounts: AdditionalIbanAccount[], row?
 
 async function fetchAdditionalAccounts(slug?: string): Promise<AdditionalAccountRow[]> {
   const url = new URL("/rest/v1/iban_additional_accounts", supabaseUrl);
-  url.searchParams.set("select", "id,slug,recipient_name,iban,bank_name,bank_id");
+  url.searchParams.set("select", "id,slug,recipient_name,iban,bank_name,bank_id,description");
   url.searchParams.set("order", "created_at.asc,id.asc");
   if (slug) url.searchParams.set("slug", `eq.${slug}`);
   const response = await fetch(url, {
@@ -82,8 +84,9 @@ function mapAdditionalAccounts(rows: AdditionalAccountRow[]) {
       id: row.id,
       recipientName: row.recipient_name,
       iban: formatIban(row.iban),
-      bankName: row.bank_name,
+      bankName: row.bank_name ?? undefined,
       bankId: row.bank_id ?? undefined,
+      description: row.description ?? undefined,
     });
     bySlug.set(row.slug, accounts);
   }

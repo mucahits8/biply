@@ -96,7 +96,8 @@ export default async function IbanPage({ params }: IbanPageProps) {
               <p className="border-b border-zinc-100 px-4 py-3 text-xs font-semibold text-blue-700 sm:px-5">Hesap {index + 2}</p>
               <InfoRow label="Hesap Sahibi" value={account.recipientName} copyValue={account.recipientName} copyLabel="Hesap sahibini kopyala" />
               <InfoRow label="IBAN" value={account.iban} copyValue={getCompactIban(account.iban)} copyLabel="IBAN bilgisini kopyala" mono />
-              <InfoRow label="Banka" value={account.bankName} copyValue={account.bankName} copyLabel="Banka adını kopyala" bankBrand={getBankBrand(account.bankId)} />
+              {account.bankName && <InfoRow label="Banka" value={account.bankName} copyValue={account.bankName} copyLabel="Banka adını kopyala" bankBrand={getBankBrand(account.bankId)} />}
+              {account.description && <InfoRow label="Açıklama" value={account.description} copyValue={account.description} copyLabel="Açıklamayı kopyala" />}
             </div>
           ))}
         </div>
