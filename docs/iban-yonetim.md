@@ -22,6 +22,11 @@ veritabanındaki bir kayıt varsa o gösterilir.
 
 3. Hesabın e-posta/şifresiyle `/iban-yonetim` adresinde giriş yap. Kaydedilen
    değişikliklerin `/iban/<sayfa>` adresinde göründüğünü doğrula.
+4. Bir sayfada birden fazla IBAN göstermek için
+   `supabase/migrations/020_iban_additional_accounts.sql` dosyasını da uygula.
+   Yönetim panelinde sayfayı seçip **Yeni IBAN ekle** ile ad soyad, IBAN ve banka
+   gir. Ek hesaplar aynı canlı sayfada ayrı kartlar olarak görünür; panelden
+   düzenlenebilir veya kaldırılabilir.
 
 IBAN yöneticileri yalnızca `iban_admins` tablosunda kayıtlı kullanıcılar olabilir.
 RLS, herkese yalnızca canlı sayfalar için gereken okuma iznini verir. Yazma izni
