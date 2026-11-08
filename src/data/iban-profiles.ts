@@ -298,6 +298,14 @@ export const ibanProfiles: IbanProfile[] = [
     bankName: "Örnek Banka",
     description: "Örnek Açıklama 35",
   },
+  ...[36, 37, 38, 39, 40].map((number) => ({
+    slug: `iban${number}`,
+    businessName: `Örnek İşletme ${number}`,
+    recipientName: `Örnek Hesap Sahibi ${number}`,
+    iban: "TR00 0000 0000 0000 0000 0000 00",
+    bankName: "Örnek Banka",
+    description: `Örnek Açıklama ${number}`,
+  })),
 ];
 
 export function getIbanProfileBySlug(slug: string) {
